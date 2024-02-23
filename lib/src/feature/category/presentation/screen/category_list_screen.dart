@@ -186,21 +186,21 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
                                               borderRadius: BorderRadius.circular(10),
                                               color: Colors.blue,
                                             ),
-                                            child: FutureBuilder<String?>(
+                                            child: /*FutureBuilder<String?>(
                                               future: context.read<CategoryProvider>().getSignedUrl(category?.imageUrl ?? ''),
                                               builder: (context, snapshot) {
                                                 print('snapshot stqte: ${snapshot.connectionState}');
                                                 print('snapshot: ${snapshot.data}');
                                                 if (snapshot.connectionState == ConnectionState.done) {
                                                   if (snapshot.hasData) {
-                                                    return Image.network(
-                                                      snapshot.data!,
+                                                    return */Image.network(
+                                                      category.imageUrl ?? '',
                                                       fit: BoxFit.cover,
                                                       errorBuilder: (context, error, stackTrace) {
                                                         return const Icon(FluentIcons.photo_error, color: Colors.white);
                                                       },
-                                                    );
-                                                  } else {
+                                                    )
+                                                  /*} else {
                                                     return const Icon(FluentIcons.photo_error, color: Colors.white);
                                                   }
                                                 } else {
@@ -210,7 +210,7 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
                                                   );
                                                 }
                                               },
-                                            ),
+                                            ),*/
                                           ),
                                         ],
                                       ),

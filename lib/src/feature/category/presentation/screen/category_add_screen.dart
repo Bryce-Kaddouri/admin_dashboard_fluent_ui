@@ -1,8 +1,6 @@
 import 'package:admin_dashboard/src/feature/category/presentation/category_provider/category_provider.dart';
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -10,55 +8,89 @@ import 'package:provider/provider.dart';
 // add catgeory screen
 // name, description, image
 
-class CategoryAddScreen extends StatelessWidget {
-  PageController pageController;
+class CategoryAddScreen extends StatefulWidget {
 
-  CategoryAddScreen({super.key, required this.pageController});
+  CategoryAddScreen({super.key});
 
-  final _formKey = GlobalKey<FormBuilderState>();
+  @override
+  State<CategoryAddScreen> createState() => _CategoryAddScreenState();
+}
+
+class _CategoryAddScreenState extends State<CategoryAddScreen> {
+  final _formKey = GlobalKey<FormState>();
+
+  // controller for name
+  final TextEditingController nameController = TextEditingController();
+
+  final TextEditingController descriptionController = TextEditingController();
+
+  Uint8List? image;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Column(
         children: [
-          FormBuilder(
+          Form(
             key: _formKey,
             child: Column(
               children: [
-                FormBuilderField<Uint8List>(
-                    builder: (FormFieldState<Uint8List> field) {
-                      return Column(
-                        children: [
-                          Text('Image'),
-                          if (field.value != null)
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              height: 200,
-                              width: 200,
-                              clipBehavior: Clip.antiAlias,
-                              child: AspectRatio(
-                                aspectRatio: 1,
-                                child: Image.memory(
-                                  field.value!,
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                            )
-                          else
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.grey[300],
-                              ),
-                              height: 200,
-                              width: 200,
-                              child: Icon(Icons.image),
+                FormField<Uint8List>(
+                  initialValue: image,
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Please pick an image';
+                      }
+                      return null;
+                    },
+                    builder: (FormFieldState field) {
+                  return Column(
+                    children: [
+
+                      Text('Image'),
+                      if (image != null)
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          height: 200,
+                          width: 200,
+                          clipBehavior: Clip.antiAlias,
+                          child: AspectRatio(
+                            aspectRatio: 1,
+                            child: Image.memory(
+                                image!,
+                              fit: BoxFit.fill,
                             ),
-                          const SizedBox(height: 10),
-                          MaterialButton(
+                          ),
+                        )
+                      else
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.grey,
+                          ),
+                          height: 200,
+                          width: 200,
+                          child: Icon(FluentIcons.photo2_add),
+                        ),
+                      FilledButton(
+                        onPressed: () async {
+                          XFile? result = await context.read<CategoryProvider>().pickImage();
+                          if (result != null) {
+                            Uint8List bytes = await result.readAsBytes();
+                            setState(() {
+                              image = bytes;
+                            });
+                          }
+                        },
+                        child: Text(image != null ? 'Change Image' : 'Pick Image'),
+                      ),
+                    ],);
+                }),
+
+
+                          /*MaterialButton(
                             color: Theme.of(context).colorScheme.secondary,
                             minWidth: 200,
                             height: 50,
@@ -70,170 +102,38 @@ class CategoryAddScreen extends StatelessWidget {
                               }
                             },
                             child: Text(field.value != null ? 'Change Image' : 'Pick Image'),
-                          ),
-                        ],
-                      );
-                    },
-                    name: 'image',
-                    initialValue: null,
-                    validator: FormBuilderValidators.required()),
-                SizedBox(height: 40),
-                FormBuilderTextField(
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                  name: 'name',
-                  decoration: InputDecoration(
-                    fillColor: Colors.white,
-                    filled: true,
-                    hintText: 'Burger',
-                    hintStyle: TextStyle(
-                      color: Colors.grey[700],
-                      fontSize: 20,
-                    ),
-                    constraints: BoxConstraints(
-                      maxWidth: 500,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    floatingLabelAlignment: FloatingLabelAlignment.start,
-                    label: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            blurRadius: 5,
-                            offset: Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 5,
-                      ),
-                      child: RichText(
-                        text: TextSpan(
-                          text: 'Name',
-                          style: TextStyle(
-                            color: Colors.grey[700],
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
-                          ),
-                          children: [
-                            TextSpan(
-                              text: '*',
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 24,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(
-                        color: Colors.grey[300]!,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(
-                        width: 2,
-                        color: Colors.blueAccent,
-                      ),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(
-                        color: Colors.redAccent,
-                      ),
-                    ),
-                  ),
-                  validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.required(),
-                  ]),
+                          ),*/
+
+
+
+
+
+
+
+
+
+                TextFormBox(
+                  controller: nameController,
+                  placeholder: 'Name',
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter product name';
+                    }
+                    return null;
+                  },
                 ),
-                SizedBox(height: 40),
-                FormBuilderTextField(
-                  name: 'description',
-                  maxLines: 5,
-                  decoration: InputDecoration(
-                    fillColor: Colors.white,
-                    filled: true,
-                    hintText: 'Description of the category ...',
-                    hintStyle: TextStyle(
-                      color: Colors.grey[700],
-                      fontSize: 20,
-                    ),
-                    constraints: BoxConstraints(
-                      maxWidth: 500,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    floatingLabelAlignment: FloatingLabelAlignment.start,
-                    label: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            blurRadius: 5,
-                            offset: Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 5,
-                      ),
-                      child: RichText(
-                        text: TextSpan(
-                          text: 'Description',
-                          style: TextStyle(
-                            color: Colors.grey[700],
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
-                          ),
-                        ),
-                      ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(
-                        color: Colors.grey[300]!,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(
-                        width: 2,
-                        color: Colors.blueAccent,
-                      ),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(
-                        color: Colors.redAccent,
-                      ),
-                    ),
+
+                InfoLabel(
+                  label: 'Enter product description:',
+                  child: TextFormBox(
+                    controller: descriptionController,
+                    placeholder: 'Description',
+                    expands: false,
+                      maxLines: null,
                   ),
-                  validator: FormBuilderValidators.compose([]),
                 ),
-              ],
-            ),
-          ),
           const SizedBox(height: 100),
-          MaterialButton(
+          /*MaterialButton(
             color: Theme.of(context).colorScheme.secondary,
             minWidth: 500,
             height: 50,
@@ -249,11 +149,7 @@ class CategoryAddScreen extends StatelessWidget {
                 if (imageUrl != null) {
                   bool res = await context.read<CategoryProvider>().addCategory(name, description, imageUrl);
                   if (res) {
-                    pageController.animateToPage(
-                      2,
-                      duration: const Duration(milliseconds: 500),
-                      curve: Curves.easeInOut,
-                    );
+
                     Get.snackbar(
                       'Success',
                       'Category added successfully',
@@ -334,14 +230,14 @@ class CategoryAddScreen extends StatelessWidget {
                   );
                 }
 
-                /* bool res = await context
+                *//* bool res = await context
                     .read<CategoryProvider>()
                     .addCategory(name, description, 'image');
                 if (res) {
                   print('success');
                 } else {
                   print('failed');
-                }*/
+                }*//*
               } else {
                 _formKey.currentState!.save();
                 if (_formKey.currentState!.value['image'] == null) {
@@ -378,9 +274,31 @@ class CategoryAddScreen extends StatelessWidget {
                     color: Colors.white,
                   )
                 : Text('Submit'),
-          ),
+          ),*/
+
+    FilledButton(child: context.watch<CategoryProvider>().isLoading ? const ProgressRing() : Text('Submit'), onPressed: () async {
+      if(_formKey.currentState!.validate()){
+        String name = nameController.text;
+        String description = descriptionController.text;
+        // upload image
+        if(image != null){
+          String? imageUrl = await context.read<CategoryProvider>().uploadImage(image!);
+          if(imageUrl != null){
+            bool res = await context.read<CategoryProvider>().addCategory(name, description, imageUrl);
+          }
+        } else {
+          bool res = await context.read<CategoryProvider>().addCategory(name, description, '');
+        }
+      }
+
+    }),
+
+
+
         ],
       ),
+      ),
+])
     );
   }
 }

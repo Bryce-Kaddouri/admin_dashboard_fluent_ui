@@ -113,17 +113,28 @@ class CategoryDataSource {
   Future<Either<StorageFailure, String>> uploadImage(Uint8List bytes) async {
     try {
       DateTime now = DateTime.now();
-      final response = await _client.storage.from('categories').uploadBinary(
-            '$now.jpg',
+      int milliseconds = now.millisecondsSinceEpoch;
+      final response =  await _client.storage.from('categories').uploadBinary(
+            '$milliseconds.jpg',
             bytes,
             fileOptions: const FileOptions(
               contentType: 'image/jpg',
               upsert: true,
             ),
           );
+      String path= response.split('categories/')[1];
+      print('response from upload image');
+      print(response);
+      String? url = await _client.storage.from('categories').createSignedUrl(
+        path,
+        const Duration(days: 365).inSeconds,
+      );
 
-      if (response != null) {
-        return Right(response);
+      print('url from upload image');
+      print(url);
+
+      if (url != null) {
+        return Right(url!);
       } else {
         return Left(StorageFailure(errorMessage: 'Error uploading image'));
       }
@@ -136,11 +147,31 @@ class CategoryDataSource {
     }
   }
 
+  Future<String?> getSignedUrlAsync(String path) async {
+    try {
+      final response = await _client.storage.from('categories').createSignedUrl(
+        path,
+        const Duration(days: 3650).inSeconds,
+      );
+      if (response != null) {
+        return response;
+      } else {
+        return null;
+      }
+    } on StorageException catch (error) {
+      print('storage error');
+      print(error);
+      return null;
+    } catch (e) {
+      return null ;
+    }
+  }
+
   Future<Either<StorageFailure, String>> getSignedUrl(String path) async {
     try {
       final response = await _client.storage.from('categories').createSignedUrl(
             path,
-            const Duration(days: 1).inSeconds,
+            const Duration(days: 3650).inSeconds,
           );
       if (response != null) {
         return Right(response);

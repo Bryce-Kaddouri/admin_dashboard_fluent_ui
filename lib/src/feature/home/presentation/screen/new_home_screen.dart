@@ -1,3 +1,4 @@
+import 'package:admin_dashboard/src/feature/category/presentation/screen/category_add_screen.dart';
 import 'package:admin_dashboard/src/feature/category/presentation/screen/category_list_screen.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
@@ -39,70 +40,6 @@ class _SideNavBarState extends State<SideNavBar> {
       icon: const Icon(FluentIcons.category_classification),
       title: const Text('Category',overflow: TextOverflow.ellipsis),
       body: Container(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Expanded(child:
-            PageView(
-              children:[
-                ListView.builder(
-                    itemCount: 20,
-                    itemBuilder: (context, index) {
-                      return ListTile.selectable(
-                        leading: SizedBox(
-                          height: 100,
-                          child: AspectRatio(
-                            aspectRatio: 16 / 9,
-                            child: ColoredBox(
-                              color: Colors.accentColors[index ~/ 20],
-                              child: const Placeholder(),
-                            ),
-                          ),
-                        ),
-                        title: Text('Contact ${index + 1}'),
-                        subtitle: const Text('With a custom subtitle'),
-                        selectionMode: ListTileSelectionMode.single,
-                        selected: false,
-/*
-                        onSelectionChange: (v) => setState(() => selectedContact = contact),
-*/
-                      );
-                    }
-                ),
-                ListView.builder(
-                    itemCount: 20,
-                    itemBuilder: (context, index) {
-                      return ListTile.selectable(
-                        leading: SizedBox(
-                          height: 100,
-                          child: AspectRatio(
-                            aspectRatio: 16 / 9,
-                            child: ColoredBox(
-                              color: Colors.accentColors[index ~/ 20],
-                              child: const Placeholder(),
-                            ),
-                          ),
-                        ),
-                        title: Text('Contact ${index + 1}'),
-                        subtitle: const Text('With a custom subtitle'),
-                        selectionMode: ListTileSelectionMode.single,
-                        selected: false,
-/*
-                        onSelectionChange: (v) => setState(() => selectedContact = contact),
-*/
-                      );
-                    }
-                ),
-              ],
-            ),
-            ),
-            Container(
-              height: 50,
-              color: Colors.blue,
-              child: const Center(child: Text('Footer')),
-            ),
-          ],
-        ),
       ),
       items: [
         PaneItem(
@@ -115,13 +52,7 @@ class _SideNavBarState extends State<SideNavBar> {
         PaneItem(
           icon: const Icon(FluentIcons.add),
           title: const Text('Add Category',overflow: TextOverflow.ellipsis),
-          body: Container(
-            padding: const EdgeInsets.all(16.0),
-            child: const Text(
-              'Check your add here',
-              style: TextStyle(fontSize: 20),
-            ),
-          ),
+          body: CategoryAddScreen(),
         ),
       ],
     ),
@@ -293,85 +224,68 @@ class _SideNavBarState extends State<SideNavBar> {
 
   ];
 
+  String getTitleScreen(int index){
+    switch(index) {
+      case 0:
+        return 'Home';
+      case 1:
+        return 'Category';
+      case 2:
+        return 'Category List';
+      case 3:
+        return 'Add Category';
+      case 4:
+        return 'Product';
+      case 5:
+        return 'Product List';
+      case 6:
+        return 'Add Product';
+      case 7:
+        return 'Order';
+      case 8:
+        return 'Track orders';
+      case 9:
+        return 'Order List';
+      case 10:
+        return 'Chart';
+      case 11:
+        return 'User';
+      case 12:
+        return 'User List';
+      case 13:
+        return 'Add User';
+      case 14:
+        return 'Catalog';
+      case 15:
+        return 'Page List';
+      case 16:
+        return 'Add Page';
+      case 17:
+        return 'Settings';
+      default:
+        return 'Home';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return NavigationView(
 
-     /* appBar: NavigationAppBar(
-        leading: Container(
-          child: IconButton(
-            icon: Icon(displayMode == PaneDisplayMode.open
-                ? FluentIcons.back
-                : FluentIcons.forward),
-            onPressed: () {
-              setState(() {
-                displayMode = displayMode == PaneDisplayMode.open
-                    ? PaneDisplayMode.compact
-                    : PaneDisplayMode.open;
-              });
-            },
+      appBar: NavigationAppBar(
+        automaticallyImplyLeading: false,
+        title: Container(
+          alignment: Alignment.centerRight,
+          child: Container(
+            width: displayMode == PaneDisplayMode.open ? MediaQuery.of(context).size.width - 340 : MediaQuery.of(context).size.width - 60,
+
+            alignment: Alignment.center,
+            child:  Text(
+              getTitleScreen(topIndex),
+              style: TextStyle(fontSize: 20),
+            ),
           ),
         ),
-        title: Row(
-          children: [
-            SizedBox(width: displayMode ==  PaneDisplayMode.open ? 255 : 0),
-            Expanded(child:
-            AnimatedContainer(
-              padding: const EdgeInsets.all(10.0),
-              alignment: Alignment.center,
-              duration: const Duration(milliseconds: 300),
-              child: TextBox(
-                prefixMode: OverlayVisibilityMode.always,
-
-                prefix: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: const Icon(
-                    FluentIcons.search,
-                    size: 20,
-                    color: Colors.black,
-                  )
-                ),
-                textAlignVertical: TextAlignVertical.center,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: const BorderRadius.all(Radius.circular(5)),
-                  border: Border.all(color: Colors.grey),
-                ),
-              ),
-            ),
-            ),
-            // select between 10, 25, 50, 100 and 250
-            DropDownButton(
-              title: Text('10'),
-              items: [
-                MenuFlyoutItem(text: const Text('10'), onPressed: () {}),
-                MenuFlyoutSeparator(),
-                MenuFlyoutItem(text: const Text('25'), onPressed: () {}),
-                MenuFlyoutSeparator(),
-                MenuFlyoutItem(text: const Text('50'), onPressed: () {}),
-                MenuFlyoutSeparator(),
-                MenuFlyoutItem(text: const Text('100'), onPressed: () {}),
-                MenuFlyoutSeparator(),
-                MenuFlyoutItem(text: const Text('250'), onPressed: () {}),
-              ],
-            ),
-            SizedBox(width: 10),
-            FilledButton(
-              style: ButtonStyle(
-                shape: ButtonState.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),),
-                padding: ButtonState.all(const EdgeInsets.all(8.0)),
-                backgroundColor: ButtonState.all(Colors.blue),
-                foregroundColor: ButtonState.all(Colors.white),
-              ),
-              onPressed: () {
-                // Your Logic to Add New `NavigationPaneItem`
-                print('Search');
-              }, child:
-             const Icon(FluentIcons.add),
-            ),
-          ],
-        ),
-      ),*/
+      ),
 
       pane: NavigationPane(
         selected: topIndex,
