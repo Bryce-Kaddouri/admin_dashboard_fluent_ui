@@ -111,20 +111,23 @@ class _CategoryAddScreenState extends State<CategoryAddScreen> {
 
 
 
-
-                TextFormBox(
+            InfoLabel(
+              label: 'Enter category name:',
+              child:
+              TextFormBox(
                   controller: nameController,
                   placeholder: 'Name',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter product name';
+                      return 'Please enter category name';
                     }
                     return null;
                   },
                 ),
+            ),
 
                 InfoLabel(
-                  label: 'Enter product description:',
+                  label: 'Enter category description:',
                   child: TextFormBox(
                     controller: descriptionController,
                     placeholder: 'Description',

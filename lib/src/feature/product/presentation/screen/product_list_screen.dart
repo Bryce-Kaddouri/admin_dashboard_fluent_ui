@@ -1,7 +1,7 @@
 import 'dart:js_interop';
 
 import 'package:admin_dashboard/src/feature/category/data/datasource/category_datasource.dart';
-import 'package:flutter/material.dart';
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -13,9 +13,8 @@ import '../../data/model/product_model.dart';
 import '../provider/product_provider.dart';
 
 class ProductListScreen extends StatefulWidget {
-  PageController mainPageController;
 
-  ProductListScreen({super.key, required this.mainPageController});
+  ProductListScreen({super.key});
 
   @override
   State<ProductListScreen> createState() => _ProductListScreenState();
@@ -44,7 +43,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
+       /* Container(
           height: 60,
           width: double.infinity,
           decoration: BoxDecoration(
@@ -137,14 +136,76 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 child: InkWell(
                   child: Icon(Icons.add, color: Colors.white),
                   onTap: () {
-                    /*print('add');
+                    *//*print('add');
                     context.read<ProductProvider>().setProductModel(null);
 
-                    widget.mainPageController.jumpToPage(7);*/
+                    widget.mainPageController.jumpToPage(7);*//*
 
                     context.go('/product-add');
                   },
                 ),
+              ),
+            ],
+          ),
+        ),*/
+
+        Card(
+          padding: const EdgeInsets.all(5),
+          child:  Row(
+            children: [
+              Expanded(child:
+              AnimatedContainer(
+                padding: const EdgeInsets.all(10.0),
+                alignment: Alignment.center,
+                duration: const Duration(milliseconds: 300),
+                child: TextBox(
+                  prefixMode: OverlayVisibilityMode.always,
+
+                  prefix: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: const Icon(
+                        FluentIcons.search,
+                        size: 20,
+                        color: Colors.black,
+                      )
+                  ),
+                  textAlignVertical: TextAlignVertical.center,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.all(Radius.circular(5)),
+                    border: Border.all(color: Colors.grey),
+                  ),
+                ),
+              ),
+              ),
+              // select between 10, 25, 50, 100 and 250
+              DropDownButton(
+                title: Text('10'),
+                items: [
+                  MenuFlyoutItem(text: const Text('10'), onPressed: () {}),
+                  MenuFlyoutSeparator(),
+                  MenuFlyoutItem(text: const Text('25'), onPressed: () {}),
+                  MenuFlyoutSeparator(),
+                  MenuFlyoutItem(text: const Text('50'), onPressed: () {}),
+                  MenuFlyoutSeparator(),
+                  MenuFlyoutItem(text: const Text('100'), onPressed: () {}),
+                  MenuFlyoutSeparator(),
+                  MenuFlyoutItem(text: const Text('250'), onPressed: () {}),
+                ],
+              ),
+              SizedBox(width: 10),
+              FilledButton(
+                style: ButtonStyle(
+                  shape: ButtonState.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),),
+                  padding: ButtonState.all(const EdgeInsets.all(8.0)),
+                  backgroundColor: ButtonState.all(Colors.blue),
+                  foregroundColor: ButtonState.all(Colors.white),
+                ),
+                onPressed: () {
+                  // Your Logic to Add New `NavigationPaneItem`
+                  print('Search');
+                }, child:
+              const Icon(FluentIcons.add),
               ),
             ],
           ),
@@ -224,11 +285,10 @@ class _ProductListScreenState extends State<ProductListScreen> {
                               print('-' * 50);
 
                               return Card(
+                                margin: const EdgeInsets.all(10),
+                                padding: const EdgeInsets.all(10),
                                 child: ListTile(
-                                  tileColor: Colors.grey[200],
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
+
                                   leading: Container(
                                     height: 50,
                                     width: 100,
@@ -253,7 +313,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(10),
-                                            color: Colors.blueAccent,
+                                            color: Colors.blue,
                                           ),
                                           child: FutureBuilder<String?>(
                                             future: context
@@ -274,20 +334,18 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                                     errorBuilder: (context,
                                                         error, stackTrace) {
                                                       return const Icon(
-                                                          Icons.error,
+                                                          FluentIcons.photo_error,
                                                           color: Colors.white);
                                                     },
                                                   );
                                                 } else {
-                                                  return const Icon(Icons.error,
+                                                  return const Icon(FluentIcons.photo_error,
                                                       color: Colors.white);
                                                 }
                                               } else {
                                                 return const Center(
                                                   child:
-                                                      CircularProgressIndicator(
-                                                    color: Colors.white,
-                                                  ),
+                                                     ProgressRing()
                                                 );
                                               }
                                             },
@@ -298,7 +356,76 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                   ),
                                   title: Text(product?.name ?? ''),
                                   subtitle: Text(product?.description ?? ''),
-                                  trailing: Container(
+                                 trailing: Row(
+                                   children: [
+
+                                     FilledButton(
+                                       style: ButtonStyle(
+                                         shape: ButtonState.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),),
+                                         padding: ButtonState.all(const EdgeInsets.all(8.0)),
+                                         backgroundColor: ButtonState.all(Colors.blue),
+                                         foregroundColor: ButtonState.all(Colors.white),
+                                       ),
+                                       onPressed: () {
+                                         context.go('/product-update/${product.id}');
+                                         }, child:
+                                     const Icon(FluentIcons.edit),
+                                     ),
+                                     SizedBox(width: 10),
+
+                                     FilledButton(
+                                       style: ButtonStyle(
+                                         shape: ButtonState.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),),
+                                         padding: ButtonState.all(const EdgeInsets.all(8.0)),
+                                         backgroundColor: ButtonState.all(Colors.red),
+                                         foregroundColor: ButtonState.all(Colors.white),
+                                       ),
+                                       onPressed: () {
+                                         print('delete');
+                                         Get.defaultDialog(
+                                           contentPadding: EdgeInsets.all(20),
+                                           content: Column(
+                                             children: [
+                                               Icon(
+                                                 FluentIcons.delete,
+                                                 color: Colors.red,
+                                                 size: 100,
+                                               ),
+                                               Text('Are you sure to delete this Product? The deletion of this category will delete all order associated with it.'),
+                                             ],
+                                           ),
+                                           title: 'Delete Product',
+                                           textConfirm: 'Yes',
+                                           textCancel: 'No',
+                                           confirmTextColor: Colors.white,
+                                           onConfirm: () async {
+                                             bool res = await context.read<ProductProvider>().deleteProduct(product.id);
+                                             Get.back();
+                                             if (res) {
+                                               Get.snackbar(
+                                                 'Success',
+                                                 'Category deleted successfully',
+                                                 backgroundColor: Colors.green,
+                                                 colorText: Colors.white,
+                                               );
+                                             } else {
+                                               Get.snackbar(
+                                                 'Error',
+                                                 'An error occured while deleting category',
+                                                 backgroundColor: Colors.red,
+                                                 colorText: Colors.white,
+                                               );
+                                             }
+                                           },
+                                         );
+                                       }, child:
+                                     const Icon(FluentIcons.delete),
+                                     ),
+
+                                   ],
+
+                                 ),
+                                 /* trailing: Container(
                                     height: 50,
                                     width: 120,
                                     child: Row(
@@ -309,7 +436,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(10),
-                                            color: Colors.blueAccent,
+                                            color: Colors.blue,
                                           ),
                                           child: InkWell(
                                             child: Icon(Icons.edit,
@@ -317,11 +444,11 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                             onTap: () {
                                               print('edit');
                                               context.go('/product-update/${product.id}');
-                                              /*widget.mainPageController
+                                              *//*widget.mainPageController
                                                   .jumpToPage(8);
                                               context
                                                   .read<ProductProvider>()
-                                                  .setProductModel(product);*/
+                                                  .setProductModel(product);*//*
                                             },
                                           ),
                                         ),
@@ -390,7 +517,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                         ),
                                       ],
                                     ),
-                                  ),
+                                  ),*/
                                 ),
                               );
                             },
@@ -399,7 +526,47 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         controller: pageController,
                       ),
                     ),
-                    Container(
+                    Card(
+
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            icon: Icon(FluentIcons.back, color: Colors.black),
+                            onPressed: () {
+                              pageController.previousPage(duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+                            },
+                          ),
+                          RichText(
+                            text: TextSpan(
+                              text: '${currentPage + 1}',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: '/$nbPages',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(FluentIcons.forward, color: Colors.black),
+                            onPressed: () {
+                              pageController.nextPage(duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                   /* Container(
                       height: 60,
                       width: double.infinity,
                       decoration: BoxDecoration(
@@ -456,12 +623,12 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           ),
                         ],
                       ),
-                    ),
+                    ),*/
                   ],
                 );
               }
               return const Center(
-                child: CircularProgressIndicator(),
+                child: ProgressRing(),
               );
             },
           ),

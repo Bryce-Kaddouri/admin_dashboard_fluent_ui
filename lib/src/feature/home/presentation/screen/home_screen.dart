@@ -51,8 +51,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                 StatScreen(),
                 CategoryListScreen(mainPageController: pageController),
                 CategoryAddScreen(),
-                ProductListScreen(mainPageController: pageController),
-                ProductAddScreen(pageController: pageController),
+                ProductListScreen(),
+                ProductAddScreen(),
                 Container(
                   child: Center(
                     child: Text('Orders'),

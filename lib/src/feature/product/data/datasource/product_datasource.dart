@@ -121,20 +121,28 @@ class ProductDataSource {
     }
   }
 
+
   Future<Either<StorageFailure, String>> uploadImage(Uint8List bytes) async {
     try {
       DateTime now = DateTime.now();
+      int milliseconds = now.millisecondsSinceEpoch;
+      String? url;
       final response = await _client.storage.from('products').uploadBinary(
-            '$now.jpg',
+            '$milliseconds.jpg',
             bytes,
             fileOptions: const FileOptions(
               contentType: 'image/jpg',
               upsert: true,
             ),
           );
+      String path = response.split('products/')[1];
+      url = await _client.storage.from('products').createSignedUrl(
+        path,
+        const Duration(days: 365).inSeconds,
+      );
 
-      if (response != null) {
-        return Right(response);
+      if (url != null) {
+        return Right(url!);
       } else {
         return Left(StorageFailure(errorMessage: 'Error uploading product'));
       }

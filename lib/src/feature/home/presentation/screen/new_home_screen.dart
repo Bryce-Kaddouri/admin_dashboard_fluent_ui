@@ -1,5 +1,7 @@
 import 'package:admin_dashboard/src/feature/category/presentation/screen/category_add_screen.dart';
 import 'package:admin_dashboard/src/feature/category/presentation/screen/category_list_screen.dart';
+import 'package:admin_dashboard/src/feature/product/presentation/screen/product_add_screen.dart';
+import 'package:admin_dashboard/src/feature/product/presentation/screen/product_list_screen.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 class NewHomeScreen extends StatelessWidget {
@@ -70,24 +72,12 @@ class _SideNavBarState extends State<SideNavBar> {
         PaneItem(
           icon: const Icon(FluentIcons.list),
           title: const Text('Product List',overflow: TextOverflow.ellipsis),
-          body: Container(
-            padding: const EdgeInsets.all(16.0),
-            child: const Text(
-              'Manage your category here',
-              style: TextStyle(fontSize: 20),
-            ),
-          ),
+          body: ProductListScreen(),
         ),
         PaneItem(
           icon: const Icon(FluentIcons.add),
           title: const Text('Add Product',overflow: TextOverflow.ellipsis),
-          body: Container(
-            padding: const EdgeInsets.all(16.0),
-            child: const Text(
-              'Check your add here',
-              style: TextStyle(fontSize: 20),
-            ),
-          ),
+          body: ProductAddScreen(),
         ),
       ],
     ),
