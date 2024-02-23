@@ -1,7 +1,6 @@
 import 'package:admin_dashboard/src/feature/user/business/param/user_update_param.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/data/usecase/usecase.dart';
@@ -43,12 +42,31 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<String> _roles = ['ADMIN', 'COOKER', 'SELLER', 'BOOK'];
+  bool _adminIsChecked = true;
+  bool get adminIsChecked => _adminIsChecked;
+  void setAdminIsChecked(bool value) {
+    _adminIsChecked = value;
+    notifyListeners();
+  }
 
-  List<String> get roles => _roles;
+  bool _cookerIsChecked = true;
+  bool get cookerIsChecked => _cookerIsChecked;
+  void setCookerIsChecked(bool value) {
+    _cookerIsChecked = value;
+    notifyListeners();
+  }
 
-  void setRoles(List<String> value) {
-    _roles = value;
+  bool _sellerIsChecked = true;
+  bool get sellerIsChecked => _sellerIsChecked;
+  void setSellerIsChecked(bool value) {
+    _sellerIsChecked = value;
+    notifyListeners();
+  }
+
+  bool _bookIsChecked = true;
+  bool get bookIsChecked => _bookIsChecked;
+  void setBookIsChecked(bool value) {
+    _bookIsChecked = value;
     notifyListeners();
   }
 

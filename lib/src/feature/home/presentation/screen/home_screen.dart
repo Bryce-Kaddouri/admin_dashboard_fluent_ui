@@ -20,7 +20,8 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
   /* bool isCollapsed = true;*/
 
   late PageController pageController;
@@ -58,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                     child: Text('Orders'),
                   ),
                 ),
-                UserListScreen(mainPageController: pageController),
+                UserListScreen(),
                 UserAddScreen(pageController: pageController),
                 Container(
                   child: Center(

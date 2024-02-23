@@ -1,23 +1,12 @@
-import 'dart:js_interop';
-
-import 'package:admin_dashboard/src/feature/category/data/datasource/category_datasource.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../../core/data/usecase/usecase.dart';
-import '../../data/datasource/user_datasource.dart';
-import '../../data/model/user_model.dart';
 import '../provider/user_provider.dart';
 
 class UserListScreen extends StatefulWidget {
-  PageController mainPageController;
-
-  UserListScreen({super.key, required this.mainPageController});
+  UserListScreen({super.key});
 
   @override
   State<UserListScreen> createState() => _UserListScreenState();
@@ -51,24 +40,24 @@ class _UserListScreenState extends State<UserListScreen> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
+        /* Container(
           height: 60,
           width: double.infinity,
           decoration: BoxDecoration(
-            color: Colors.grey[900],
+            color: Colors.grey,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10),
               topRight: Radius.circular(10),
             ),
             border: Border.all(
-              color: Colors.blueAccent,
+              color: Colors.blue,
               width: 4,
             ),
           ),
           child: Row(
             children: [
               SizedBox(width: 10),
-              Expanded(
+              */ /*Expanded(
                 child: FormBuilderTextField(
                   name: 'sarch',
                   controller: context.watch<UserProvider>().searchController,
@@ -97,9 +86,9 @@ class _UserListScreenState extends State<UserListScreen> {
                     fillColor: Colors.white,
                   ),
                 ),
-              ),
+              ),*/ /*
               SizedBox(width: 10),
-              Expanded(
+              */ /*   Expanded(
                 child: Container(
                   height: 40,
                   child: FormBuilderCheckboxGroup(
@@ -123,14 +112,14 @@ class _UserListScreenState extends State<UserListScreen> {
                       print('value: $value');
                       context.read<UserProvider>().setRoles(value!);
 
-/*
+*/ /* */ /*
                 context.read<UserProvider>().setSearchText(value!);
-*/
+*/ /* */ /*
                     },
                   ),
                 ),
-              ),
-              Container(
+              ),*/ /*
+              */ /* Container(
                 width: 80,
                 height: 40,
                 child: FormBuilderDropdown(
@@ -162,9 +151,9 @@ class _UserListScreenState extends State<UserListScreen> {
                         value: 50,
                       ),
                     ]),
-              ),
+              ),*/ /*
               SizedBox(width: 10),
-              Container(
+              */ /*  Container(
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
@@ -177,9 +166,139 @@ class _UserListScreenState extends State<UserListScreen> {
                     print('add');
                     context.read<UserProvider>().setSelectedUser(null);
 
-                    widget.mainPageController.jumpToPage(10);
                   },
                 ),
+              ),*/ /*
+            ],
+          ),
+        ),*/
+        Card(
+          padding: const EdgeInsets.all(5),
+          child: Row(
+            children: [
+              Expanded(
+                child: AnimatedContainer(
+                  padding: const EdgeInsets.all(10.0),
+                  alignment: Alignment.center,
+                  duration: const Duration(milliseconds: 300),
+                  child: TextBox(
+                    prefixMode: OverlayVisibilityMode.always,
+                    prefix: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: const Icon(
+                          FluentIcons.search,
+                          size: 20,
+                          color: Colors.black,
+                        )),
+                    textAlignVertical: TextAlignVertical.center,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: const BorderRadius.all(Radius.circular(5)),
+                      border: Border.all(color: Colors.grey),
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                child: Row(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(children: [
+                        Text('ADMIN'),
+                        SizedBox(width: 5),
+                        Checkbox(
+                          onChanged: (value) {
+                            context
+                                .read<UserProvider>()
+                                .setAdminIsChecked(value!);
+                          },
+                          checked: context.watch<UserProvider>().adminIsChecked,
+                        ),
+                      ]),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(children: [
+                        Text('COOKER'),
+                        SizedBox(width: 5),
+                        Checkbox(
+                          onChanged: (value) {
+                            context
+                                .read<UserProvider>()
+                                .setCookerIsChecked(value!);
+                          },
+                          checked:
+                              context.watch<UserProvider>().cookerIsChecked,
+                        ),
+                      ]),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(children: [
+                        Text('SELLER'),
+                        SizedBox(width: 5),
+                        Checkbox(
+                          onChanged: (value) {
+                            context
+                                .read<UserProvider>()
+                                .setSellerIsChecked(value!);
+                          },
+                          checked:
+                              context.watch<UserProvider>().sellerIsChecked,
+                        ),
+                      ]),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(children: [
+                        Text('BOOK'),
+                        SizedBox(width: 5),
+                        Checkbox(
+                          onChanged: (value) {
+                            context
+                                .read<UserProvider>()
+                                .setBookIsChecked(value!);
+                          },
+                          checked: context.watch<UserProvider>().bookIsChecked,
+                        ),
+                      ]),
+                    )
+                  ],
+                ),
+              ),
+
+              // select between 10, 25, 50, 100 and 250
+              DropDownButton(
+                title: Text('10'),
+                items: [
+                  MenuFlyoutItem(text: const Text('10'), onPressed: () {}),
+                  MenuFlyoutSeparator(),
+                  MenuFlyoutItem(text: const Text('25'), onPressed: () {}),
+                  MenuFlyoutSeparator(),
+                  MenuFlyoutItem(text: const Text('50'), onPressed: () {}),
+                  MenuFlyoutSeparator(),
+                  MenuFlyoutItem(text: const Text('100'), onPressed: () {}),
+                  MenuFlyoutSeparator(),
+                  MenuFlyoutItem(text: const Text('250'), onPressed: () {}),
+                ],
+              ),
+              SizedBox(width: 10),
+              FilledButton(
+                style: ButtonStyle(
+                  shape: ButtonState.all(
+                    RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                  ),
+                  padding: ButtonState.all(const EdgeInsets.all(8.0)),
+                  backgroundColor: ButtonState.all(Colors.blue),
+                  foregroundColor: ButtonState.all(Colors.white),
+                ),
+                onPressed: () {
+                  // Your Logic to Add New `NavigationPaneItem`
+                  print('Search');
+                },
+                child: const Icon(FluentIcons.add),
               ),
             ],
           ),
@@ -208,7 +327,12 @@ class _UserListScreenState extends State<UserListScreen> {
                                 .toLowerCase()))
                     .toList();
 
-                List<String> roles = context.watch<UserProvider>().roles;
+                List<String> roles = [
+                  if (context.watch<UserProvider>().adminIsChecked) 'ADMIN',
+                  if (context.watch<UserProvider>().cookerIsChecked) 'COOKER',
+                  if (context.watch<UserProvider>().sellerIsChecked) 'SELLER',
+                  if (context.watch<UserProvider>().bookIsChecked) 'BOOK',
+                ];
 
                 users = users
                     .where((element) =>
@@ -267,16 +391,14 @@ class _UserListScreenState extends State<UserListScreen> {
                               print('-' * 50);
 
                               return Card(
-                                child:
-
-                                ListTile(
-                                  onTap: (){
-                                    context.go('/user-detail/${user.id.toString()}');
+                                margin: const EdgeInsets.all(10),
+                                padding: const EdgeInsets.all(0),
+                                child: ListTile(
+                                  cursor: SystemMouseCursors.click,
+                                  onPressed: () {
+                                    context.go(
+                                        '/user-detail/${user.id.toString()}');
                                   },
-                                  tileColor: Colors.grey[200],
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
                                   leading: Container(
                                     height: 50,
                                     width: 100,
@@ -287,7 +409,7 @@ class _UserListScreenState extends State<UserListScreen> {
                                             alignment: Alignment.center,
                                             decoration: BoxDecoration(
                                               shape: BoxShape.circle,
-                                              color: Colors.blueAccent,
+                                              color: Colors.blue,
                                             ),
                                             child: Text(
                                               '${user.userMetadata!['fName'].toString().substring(0, 1).toUpperCase()}',
@@ -306,7 +428,49 @@ class _UserListScreenState extends State<UserListScreen> {
                                       ' ' +
                                       user.userMetadata!['lName']),
                                   subtitle: Text(user.createdAt.toString()),
-                                  trailing: Container(
+                                  trailing: Row(
+                                    children: [
+                                      FilledButton(
+                                        style: ButtonStyle(
+                                          shape: ButtonState.all(
+                                            RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
+                                          ),
+                                          padding: ButtonState.all(
+                                              const EdgeInsets.all(8.0)),
+                                          backgroundColor:
+                                              ButtonState.all(Colors.blue),
+                                          foregroundColor:
+                                              ButtonState.all(Colors.white),
+                                        ),
+                                        onPressed: () {
+                                          context.go(
+                                              '/user-update/${user.id.toString()}');
+                                        },
+                                        child: const Icon(FluentIcons.edit),
+                                      ),
+                                      SizedBox(width: 10),
+                                      FilledButton(
+                                        style: ButtonStyle(
+                                          shape: ButtonState.all(
+                                            RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
+                                          ),
+                                          padding: ButtonState.all(
+                                              const EdgeInsets.all(8.0)),
+                                          backgroundColor:
+                                              ButtonState.all(Colors.red),
+                                          foregroundColor:
+                                              ButtonState.all(Colors.white),
+                                        ),
+                                        onPressed: () {},
+                                        child: const Icon(FluentIcons.delete),
+                                      ),
+                                    ],
+                                  ),
+                                  /*trailing: Container(
                                     height: 50,
                                     width: 120,
                                     child: Row(
@@ -317,18 +481,14 @@ class _UserListScreenState extends State<UserListScreen> {
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(10),
-                                            color: Colors.blueAccent,
+                                            color: Colors.blue,
                                           ),
                                           child: InkWell(
                                             child: Icon(Icons.edit,
                                                 color: Colors.white),
                                             onTap: () {
                                               print('edit');
-                                              widget.mainPageController
-                                                  .jumpToPage(11);
-                                              context
-                                                  .read<UserProvider>()
-                                                  .setSelectedUser(user);
+
                                             },
                                           ),
                                         ),
@@ -397,9 +557,8 @@ class _UserListScreenState extends State<UserListScreen> {
                                         ),
                                       ],
                                     ),
-                                  ),
+                                  ),*/
                                 ),
-
                               );
                             },
                           );
@@ -407,26 +566,12 @@ class _UserListScreenState extends State<UserListScreen> {
                         controller: pageController,
                       ),
                     ),
-                    Container(
-                      height: 60,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[900],
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10),
-                        ),
-                        border: Border.all(
-                          color: Colors.blueAccent,
-                          width: 4,
-                        ),
-                      ),
+                    Card(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           IconButton(
-                            icon:
-                                Icon(Icons.arrow_back_ios, color: Colors.white),
+                            icon: Icon(FluentIcons.back, color: Colors.black),
                             onPressed: () {
                               pageController.previousPage(
                                   duration: Duration(milliseconds: 300),
@@ -437,7 +582,7 @@ class _UserListScreenState extends State<UserListScreen> {
                             text: TextSpan(
                               text: '${currentPage + 1}',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Colors.black,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20,
                               ),
@@ -445,7 +590,7 @@ class _UserListScreenState extends State<UserListScreen> {
                                 TextSpan(
                                   text: '/$nbPages',
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: Colors.black,
                                     fontWeight: FontWeight.normal,
                                     fontSize: 20,
                                   ),
@@ -454,8 +599,8 @@ class _UserListScreenState extends State<UserListScreen> {
                             ),
                           ),
                           IconButton(
-                            icon: Icon(Icons.arrow_forward_ios,
-                                color: Colors.white),
+                            icon:
+                                Icon(FluentIcons.forward, color: Colors.black),
                             onPressed: () {
                               pageController.nextPage(
                                   duration: Duration(milliseconds: 300),
@@ -469,7 +614,7 @@ class _UserListScreenState extends State<UserListScreen> {
                 );
               }
               return const Center(
-                child: CircularProgressIndicator(),
+                child: ProgressRing(),
               );
             },
           ),

@@ -2,6 +2,7 @@ import 'package:admin_dashboard/src/feature/category/presentation/screen/categor
 import 'package:admin_dashboard/src/feature/category/presentation/screen/category_list_screen.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/product_add_screen.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/product_list_screen.dart';
+import 'package:admin_dashboard/src/feature/user/presentation/screen/user_list_screen.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 class NewHomeScreen extends StatelessWidget {
@@ -10,7 +11,6 @@ class NewHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SideNavBar();
-
   }
 }
 
@@ -26,9 +26,9 @@ class _SideNavBarState extends State<SideNavBar> {
   PaneDisplayMode displayMode = PaneDisplayMode.open;
 
   List<NavigationPaneItem> items = [
-   PaneItem(
+    PaneItem(
       icon: const Icon(FluentIcons.home),
-      title: const Text('Home',overflow: TextOverflow.ellipsis),
+      title: const Text('Home', overflow: TextOverflow.ellipsis),
       body: Container(
         padding: const EdgeInsets.all(16.0),
         child: const Text(
@@ -40,27 +40,26 @@ class _SideNavBarState extends State<SideNavBar> {
     PaneItemSeparator(),
     PaneItemExpander(
       icon: const Icon(FluentIcons.category_classification),
-      title: const Text('Category',overflow: TextOverflow.ellipsis),
-      body: Container(
-      ),
+      title: const Text('Category', overflow: TextOverflow.ellipsis),
+      body: Container(),
       items: [
         PaneItem(
           icon: const Icon(FluentIcons.list),
-          title: const Text('Category List',overflow: TextOverflow.ellipsis),
+          title: const Text('Category List', overflow: TextOverflow.ellipsis),
           body: CategoryListScreen(
             mainPageController: PageController(),
           ),
         ),
         PaneItem(
           icon: const Icon(FluentIcons.add),
-          title: const Text('Add Category',overflow: TextOverflow.ellipsis),
+          title: const Text('Add Category', overflow: TextOverflow.ellipsis),
           body: CategoryAddScreen(),
         ),
       ],
     ),
     PaneItemExpander(
       icon: const Icon(FluentIcons.product),
-      title: const Text('Product',overflow: TextOverflow.ellipsis),
+      title: const Text('Product', overflow: TextOverflow.ellipsis),
       body: Container(
         padding: const EdgeInsets.all(16.0),
         child: const Text(
@@ -71,19 +70,19 @@ class _SideNavBarState extends State<SideNavBar> {
       items: [
         PaneItem(
           icon: const Icon(FluentIcons.list),
-          title: const Text('Product List',overflow: TextOverflow.ellipsis),
+          title: const Text('Product List', overflow: TextOverflow.ellipsis),
           body: ProductListScreen(),
         ),
         PaneItem(
           icon: const Icon(FluentIcons.add),
-          title: const Text('Add Product',overflow: TextOverflow.ellipsis),
+          title: const Text('Add Product', overflow: TextOverflow.ellipsis),
           body: ProductAddScreen(),
         ),
       ],
     ),
     PaneItemExpander(
       icon: const Icon(FluentIcons.category_classification),
-      title: const Text('Order',overflow: TextOverflow.ellipsis),
+      title: const Text('Order', overflow: TextOverflow.ellipsis),
       body: Container(
         padding: const EdgeInsets.all(16.0),
         child: const Text(
@@ -94,7 +93,7 @@ class _SideNavBarState extends State<SideNavBar> {
       items: [
         PaneItem(
           icon: const Icon(FluentIcons.trackers),
-          title: const Text('Track orders',overflow: TextOverflow.ellipsis),
+          title: const Text('Track orders', overflow: TextOverflow.ellipsis),
           infoBadge: const InfoBadge(source: Text('8')),
           body: Container(
             padding: const EdgeInsets.all(16.0),
@@ -106,7 +105,7 @@ class _SideNavBarState extends State<SideNavBar> {
         ),
         PaneItem(
           icon: const Icon(FluentIcons.issue_tracking),
-          title: const Text('Order List',overflow: TextOverflow.ellipsis),
+          title: const Text('Order List', overflow: TextOverflow.ellipsis),
           body: Container(
             padding: const EdgeInsets.all(16.0),
             child: const Text(
@@ -117,7 +116,7 @@ class _SideNavBarState extends State<SideNavBar> {
         ),
         PaneItem(
           icon: const Icon(FluentIcons.chart),
-          title: const Text('Chart',overflow: TextOverflow.ellipsis),
+          title: const Text('Chart', overflow: TextOverflow.ellipsis),
           body: Container(
             padding: const EdgeInsets.all(16.0),
             child: const Text(
@@ -130,7 +129,7 @@ class _SideNavBarState extends State<SideNavBar> {
     ),
     PaneItemExpander(
       icon: const Icon(FluentIcons.account_management),
-      title: const Text('User',overflow: TextOverflow.ellipsis),
+      title: const Text('User', overflow: TextOverflow.ellipsis),
       body: Container(
         padding: const EdgeInsets.all(16.0),
         child: const Text(
@@ -140,19 +139,12 @@ class _SideNavBarState extends State<SideNavBar> {
       ),
       items: [
         PaneItem(
-          icon: const Icon(FluentIcons.list),
-          title: const Text('user List',overflow: TextOverflow.ellipsis),
-          body: Container(
-            padding: const EdgeInsets.all(16.0),
-            child: const Text(
-              'Manage your category here',
-              style: TextStyle(fontSize: 20),
-            ),
-          ),
-        ),
+            icon: const Icon(FluentIcons.list),
+            title: const Text('user List', overflow: TextOverflow.ellipsis),
+            body: UserListScreen()),
         PaneItem(
           icon: const Icon(FluentIcons.add),
-          title: const Text('Add User',overflow: TextOverflow.ellipsis),
+          title: const Text('Add User', overflow: TextOverflow.ellipsis),
           body: Container(
             padding: const EdgeInsets.all(16.0),
             child: const Text(
@@ -165,7 +157,7 @@ class _SideNavBarState extends State<SideNavBar> {
     ),
     PaneItemExpander(
       icon: const Icon(FluentIcons.book_answers),
-      title: const Text('Catalog',overflow: TextOverflow.ellipsis),
+      title: const Text('Catalog', overflow: TextOverflow.ellipsis),
       body: Container(
         padding: const EdgeInsets.all(16.0),
         child: const Text(
@@ -176,7 +168,7 @@ class _SideNavBarState extends State<SideNavBar> {
       items: [
         PaneItem(
           icon: const Icon(FluentIcons.list),
-          title: const Text('Page List',overflow: TextOverflow.ellipsis),
+          title: const Text('Page List', overflow: TextOverflow.ellipsis),
           body: Container(
             padding: const EdgeInsets.all(16.0),
             child: const Text(
@@ -187,7 +179,7 @@ class _SideNavBarState extends State<SideNavBar> {
         ),
         PaneItem(
           icon: const Icon(FluentIcons.add),
-          title: const Text('Add Page',overflow: TextOverflow.ellipsis),
+          title: const Text('Add Page', overflow: TextOverflow.ellipsis),
           body: Container(
             padding: const EdgeInsets.all(16.0),
             child: const Text(
@@ -200,7 +192,7 @@ class _SideNavBarState extends State<SideNavBar> {
     ),
     PaneItem(
       icon: const Icon(FluentIcons.settings),
-      title: const Text('Settings',overflow: TextOverflow.ellipsis),
+      title: const Text('Settings', overflow: TextOverflow.ellipsis),
       body: Container(
         padding: const EdgeInsets.all(16.0),
         child: const Text(
@@ -209,13 +201,10 @@ class _SideNavBarState extends State<SideNavBar> {
         ),
       ),
     ),
-
-
-
   ];
 
-  String getTitleScreen(int index){
-    switch(index) {
+  String getTitleScreen(int index) {
+    switch (index) {
       case 0:
         return 'Home';
       case 1:
@@ -260,27 +249,30 @@ class _SideNavBarState extends State<SideNavBar> {
   @override
   Widget build(BuildContext context) {
     return NavigationView(
-
       appBar: NavigationAppBar(
         automaticallyImplyLeading: false,
         title: Container(
           alignment: Alignment.centerRight,
           child: Container(
-            width: displayMode == PaneDisplayMode.open ? MediaQuery.of(context).size.width - 340 : MediaQuery.of(context).size.width - 60,
-
+            width: displayMode == PaneDisplayMode.open
+                ? MediaQuery.of(context).size.width - 340
+                : MediaQuery.of(context).size.width - 60,
             alignment: Alignment.center,
-            child:  Text(
+            child: Text(
               getTitleScreen(topIndex),
               style: TextStyle(fontSize: 20),
             ),
           ),
         ),
       ),
-
       pane: NavigationPane(
         selected: topIndex,
         onChanged: (index) => {
-          if(index != 1 && index != 4 && index != 7 && index != 11 && index != 14)
+          if (index != 1 &&
+              index != 4 &&
+              index != 7 &&
+              index != 11 &&
+              index != 14)
             setState(() => topIndex = index),
         },
         displayMode: displayMode,
@@ -332,4 +324,3 @@ class _SideNavBarState extends State<SideNavBar> {
     );
   }
 }
-
