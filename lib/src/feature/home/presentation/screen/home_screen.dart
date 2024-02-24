@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
                 ),
                 UserListScreen(),
-                UserAddScreen(pageController: pageController),
+                UserAddScreen(),
                 Container(
                   child: Center(
                     child: Text('Page List'),

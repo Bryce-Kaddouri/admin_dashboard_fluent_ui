@@ -1,36 +1,29 @@
-import 'dart:io';
-
-import 'package:admin_dashboard/src/feature/category/presentation/category_provider/category_provider.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../category/data/model/category_model.dart';
-import '../../data/model/user_model.dart';
 import '../provider/user_provider.dart';
 
 // add catgeory screen
 // name, description, image
 
 class UserAddScreen extends StatefulWidget {
-  PageController pageController;
-
-  UserAddScreen({super.key, required this.pageController});
+  UserAddScreen({super.key});
 
   @override
   State<UserAddScreen> createState() => _UserAddScreenState();
 }
 
 class _UserAddScreenState extends State<UserAddScreen> {
-  final _formKey = GlobalKey<FormBuilderState>();
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-  TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+  final TextEditingController _roleController = TextEditingController();
+  String _password = '';
 
   /*
   String imgUrl = '';
@@ -75,11 +68,136 @@ class _UserAddScreenState extends State<UserAddScreen> {
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
                     color: Colors.white)),
-            FormBuilder(
+            Form(
               key: _formKey,
               child: Column(
                 children: [
-                  SizedBox(height: 40),
+                  InfoLabel(
+                    label: 'Enter First Name:',
+                    child: TextFormBox(
+                      controller: _firstNameController,
+                      placeholder: 'First Name',
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter first name';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  InfoLabel(
+                    label: 'Enter Last Name:',
+                    child: TextFormBox(
+                      controller: _lastNameController,
+                      placeholder: 'Last Name',
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                      ]),
+                    ),
+                  ),
+                  InfoLabel(
+                    label: 'Enter Email:',
+                    child: TextFormBox(
+                      controller: _emailController,
+                      placeholder: 'Email',
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                        FormBuilderValidators.email(),
+                      ]),
+                    ),
+                  ),
+                  InfoLabel(
+                    label: 'Enter Password:',
+                    child: TextFormBox(
+                      controller: _passwordController,
+                      placeholder: 'Password',
+                      onChanged: (value) {
+                        setState(() {
+                          _password = value;
+                        });
+                      },
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                      ]),
+                    ),
+                  ),
+                  InfoLabel(
+                    label: 'Enter Confirm Password:',
+                    child: TextFormBox(
+                      controller: _confirmPasswordController,
+                      placeholder: 'Confirm Password',
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                        FormBuilderValidators.equal(_password,
+                            errorText: 'Passwords do not match'),
+                      ]),
+                    ),
+                  ),
+                  InfoLabel(
+                    label: 'Select Role:',
+                    child: ComboboxFormField<String>(
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                      ]),
+                      isExpanded: true,
+                      value: _roleController.text,
+                      placeholder: Text('Select Role'),
+                      items: [
+                        ComboBoxItem(
+                          child: Text('ADMIN'),
+                          value: 'ADMIN',
+                        ),
+                        ComboBoxItem(
+                          child: Text('COOKER'),
+                          value: 'COOKER',
+                        ),
+                        ComboBoxItem(
+                          child: Text('SELLER'),
+                          value: 'SELLER',
+                        ),
+                        ComboBoxItem(
+                          child: Text('BOOK'),
+                          value: 'BOOK',
+                        ),
+                      ],
+                      onChanged: (String? value) {
+                        _roleController.text = value!;
+                      },
+                    ),
+                  ),
+                  FilledButton(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        print('Form is valid');
+                        String fName = _firstNameController.text;
+                        String lName = _lastNameController.text;
+                        String email = _emailController.text;
+                        String password = _passwordController.text;
+                        String role = _roleController.text;
+
+                        bool res = await context.read<UserProvider>().addUser(
+                            email, password, fName, lName, role, context);
+
+                        if (res) {
+                          // reset form
+                          _firstNameController.clear();
+                          _lastNameController.clear();
+                          _emailController.clear();
+                          _passwordController.clear();
+                          _confirmPasswordController.clear();
+                          _roleController.clear();
+
+                          setState(() {
+                            _password = '';
+                          });
+                        }
+                      } else {
+                        print('Form is invalid');
+                      }
+                    },
+                    child: Text('Save'),
+                  ),
+                  /*SizedBox(height: 40),
                   FormBuilderTextField(
                     initialValue:
                         context.watch<UserProvider>().selectedUser == null
@@ -598,12 +716,12 @@ class _UserAddScreenState extends State<UserAddScreen> {
                         ),
                       );
                     }),
-                  ),
+                  ),*/
                 ],
               ),
             ),
             const SizedBox(height: 100),
-            MaterialButton(
+            /* MaterialButton(
               color: Theme.of(context).colorScheme.secondary,
               minWidth: 500,
               height: 50,
@@ -630,13 +748,7 @@ class _UserAddScreenState extends State<UserAddScreen> {
                     bool res = await context
                         .read<UserProvider>()
                         .addUser(email, password, fName, lName, role);
-                    if (res) {
-                      widget.pageController.animateToPage(
-                        10,
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeInOut,
-                      );
-                    }
+                    if (res) {}
                   } else {
                     print('-' * 100);
                     print(_formKey.currentState!.value);
@@ -661,17 +773,11 @@ class _UserAddScreenState extends State<UserAddScreen> {
 
                     User? res = await context.read<UserProvider>().updateUser(
                         uid, email, password, fName, lName, role, true);
-                    if (res != null) {
-                      widget.pageController.animateToPage(
-                        10,
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeInOut,
-                      );
-                    }
+                    if (res != null) {}
                   }
                 }
               },
-            ),
+            ),*/
             SizedBox(height: 100),
           ],
         ),

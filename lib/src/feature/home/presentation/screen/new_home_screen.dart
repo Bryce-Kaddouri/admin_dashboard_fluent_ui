@@ -2,6 +2,7 @@ import 'package:admin_dashboard/src/feature/category/presentation/screen/categor
 import 'package:admin_dashboard/src/feature/category/presentation/screen/category_list_screen.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/product_add_screen.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/product_list_screen.dart';
+import 'package:admin_dashboard/src/feature/user/presentation/screen/user_add_screen.dart';
 import 'package:admin_dashboard/src/feature/user/presentation/screen/user_list_screen.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
@@ -145,13 +146,7 @@ class _SideNavBarState extends State<SideNavBar> {
         PaneItem(
           icon: const Icon(FluentIcons.add),
           title: const Text('Add User', overflow: TextOverflow.ellipsis),
-          body: Container(
-            padding: const EdgeInsets.all(16.0),
-            child: const Text(
-              'Check your add here',
-              style: TextStyle(fontSize: 20),
-            ),
-          ),
+          body: UserAddScreen(),
         ),
       ],
     ),
