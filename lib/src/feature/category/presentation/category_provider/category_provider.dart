@@ -1,6 +1,7 @@
 import 'package:admin_dashboard/src/feature/category/business/usecase/category_add_usecase.dart';
 import 'package:admin_dashboard/src/feature/category/business/usecase/category_get_categories_usecase.dart';
 import 'package:admin_dashboard/src/feature/category/business/usecase/category_update_usecase.dart';
+import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -106,8 +107,8 @@ class CategoryProvider with ChangeNotifier {
   }
 
   Future<List<CategoryModel>?> getCategoriesAsync() async {
-
     List<CategoryModel> categoryList = [];
+
     final result = await categoryGetCategoriesUseCase.call(NoParams());
 
     await result.fold((l) async {
@@ -117,7 +118,6 @@ class CategoryProvider with ChangeNotifier {
       categoryList = r;
     });
 
-    _categoryList = categoryList;
     return categoryList;
   }
 
@@ -201,11 +201,12 @@ class CategoryProvider with ChangeNotifier {
     return url;
   }
 
-  Future<bool> addCategory(
-      String name, String? description, String imageUrl) async {
+  Future<bool> addCategory(String name, String? description, String imageUrl,
+      BuildContext context) async {
     _isLoading = true;
-    bool isSuccess = false;
     notifyListeners();
+
+    bool isSuccess = false;
     final result = await categoryAddUseCase.call(CategoryAddParam(
       name: name,
       description: description,
@@ -215,9 +216,55 @@ class CategoryProvider with ChangeNotifier {
     await result.fold((l) async {
       _addCategoryErrorMessage = l.errorMessage;
 
+      await fluent.displayInfoBar(
+        context,
+        builder: (context, close) {
+          return fluent.InfoBar(
+            title: const Text('Error!'),
+            content: fluent.RichText(
+                text: fluent.TextSpan(
+              text: 'The user has not been added because of an error. ',
+              children: [
+                fluent.TextSpan(
+                  text: l.errorMessage,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ],
+            )),
+
+            /*'The user has not been added because of an error. ${l.errorMessage}'*/
+
+            action: IconButton(
+              icon: const Icon(fluent.FluentIcons.clear),
+              onPressed: close,
+            ),
+            severity: fluent.InfoBarSeverity.error,
+          );
+        },
+        alignment: Alignment.topRight,
+        duration: const Duration(seconds: 5),
+      );
+
       isSuccess = false;
     }, (r) async {
       print(r.toJson());
+      await fluent.displayInfoBar(
+        context,
+        builder: (context, close) {
+          return fluent.InfoBar(
+            title: const Text('Success!'),
+            content: const Text(
+                'The category has been added successfully. You can add another category or close the form.'),
+            action: IconButton(
+              icon: const Icon(fluent.FluentIcons.clear),
+              onPressed: close,
+            ),
+            severity: fluent.InfoBarSeverity.success,
+          );
+        },
+        alignment: Alignment.topRight,
+        duration: const Duration(seconds: 5),
+      );
       isSuccess = true;
     });
 
@@ -240,23 +287,71 @@ class CategoryProvider with ChangeNotifier {
     return categoryModel;
   }
 
-  Future<CategoryModel?> updateCategory(CategoryModel category) async {
+  Future<bool> updateCategory(
+      CategoryModel category, BuildContext context) async {
     _isLoading = true;
     notifyListeners();
+    bool isSuccess = false;
     CategoryModel? categoryModel;
     final result = await categoryUpdateCategoryUseCase.call(category);
 
     await result.fold((l) async {
       _addCategoryErrorMessage = l.errorMessage;
+      await fluent.displayInfoBar(
+        context,
+        builder: (context, close) {
+          return fluent.InfoBar(
+            title: const Text('Error!'),
+            content: fluent.RichText(
+                text: fluent.TextSpan(
+              text: 'The user has not been added because of an error. ',
+              children: [
+                fluent.TextSpan(
+                  text: l.errorMessage,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ],
+            )),
+
+            /*'The user has not been added because of an error. ${l.errorMessage}'*/
+
+            action: IconButton(
+              icon: const Icon(fluent.FluentIcons.clear),
+              onPressed: close,
+            ),
+            severity: fluent.InfoBarSeverity.error,
+          );
+        },
+        alignment: Alignment.topRight,
+        duration: const Duration(seconds: 5),
+      );
+      isSuccess = false;
     }, (r) async {
       print(r.toJson());
-      categoryModel = CategoryModel.fromJson(r.toJson());
+      await fluent.displayInfoBar(
+        context,
+        builder: (context, close) {
+          return fluent.InfoBar(
+            title: const Text('Success!'),
+            content: const Text(
+                'The category has been added successfully. You can add another category or close the form.'),
+            action: IconButton(
+              icon: const Icon(fluent.FluentIcons.clear),
+              onPressed: close,
+            ),
+            severity: fluent.InfoBarSeverity.success,
+          );
+        },
+        alignment: Alignment.topRight,
+        duration: const Duration(seconds: 5),
+      );
+      isSuccess = true;
     });
 
     _isLoading = false;
     notifyListeners();
 
-    return categoryModel;
+    return isSuccess;
   }
 
   Future<bool> deleteCategory(int id) async {

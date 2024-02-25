@@ -343,7 +343,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                         ),
                                         onPressed: () {
                                           context.go(
-                                              '/product-update/${product.id}');
+                                              '/product/update/${product.id}');
                                         },
                                         child: const Icon(FluentIcons.edit),
                                       ),

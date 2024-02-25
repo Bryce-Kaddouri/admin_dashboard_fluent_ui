@@ -50,6 +50,8 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
           key: _formKey,
           child: Column(
             children: [
+              SizedBox(height: 50),
+
               InfoLabel(
                 label: 'Add product image:',
                 child: Column(
@@ -80,6 +82,7 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
                         width: 200,
                         child: Icon(FluentIcons.photo2_add),
                       ),
+                    SizedBox(height: 10),
                     FilledButton(
                       onPressed: () async {
                         XFile? result =
@@ -91,94 +94,130 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
                           });
                         }
                       },
-                      child:
-                          Text(image != null ? 'Change Image' : 'Pick Image'),
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: 200,
+                        height: 30,
+                        child:
+                            Text(image != null ? 'Change Image' : 'Pick Image'),
+                      ),
                     ),
                   ],
                 ),
               ),
+              SizedBox(height: 50),
+
               InfoLabel(
                 label: 'Enter product name:',
-                child: TextFormBox(
-                  controller: nameController,
-                  placeholder: 'Name',
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter category name';
-                    }
-                    return null;
-                  },
+                child: Container(
+                  alignment: Alignment.center,
+                  constraints: BoxConstraints(maxWidth: 500, maxHeight: 50),
+                  child: TextFormBox(
+                    controller: nameController,
+                    placeholder: 'Name',
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter category name';
+                      }
+                      return null;
+                    },
+                  ),
                 ),
               ),
+              SizedBox(height: 50),
+
               InfoLabel(
                 label: 'Enter product price:',
-                child: NumberFormBox<double>(
-                  precision: 2,
-                  value: priceController.text.isEmpty
-                      ? null
-                      : double.parse(priceController.text),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                      RegExp(r'^\d+\.?\d{0,2}'),
-                    ),
-                  ],
-                  min: 0,
-                  onChanged: (value) {
-                    priceController.text = value.toString();
-                  },
-                  validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.required(),
-                    FormBuilderValidators.numeric(),
-                  ]),
-                  placeholder: 'Price',
-                  smallChange: 0.1,
-                  largeChange: 1,
-                  mode: SpinButtonPlacementMode.inline,
+                child: Container(
+                  alignment: Alignment.center,
+                  constraints: BoxConstraints(maxWidth: 500, maxHeight: 50),
+                  child: NumberFormBox<double>(
+                    precision: 2,
+                    value: priceController.text.isEmpty
+                        ? null
+                        : double.parse(priceController.text),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(
+                        RegExp(r'^\d+\.?\d{0,2}'),
+                      ),
+                    ],
+                    min: 0,
+                    onChanged: (value) {
+                      priceController.text = value.toString();
+                    },
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(),
+                      FormBuilderValidators.numeric(),
+                    ]),
+                    placeholder: 'Price',
+                    smallChange: 0.1,
+                    largeChange: 1,
+                    mode: SpinButtonPlacementMode.inline,
+                  ),
                 ),
               ),
+              SizedBox(height: 50),
+
               InfoLabel(
                 label: 'Enter product description:',
-                child: TextFormBox(
-                  controller: descriptionController,
-                  placeholder: 'Name',
+                child: Container(
+                  alignment: Alignment.center,
+                  constraints: BoxConstraints(maxWidth: 500, maxHeight: 50),
+                  child: TextFormBox(
+                    controller: descriptionController,
+                    placeholder: 'Description',
+                  ),
                 ),
               ),
 
               // auto suggest category
+              SizedBox(height: 50),
+
               InfoLabel(
                 label: 'Select category:',
-                child: AutoSuggestBox.form(
-                  validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.required(
-                        errorText: 'Please select category'),
-                  ]),
-                  controller: categoryController,
-                  placeholder: 'Select Category',
-                  items: lstCategory
-                      .map<AutoSuggestBoxItem<CategoryModel>>(
-                        (cat) => AutoSuggestBoxItem<CategoryModel>(
-                          value: cat,
-                          label: cat.name,
-                          onFocusChange: (focused) {
-                            if (focused) {
-                              debugPrint('Focused #${cat.id} - ${cat.name}');
-                            }
-                          },
-                        ),
-                      )
-                      .toList(),
-                  onSelected: (item) {
-                    setState(() {
-                      selectedObjectCategory = item.value;
-                      categoryController.text = item.value!.id.toString();
-                    });
-                  },
+                child: Container(
+                  alignment: Alignment.center,
+                  constraints: BoxConstraints(maxWidth: 500, maxHeight: 50),
+                  child: AutoSuggestBox.form(
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(
+                          errorText: 'Please select category'),
+                    ]),
+                    controller: categoryController,
+                    placeholder: 'Select Category',
+                    items: lstCategory
+                        .map<AutoSuggestBoxItem<CategoryModel>>(
+                          (cat) => AutoSuggestBoxItem<CategoryModel>(
+                            value: cat,
+                            label: cat.name,
+                            onFocusChange: (focused) {
+                              if (focused) {
+                                debugPrint('Focused #${cat.id} - ${cat.name}');
+                              }
+                            },
+                          ),
+                        )
+                        .toList(),
+                    onSelected: (item) {
+                      setState(() {
+                        selectedObjectCategory = item.value;
+                        categoryController.text = item.value!.id.toString();
+                      });
+                    },
+                  ),
                 ),
               ),
+              SizedBox(height: 100),
+
               FilledButton(
                   child: context.watch<ProductProvider>().isLoading
                       ? ProgressRing()
-                      : Text('Add Product'),
+                      : Container(
+                          alignment: Alignment.center,
+                          width: 200,
+                          height: 30,
+                          child: Text('Add Product'),
+                        ),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       print('Form is valid');
@@ -195,7 +234,7 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
                       bool res = await context
                           .read<ProductProvider>()
                           .addProduct(name, description, imageUrl ?? '', price,
-                              categoryId);
+                              categoryId, context);
                       if (res) {
                         await displayInfoBar(
                           context,
@@ -240,6 +279,7 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
                       print('Form is invalid');
                     }
                   }),
+              SizedBox(height: 100),
             ],
           ),
         ),

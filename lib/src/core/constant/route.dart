@@ -1,7 +1,6 @@
-import 'package:admin_dashboard/fluent_ui.dart';
 import 'package:admin_dashboard/src/feature/auth/presentation/provider/auth_provider.dart';
-import 'package:admin_dashboard/src/feature/home/presentation/screen/home_screen.dart';
 import 'package:admin_dashboard/src/feature/home/presentation/screen/new_home_screen.dart';
+import 'package:admin_dashboard/src/feature/product/presentation/screen/update_product_screen.dart';
 import 'package:admin_dashboard/src/feature/user/presentation/screen/user_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,7 +9,6 @@ import 'package:provider/provider.dart';
 
 import '../../feature/auth/presentation/screen/signin_screen.dart';
 import '../../feature/category/presentation/screen/update_category_screen.dart';
-import '../../feature/product/presentation/screen/product_screen.dart';
 
 /*class Routes {
   static const String home = '/home';
@@ -35,10 +33,6 @@ import '../../feature/product/presentation/screen/product_screen.dart';
 }*/
 
 class RouterHelper {
-  static back() {
-    Get.key?.currentState?.pop();
-  }
-
   GoRouter getRouter() {
     return GoRouter(
       navigatorKey: Get.key,
@@ -61,107 +55,119 @@ class RouterHelper {
       routes: [
         GoRoute(
           path: '/',
-          builder: (context, state) => TestFluentUI(),
-        ),
-        GoRoute(
-          path: '/home',
-          builder: (context, state) => /*HomeScreen(
+          builder: (context,
+                  state) => /*HomeScreen(
             currentIndex: 0,
           ),*/
-          NewHomeScreen(),
-        ),
-        GoRoute(
-          path: '/category-list',
-          builder: (context, state) => HomeScreen(
-            currentIndex: 1,
+              NewHomeScreen(
+            key: state.pageKey,
+            currentIndex: 0,
           ),
         ),
         GoRoute(
-          path: '/category-add',
-          builder: (context, state) => HomeScreen(
+          path: '/category',
+          builder: (context, state) => NewHomeScreen(
+            key: state.pageKey,
             currentIndex: 2,
           ),
+          routes: [
+            GoRoute(
+              path: 'add',
+              builder: (context, state) => NewHomeScreen(
+                key: state.pageKey,
+                currentIndex: 3,
+              ),
+            ),
+            GoRoute(
+              path: 'update/:id',
+              builder: (context, state) {
+                String? id = state.pathParameters['id'];
+                if (id == null) {
+                  return Scaffold(
+                    body: Center(
+                      child: Text('Category Not found'),
+                    ),
+                  );
+                } else {
+                  int idInt = int.parse(id);
+                  return UpdateCategoryScreen(
+                    categoryId: idInt,
+                  );
+                }
+              },
+            ),
+          ],
         ),
         GoRoute(
-            path: '/category-update/:id',
-            builder: (context, state) {
-              String? id = state.pathParameters['id'];
-              if (id == null) {
-                return Scaffold(
-                  body: Center(
-                    child: Text('Category Not found'),
-                  ),
-                );
-              } else {
-                int idInt = int.parse(id);
-                return UpdateCategoryScreen(
-                  categoryId: idInt,
-                );
-              }
-            }),
-        GoRoute(
-            path: '/product-update/:id',
-            builder: (context, state) {
-              String? id = state.pathParameters['id'];
-              if (id == null) {
-                return Scaffold(
-                  body: Center(
-                    child: Text('Product Not found'),
-                  ),
-                );
-              } else {
-                int idInt = int.parse(id);
-                return UpdateProductScreen(
-                  productId: idInt,
-                );
-              }
-            }),
-        GoRoute(
-          path: '/product-list',
-          builder: (context, state) => HomeScreen(
-            currentIndex: 3,
-          ),
-        ),
-        GoRoute(
-          path: '/product-add',
-          builder: (context, state) => HomeScreen(
-            currentIndex: 4,
-          ),
-        ),
-        GoRoute(
-          path: '/order-list',
-          builder: (context, state) => HomeScreen(
+          path: '/product',
+          builder: (context, state) => NewHomeScreen(
+            key: state.pageKey,
             currentIndex: 5,
           ),
+          routes: [
+            GoRoute(
+              path: 'add',
+              builder: (context, state) => NewHomeScreen(
+                key: state.pageKey,
+                currentIndex: 6,
+              ),
+            ),
+            GoRoute(
+              path: 'update/:id',
+              builder: (context, state) {
+                String? id = state.pathParameters['id'];
+                if (id == null) {
+                  return Scaffold(
+                    body: Center(
+                      child: Text('Product Not found'),
+                    ),
+                  );
+                } else {
+                  int idInt = int.parse(id);
+                  return UpdateProductScreen(
+                    productId: idInt,
+/*
+                    productId: idInt,
+*/
+                  );
+                }
+              },
+            ),
+          ],
         ),
         GoRoute(
-          path: '/user-list',
-          builder: (context, state) => HomeScreen(
-            currentIndex: 6,
+          path: '/user',
+          builder: (context, state) => NewHomeScreen(
+            key: state.pageKey,
+            currentIndex: 12,
           ),
+          routes: [
+            GoRoute(
+              path: 'add',
+              builder: (context, state) => NewHomeScreen(
+                key: state.pageKey,
+                currentIndex: 13,
+              ),
+            ),
+            GoRoute(
+              path: 'update/:uid',
+              builder: (context, state) {
+                String? id = state.pathParameters['uid'];
+                if (id == null) {
+                  return Scaffold(
+                    body: Center(
+                      child: Text('User Not found'),
+                    ),
+                  );
+                } else {
+                  return UserDetailScreen(
+                    uid: id,
+                  );
+                }
+              },
+            ),
+          ],
         ),
-        GoRoute(
-          path: '/user-add',
-          builder: (context, state) => HomeScreen(
-            currentIndex: 7,
-          ),
-        ),
-        GoRoute(
-            path: '/user-detail/:uid',
-            builder: (context, state) {
-              String? uid = state.pathParameters['uid'];
-              if (uid == null) {
-                return Scaffold(
-                  body: Center(
-                    child: Text('User Not found'),
-                  ),
-                );
-              } else {
-                return UserDetailScreen(
-                  uid: uid,
-                );
-              }
-            }),
         GoRoute(
           path: '/login',
           builder: (context, state) => SignInScreen(),

@@ -35,4 +35,25 @@ class HomeProvider with ChangeNotifier {
     _bookIsCollapsed = value;
     notifyListeners();
   }
+
+  bool _categoryIsExpanded = false;
+  bool get categoryIsExpanded => _categoryIsExpanded;
+  void setCategoryExpanded(bool value) {
+    _categoryIsExpanded = value;
+    notifyListeners();
+  }
+
+  bool _productIsExpanded = false;
+  bool get productIsExpanded => _productIsExpanded;
+  void setProductExpanded(bool value) {
+    _productIsExpanded = value;
+    notifyListeners();
+  }
+
+  bool _userIsExpanded = false;
+  bool get userIsExpanded => _userIsExpanded;
+  void setUserExpanded(bool value) {
+    _userIsExpanded = value;
+    notifyListeners();
+  }
 }

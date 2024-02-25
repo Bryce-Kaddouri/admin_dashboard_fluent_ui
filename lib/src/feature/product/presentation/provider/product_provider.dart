@@ -1,19 +1,15 @@
-import 'package:admin_dashboard/src/feature/category/business/usecase/category_add_usecase.dart';
-import 'package:admin_dashboard/src/feature/category/business/usecase/category_get_categories_usecase.dart';
-import 'package:admin_dashboard/src/feature/category/business/usecase/category_update_usecase.dart';
 import 'package:admin_dashboard/src/feature/product/data/model/product_model.dart';
+import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../../core/data/usecase/usecase.dart';
-
 import '../../business/param/product_add_param.dart';
 import '../../business/usecase/product_add_usecase.dart';
 import '../../business/usecase/product_delete_usecase.dart';
-import '../../business/usecase/product_get_products_usecase.dart';
 import '../../business/usecase/product_get_product_by_id_usecase.dart';
+import '../../business/usecase/product_get_products_usecase.dart';
 import '../../business/usecase/product_get_signed_url_usecase.dart';
 import '../../business/usecase/product_update_usecase.dart';
 import '../../business/usecase/product_upload_image_usecase.dart';
@@ -172,7 +168,7 @@ class ProductProvider with ChangeNotifier {
   }
 
   Future<bool> addProduct(String name, String? description, String imageUrl,
-      double price, int categoryId) async {
+      double price, int categoryId, BuildContext context) async {
     _isLoading = true;
     bool isSuccess = false;
     notifyListeners();
@@ -186,10 +182,54 @@ class ProductProvider with ChangeNotifier {
 
     await result.fold((l) async {
       _addProductErrorMessage = l.errorMessage;
+      await fluent.displayInfoBar(
+        context,
+        builder: (context, close) {
+          return fluent.InfoBar(
+            title: const Text('Error!'),
+            content: fluent.RichText(
+                text: fluent.TextSpan(
+              text: 'The product has not been added because of an error. ',
+              children: [
+                fluent.TextSpan(
+                  text: l.errorMessage,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ],
+            )),
 
+            /*'The user has not been added because of an error. ${l.errorMessage}'*/
+
+            action: IconButton(
+              icon: const Icon(fluent.FluentIcons.clear),
+              onPressed: close,
+            ),
+            severity: fluent.InfoBarSeverity.error,
+          );
+        },
+        alignment: Alignment.topRight,
+        duration: const Duration(seconds: 5),
+      );
       isSuccess = false;
     }, (r) async {
       print(r.toJson());
+      await fluent.displayInfoBar(
+        context,
+        builder: (context, close) {
+          return fluent.InfoBar(
+            title: const Text('Success!'),
+            content: const Text(
+                'The product has been added successfully. You can add another product or close the form.'),
+            action: IconButton(
+              icon: const Icon(fluent.FluentIcons.clear),
+              onPressed: close,
+            ),
+            severity: fluent.InfoBarSeverity.success,
+          );
+        },
+        alignment: Alignment.topRight,
+        duration: const Duration(seconds: 5),
+      );
       isSuccess = true;
     });
 
@@ -200,6 +240,7 @@ class ProductProvider with ChangeNotifier {
 
   Future<ProductModel?> getProductById(int id) async {
     ProductModel? productModel;
+
     final result = await productGetProductByIdUseCase.call(id);
 
     await result.fold((l) async {
@@ -212,23 +253,68 @@ class ProductProvider with ChangeNotifier {
     return productModel;
   }
 
-  Future<ProductModel?> updateProduct(ProductModel product) async {
+  Future<bool> updateProduct(ProductModel product, BuildContext context) async {
     _isLoading = true;
+    bool isSuccess = false;
     notifyListeners();
-    ProductModel? productModel;
     final result = await productUpdateProductUseCase.call(product);
 
     await result.fold((l) async {
       _addProductErrorMessage = l.errorMessage;
+      await fluent.displayInfoBar(
+        context,
+        builder: (context, close) {
+          return fluent.InfoBar(
+            title: const Text('Error!'),
+            content: fluent.RichText(
+                text: fluent.TextSpan(
+              text: 'The product has not been added because of an error. ',
+              children: [
+                fluent.TextSpan(
+                  text: l.errorMessage,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ],
+            )),
+
+            /*'The user has not been added because of an error. ${l.errorMessage}'*/
+
+            action: IconButton(
+              icon: const Icon(fluent.FluentIcons.clear),
+              onPressed: close,
+            ),
+            severity: fluent.InfoBarSeverity.error,
+          );
+        },
+        alignment: Alignment.topRight,
+        duration: const Duration(seconds: 5),
+      );
     }, (r) async {
       print(r.toJson());
-      productModel = ProductModel.fromJson(r.toJson());
+      await fluent.displayInfoBar(
+        context,
+        builder: (context, close) {
+          return fluent.InfoBar(
+            title: const Text('Success!'),
+            content: const Text(
+                'The product has been updated successfully. You can add another product or close the form.'),
+            action: IconButton(
+              icon: const Icon(fluent.FluentIcons.clear),
+              onPressed: close,
+            ),
+            severity: fluent.InfoBarSeverity.success,
+          );
+        },
+        alignment: Alignment.topRight,
+        duration: const Duration(seconds: 5),
+      );
+      isSuccess = true;
     });
 
     _isLoading = false;
     notifyListeners();
 
-    return productModel;
+    return isSuccess;
   }
 
   Future<bool> deleteProduct(int id) async {

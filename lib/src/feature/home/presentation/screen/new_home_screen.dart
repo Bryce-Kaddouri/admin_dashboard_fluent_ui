@@ -1,202 +1,29 @@
 import 'package:admin_dashboard/src/feature/category/presentation/screen/category_add_screen.dart';
 import 'package:admin_dashboard/src/feature/category/presentation/screen/category_list_screen.dart';
+import 'package:admin_dashboard/src/feature/home/presentation/provider/home_provider.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/product_add_screen.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/product_list_screen.dart';
 import 'package:admin_dashboard/src/feature/user/presentation/screen/user_add_screen.dart';
 import 'package:admin_dashboard/src/feature/user/presentation/screen/user_list_screen.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
-class NewHomeScreen extends StatelessWidget {
-  const NewHomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SideNavBar();
+class NewHomeScreen extends StatefulWidget {
+  NewHomeScreen({required int currentIndex, Key? key})
+      : index = currentIndex,
+        super(key: key) {
+    assert(index != -1);
   }
-}
 
-class SideNavBar extends StatefulWidget {
-  SideNavBar({super.key});
+  final int index;
 
   @override
-  State<SideNavBar> createState() => _SideNavBarState();
+  State<NewHomeScreen> createState() => _NewHomeScreenState();
 }
 
-class _SideNavBarState extends State<SideNavBar> {
-  int topIndex = 0;
+class _NewHomeScreenState extends State<NewHomeScreen> {
   PaneDisplayMode displayMode = PaneDisplayMode.open;
-
-  List<NavigationPaneItem> items = [
-    PaneItem(
-      icon: const Icon(FluentIcons.home),
-      title: const Text('Home', overflow: TextOverflow.ellipsis),
-      body: Container(
-        padding: const EdgeInsets.all(16.0),
-        child: const Text(
-          'Welcome to the Home Page',
-          style: TextStyle(fontSize: 20),
-        ),
-      ),
-    ),
-    PaneItemSeparator(),
-    PaneItemExpander(
-      icon: const Icon(FluentIcons.category_classification),
-      title: const Text('Category', overflow: TextOverflow.ellipsis),
-      body: Container(),
-      items: [
-        PaneItem(
-          icon: const Icon(FluentIcons.list),
-          title: const Text('Category List', overflow: TextOverflow.ellipsis),
-          body: CategoryListScreen(
-            mainPageController: PageController(),
-          ),
-        ),
-        PaneItem(
-          icon: const Icon(FluentIcons.add),
-          title: const Text('Add Category', overflow: TextOverflow.ellipsis),
-          body: CategoryAddScreen(),
-        ),
-      ],
-    ),
-    PaneItemExpander(
-      icon: const Icon(FluentIcons.product),
-      title: const Text('Product', overflow: TextOverflow.ellipsis),
-      body: Container(
-        padding: const EdgeInsets.all(16.0),
-        child: const Text(
-          'Manage your prod here',
-          style: TextStyle(fontSize: 20),
-        ),
-      ),
-      items: [
-        PaneItem(
-          icon: const Icon(FluentIcons.list),
-          title: const Text('Product List', overflow: TextOverflow.ellipsis),
-          body: ProductListScreen(),
-        ),
-        PaneItem(
-          icon: const Icon(FluentIcons.add),
-          title: const Text('Add Product', overflow: TextOverflow.ellipsis),
-          body: ProductAddScreen(),
-        ),
-      ],
-    ),
-    PaneItemExpander(
-      icon: const Icon(FluentIcons.category_classification),
-      title: const Text('Order', overflow: TextOverflow.ellipsis),
-      body: Container(
-        padding: const EdgeInsets.all(16.0),
-        child: const Text(
-          'Manage your categ here',
-          style: TextStyle(fontSize: 20),
-        ),
-      ),
-      items: [
-        PaneItem(
-          icon: const Icon(FluentIcons.trackers),
-          title: const Text('Track orders', overflow: TextOverflow.ellipsis),
-          infoBadge: const InfoBadge(source: Text('8')),
-          body: Container(
-            padding: const EdgeInsets.all(16.0),
-            child: const Text(
-              'Track your orders here',
-              style: TextStyle(fontSize: 20),
-            ),
-          ),
-        ),
-        PaneItem(
-          icon: const Icon(FluentIcons.issue_tracking),
-          title: const Text('Order List', overflow: TextOverflow.ellipsis),
-          body: Container(
-            padding: const EdgeInsets.all(16.0),
-            child: const Text(
-              'Manage your category here',
-              style: TextStyle(fontSize: 20),
-            ),
-          ),
-        ),
-        PaneItem(
-          icon: const Icon(FluentIcons.chart),
-          title: const Text('Chart', overflow: TextOverflow.ellipsis),
-          body: Container(
-            padding: const EdgeInsets.all(16.0),
-            child: const Text(
-              'Check your add here',
-              style: TextStyle(fontSize: 20),
-            ),
-          ),
-        ),
-      ],
-    ),
-    PaneItemExpander(
-      icon: const Icon(FluentIcons.account_management),
-      title: const Text('User', overflow: TextOverflow.ellipsis),
-      body: Container(
-        padding: const EdgeInsets.all(16.0),
-        child: const Text(
-          'Manage your user here',
-          style: TextStyle(fontSize: 20),
-        ),
-      ),
-      items: [
-        PaneItem(
-            icon: const Icon(FluentIcons.list),
-            title: const Text('user List', overflow: TextOverflow.ellipsis),
-            body: UserListScreen()),
-        PaneItem(
-          icon: const Icon(FluentIcons.add),
-          title: const Text('Add User', overflow: TextOverflow.ellipsis),
-          body: UserAddScreen(),
-        ),
-      ],
-    ),
-    PaneItemExpander(
-      icon: const Icon(FluentIcons.book_answers),
-      title: const Text('Catalog', overflow: TextOverflow.ellipsis),
-      body: Container(
-        padding: const EdgeInsets.all(16.0),
-        child: const Text(
-          'Manage your catalog here',
-          style: TextStyle(fontSize: 20),
-        ),
-      ),
-      items: [
-        PaneItem(
-          icon: const Icon(FluentIcons.list),
-          title: const Text('Page List', overflow: TextOverflow.ellipsis),
-          body: Container(
-            padding: const EdgeInsets.all(16.0),
-            child: const Text(
-              'Manage your category here',
-              style: TextStyle(fontSize: 20),
-            ),
-          ),
-        ),
-        PaneItem(
-          icon: const Icon(FluentIcons.add),
-          title: const Text('Add Page', overflow: TextOverflow.ellipsis),
-          body: Container(
-            padding: const EdgeInsets.all(16.0),
-            child: const Text(
-              'Check your add here',
-              style: TextStyle(fontSize: 20),
-            ),
-          ),
-        ),
-      ],
-    ),
-    PaneItem(
-      icon: const Icon(FluentIcons.settings),
-      title: const Text('Settings', overflow: TextOverflow.ellipsis),
-      body: Container(
-        padding: const EdgeInsets.all(16.0),
-        child: const Text(
-          'Change your settings here',
-          style: TextStyle(fontSize: 20),
-        ),
-      ),
-    ),
-  ];
 
   String getTitleScreen(int index) {
     switch (index) {
@@ -221,7 +48,7 @@ class _SideNavBarState extends State<SideNavBar> {
       case 9:
         return 'Order List';
       case 10:
-        return 'Chart';
+        return 'Chart Orders';
       case 11:
         return 'User';
       case 12:
@@ -242,6 +69,17 @@ class _SideNavBarState extends State<SideNavBar> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    print('widget.index: ${widget.index}');
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return NavigationView(
       appBar: NavigationAppBar(
@@ -254,24 +92,241 @@ class _SideNavBarState extends State<SideNavBar> {
                 : MediaQuery.of(context).size.width - 60,
             alignment: Alignment.center,
             child: Text(
-              getTitleScreen(topIndex),
+              getTitleScreen(widget.index),
               style: TextStyle(fontSize: 20),
             ),
           ),
         ),
       ),
       pane: NavigationPane(
-        selected: topIndex,
-        onChanged: (index) => {
+        selected: widget.index,
+        onChanged: (index) {
           if (index != 1 &&
               index != 4 &&
               index != 7 &&
               index != 11 &&
-              index != 14)
-            setState(() => topIndex = index),
+              index != 14) {
+            print('index: $index');
+          }
         },
         displayMode: displayMode,
-        items: items,
+        items: [
+          PaneItem(
+            onTap: () {
+              context.go('/');
+            },
+            icon: const Icon(FluentIcons.home),
+            title: const Text('Home', overflow: TextOverflow.ellipsis),
+            body: Container(
+              padding: const EdgeInsets.all(16.0),
+              child: const Text(
+                'Welcome to the Home Page',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+          ),
+          PaneItemSeparator(),
+          PaneItemExpander(
+            initiallyExpanded: context.read<HomeProvider>().categoryIsExpanded,
+            onTap: () {
+              Future.delayed(Duration(seconds: 1), () {
+                context.read<HomeProvider>().setCategoryExpanded(
+                    !context.read<HomeProvider>().categoryIsExpanded);
+              });
+            },
+            icon: const Icon(FluentIcons.category_classification),
+            title: const Text('Category', overflow: TextOverflow.ellipsis),
+            body: Container(),
+            items: [
+              PaneItem(
+                onTap: () {
+                  context.go('/category');
+                },
+                icon: const Icon(FluentIcons.list),
+                title: const Text('Category List',
+                    overflow: TextOverflow.ellipsis),
+                body: CategoryListScreen(
+                  mainPageController: PageController(),
+                ),
+              ),
+              PaneItem(
+                onTap: () {
+                  context.go('/category/add');
+                },
+                icon: const Icon(FluentIcons.add),
+                title:
+                    const Text('Add Category', overflow: TextOverflow.ellipsis),
+                body: CategoryAddScreen(),
+              ),
+            ],
+          ),
+          PaneItemExpander(
+            initiallyExpanded: context.watch<HomeProvider>().productIsExpanded,
+            onTap: () {
+              Future.delayed(Duration(milliseconds: 500), () {
+                context.read<HomeProvider>().setProductExpanded(
+                    !context.read<HomeProvider>().productIsExpanded);
+              });
+            },
+            icon: const Icon(FluentIcons.product),
+            title: const Text('Product', overflow: TextOverflow.ellipsis),
+            body: Container(
+              padding: const EdgeInsets.all(16.0),
+              child: const Text(
+                'Manage your prod here',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            items: [
+              PaneItem(
+                onTap: () {
+                  context.go('/product');
+                },
+                icon: const Icon(FluentIcons.list),
+                title:
+                    const Text('Product List', overflow: TextOverflow.ellipsis),
+                body: ProductListScreen(),
+              ),
+              PaneItem(
+                onTap: () {
+                  context.go('/product/add');
+                },
+                icon: const Icon(FluentIcons.add),
+                title:
+                    const Text('Add Product', overflow: TextOverflow.ellipsis),
+                body: ProductAddScreen(),
+              ),
+            ],
+          ),
+          PaneItemExpander(
+            icon: const Icon(FluentIcons.category_classification),
+            title: const Text('Order', overflow: TextOverflow.ellipsis),
+            body: Container(
+              padding: const EdgeInsets.all(16.0),
+              child: const Text(
+                'Manage your categ here',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            items: [
+              PaneItem(
+                onTap: () {
+                  context.go('/track-orders');
+                },
+                icon: const Icon(FluentIcons.trackers),
+                title:
+                    const Text('Track orders', overflow: TextOverflow.ellipsis),
+                infoBadge: const InfoBadge(source: Text('8')),
+                body: Container(
+                  padding: const EdgeInsets.all(16.0),
+                  child: const Text(
+                    'Track your orders here',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+              ),
+              PaneItem(
+                icon: const Icon(FluentIcons.issue_tracking),
+                title:
+                    const Text('Order List', overflow: TextOverflow.ellipsis),
+                body: Container(
+                  padding: const EdgeInsets.all(16.0),
+                  child: const Text(
+                    'Manage your category here',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+              ),
+              PaneItem(
+                icon: const Icon(FluentIcons.chart),
+                title: const Text('Chart', overflow: TextOverflow.ellipsis),
+                body: Container(
+                  padding: const EdgeInsets.all(16.0),
+                  child: const Text(
+                    'Check your add here',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          PaneItemExpander(
+            initiallyExpanded: context.read<HomeProvider>().userIsExpanded,
+            onTap: () {
+              Future.delayed(Duration(seconds: 1), () {
+                context.read<HomeProvider>().setUserExpanded(
+                    !context.read<HomeProvider>().userIsExpanded);
+              });
+            },
+            icon: const Icon(FluentIcons.account_management),
+            title: const Text('User', overflow: TextOverflow.ellipsis),
+            body: Container(
+              padding: const EdgeInsets.all(16.0),
+              child: const Text(
+                'Manage your user here',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            items: [
+              PaneItem(
+                  icon: const Icon(FluentIcons.list),
+                  title:
+                      const Text('user List', overflow: TextOverflow.ellipsis),
+                  body: UserListScreen()),
+              PaneItem(
+                icon: const Icon(FluentIcons.add),
+                title: const Text('Add User', overflow: TextOverflow.ellipsis),
+                body: UserAddScreen(),
+              ),
+            ],
+          ),
+          PaneItemExpander(
+            icon: const Icon(FluentIcons.book_answers),
+            title: const Text('Catalog', overflow: TextOverflow.ellipsis),
+            body: Container(
+              padding: const EdgeInsets.all(16.0),
+              child: const Text(
+                'Manage your catalog here',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            items: [
+              PaneItem(
+                icon: const Icon(FluentIcons.list),
+                title: const Text('Page List', overflow: TextOverflow.ellipsis),
+                body: Container(
+                  padding: const EdgeInsets.all(16.0),
+                  child: const Text(
+                    'Manage your category here',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+              ),
+              PaneItem(
+                icon: const Icon(FluentIcons.add),
+                title: const Text('Add Page', overflow: TextOverflow.ellipsis),
+                body: Container(
+                  padding: const EdgeInsets.all(16.0),
+                  child: const Text(
+                    'Check your add here',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          PaneItem(
+            icon: const Icon(FluentIcons.settings),
+            title: const Text('Settings', overflow: TextOverflow.ellipsis),
+            body: Container(
+              padding: const EdgeInsets.all(16.0),
+              child: const Text(
+                'Change your settings here',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+          ),
+        ],
         header: Container(
           padding: const EdgeInsets.all(16.0),
           child: const Text(
