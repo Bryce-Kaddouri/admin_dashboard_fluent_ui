@@ -10,13 +10,14 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class NewHomeScreen extends StatefulWidget {
-  NewHomeScreen({required int currentIndex, Key? key})
-      : index = currentIndex,
-        super(key: key) {
-    assert(index != -1);
-  }
+  NewHomeScreen({Key? key})
+      :
+        super(key: key);
 
-  final int index;
+  static int index = 0;
+
+
+
 
   @override
   State<NewHomeScreen> createState() => _NewHomeScreenState();
@@ -68,10 +69,11 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
     }
   }
 
+
   @override
   void initState() {
     super.initState();
-    print('widget.index: ${widget.index}');
+    GoRouter.of(context).toString();
   }
 
   @override
@@ -92,14 +94,14 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                 : MediaQuery.of(context).size.width - 60,
             alignment: Alignment.center,
             child: Text(
-              getTitleScreen(widget.index),
+              getTitleScreen(NewHomeScreen.index),
               style: TextStyle(fontSize: 20),
             ),
           ),
         ),
       ),
       pane: NavigationPane(
-        selected: widget.index,
+        selected: NewHomeScreen.index,
         onChanged: (index) {
           if (index != 1 &&
               index != 4 &&
@@ -269,11 +271,17 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
             ),
             items: [
               PaneItem(
+                  onTap: () {
+                    context.go('/user');
+                  },
                   icon: const Icon(FluentIcons.list),
                   title:
                       const Text('user List', overflow: TextOverflow.ellipsis),
                   body: UserListScreen()),
               PaneItem(
+                onTap: () {
+                  context.go('/user/add');
+                },
                 icon: const Icon(FluentIcons.add),
                 title: const Text('Add User', overflow: TextOverflow.ellipsis),
                 body: UserAddScreen(),

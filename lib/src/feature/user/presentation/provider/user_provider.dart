@@ -1,5 +1,6 @@
 import 'package:admin_dashboard/src/feature/user/business/param/user_update_param.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -266,8 +267,8 @@ class UserProvider with ChangeNotifier {
     return user;
   }
 
-  Future<User?> updateUser(String uid, String email, String password,
-      String fName, String lName, String role, bool isAvailable) async {
+  Future<bool> updateUser({required String uid, required String email, required String password,
+    required String fName, required String lName, required String role, required bool isAvailable, required BuildContext context}) async {
     print('updateUser from provier');
     print(uid);
     print(email);
@@ -279,6 +280,7 @@ class UserProvider with ChangeNotifier {
 
     _isLoading = true;
     notifyListeners();
+    bool isSuccess = false;
     User? user = await getUserById(uid);
     if (user != null) {
       final result = await userUpdateUserUseCase.call(
@@ -295,17 +297,59 @@ class UserProvider with ChangeNotifier {
 
       await result.fold((l) async {
         print(l.errorMessage);
-        user = null;
+        await fluent.displayInfoBar(
+          context,
+          builder: (context, close) {
+            return fluent.InfoBar(
+              title: const Text('Error!'),
+              content: fluent.RichText(
+                  text: fluent.TextSpan(
+                text: 'The user has not been updated because of an error. ',
+                children: [
+                  fluent.TextSpan(
+                    text: l.errorMessage,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ],
+              )),
+              action: IconButton(
+                icon: const Icon(fluent.FluentIcons.clear),
+                onPressed: close,
+              ),
+              severity: fluent.InfoBarSeverity.error,
+            );
+          },
+          alignment: Alignment.topRight,
+          duration: const Duration(seconds: 5),
+        );
+        isSuccess = false;
       }, (r) async {
-        print(r.toJson());
-        user = r;
+        print(r);
+        await fluent.displayInfoBar(
+          context,
+          builder: (context, close) {
+            return fluent.InfoBar(
+              title: const Text('Success!'),
+              content: const Text(
+                  'The user has been updated successfully. You can add another user or close the form.'),
+              action: IconButton(
+                icon: const Icon(fluent.FluentIcons.clear),
+                onPressed: close,
+              ),
+              severity: fluent.InfoBarSeverity.success,
+            );
+          },
+          alignment: Alignment.topRight,
+          duration: const Duration(seconds: 5),
+        );
+        isSuccess = true;
       });
     }
 
     _isLoading = false;
     notifyListeners();
 
-    return user;
+    return isSuccess;
   }
 
   Future<bool> deleteUser(String uid) async {

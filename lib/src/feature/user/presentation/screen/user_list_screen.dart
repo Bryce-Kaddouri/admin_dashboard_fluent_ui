@@ -446,7 +446,7 @@ class _UserListScreenState extends State<UserListScreen> {
                                         ),
                                         onPressed: () {
                                           context.go(
-                                              '/user-update/${user.id.toString()}');
+                                              '/user/update/${user.id.toString()}');
                                         },
                                         child: const Icon(FluentIcons.edit),
                                       ),

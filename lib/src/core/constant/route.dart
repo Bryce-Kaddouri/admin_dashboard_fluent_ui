@@ -1,7 +1,8 @@
 import 'package:admin_dashboard/src/feature/auth/presentation/provider/auth_provider.dart';
 import 'package:admin_dashboard/src/feature/home/presentation/screen/new_home_screen.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/update_product_screen.dart';
-import 'package:admin_dashboard/src/feature/user/presentation/screen/user_detail_screen.dart';
+import 'package:admin_dashboard/src/feature/user/presentation/screen/user_update_screen.dart';
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -35,6 +36,7 @@ import '../../feature/category/presentation/screen/update_category_screen.dart';
 class RouterHelper {
   GoRouter getRouter() {
     return GoRouter(
+
       navigatorKey: Get.key,
       redirect: (context, state) {
         // check if user is logged in
@@ -45,6 +47,22 @@ class RouterHelper {
 
         bool isLoggedIn = context.read<AuthProvider>().checkIsLoggedIn();
         print('isLoggedIn: $isLoggedIn');
+
+        if(state.uri.path == '/'){
+          NewHomeScreen.index = 0;
+        }else if(state.uri.path == '/category') {
+          NewHomeScreen.index = 2;
+        }else if(state.uri.path == '/category/add') {
+          NewHomeScreen.index = 3;
+        }else if(state.uri.path == '/product') {
+          NewHomeScreen.index = 5;
+        }else if(state.uri.path == '/product/add') {
+          NewHomeScreen.index = 6;
+        }else if(state.uri.path == '/user') {
+          NewHomeScreen.index = 12;
+        }else if(state.uri.path == '/user/add') {
+          NewHomeScreen.index = 13;
+        }
 
         if (!isLoggedIn && state.uri.path != '/login') {
           return '/login';
@@ -61,21 +79,18 @@ class RouterHelper {
           ),*/
               NewHomeScreen(
             key: state.pageKey,
-            currentIndex: 0,
           ),
         ),
         GoRoute(
           path: '/category',
           builder: (context, state) => NewHomeScreen(
             key: state.pageKey,
-            currentIndex: 2,
           ),
           routes: [
             GoRoute(
               path: 'add',
               builder: (context, state) => NewHomeScreen(
                 key: state.pageKey,
-                currentIndex: 3,
               ),
             ),
             GoRoute(
@@ -102,14 +117,12 @@ class RouterHelper {
           path: '/product',
           builder: (context, state) => NewHomeScreen(
             key: state.pageKey,
-            currentIndex: 5,
           ),
           routes: [
             GoRoute(
               path: 'add',
               builder: (context, state) => NewHomeScreen(
                 key: state.pageKey,
-                currentIndex: 6,
               ),
             ),
             GoRoute(
@@ -139,14 +152,12 @@ class RouterHelper {
           path: '/user',
           builder: (context, state) => NewHomeScreen(
             key: state.pageKey,
-            currentIndex: 12,
           ),
           routes: [
             GoRoute(
               path: 'add',
               builder: (context, state) => NewHomeScreen(
                 key: state.pageKey,
-                currentIndex: 13,
               ),
             ),
             GoRoute(
@@ -160,7 +171,7 @@ class RouterHelper {
                     ),
                   );
                 } else {
-                  return UserDetailScreen(
+                  return UserUpdateScreen(
                     uid: id,
                   );
                 }

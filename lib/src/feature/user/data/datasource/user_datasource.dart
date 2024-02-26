@@ -100,7 +100,6 @@ class UserDataSource {
         param.uid,
         attributes: AdminUserAttributes(
           email: param.email,
-          password: param.password.isEmpty ? null : param.password,
 
 /*
           password: param.password,

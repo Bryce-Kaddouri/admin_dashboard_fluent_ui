@@ -51,6 +51,16 @@ class _UserAddScreenState extends State<UserAddScreen> {
    */
 
   @override
+  void initState() {
+    super.initState();
+    _passwordController.addListener(() {
+      setState(() {
+        _password = _passwordController.text;
+      });
+    });
+    // _initData();
+  }
+  @override
   Widget build(BuildContext context) {
 /*
     print(context.watch<ProductProvider>().productModel);
@@ -74,7 +84,12 @@ class _UserAddScreenState extends State<UserAddScreen> {
                 children: [
                   InfoLabel(
                     label: 'Enter First Name:',
-                    child: TextFormBox(
+                    child:
+                    Container(
+                      alignment: Alignment.center,
+                      constraints: BoxConstraints(maxWidth: 500, minHeight: 50),
+                      child:
+                    TextFormBox(
                       controller: _firstNameController,
                       placeholder: 'First Name',
                       validator: (value) {
@@ -85,19 +100,30 @@ class _UserAddScreenState extends State<UserAddScreen> {
                       },
                     ),
                   ),
+                  ),
+                  SizedBox(height: 30),
+
                   InfoLabel(
                     label: 'Enter Last Name:',
-                    child: TextFormBox(
+                    child: Container(
+                      alignment: Alignment.center,
+                      constraints: BoxConstraints(maxWidth: 500, minHeight: 50),
+                      child:TextFormBox(
                       controller: _lastNameController,
                       placeholder: 'Last Name',
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(),
                       ]),
                     ),
-                  ),
+                  ),),
+                  SizedBox(height: 30),
+
                   InfoLabel(
                     label: 'Enter Email:',
-                    child: TextFormBox(
+                    child: Container(
+                      alignment: Alignment.center,
+                      constraints: BoxConstraints(maxWidth: 500, minHeight: 50),
+                      child:TextFormBox(
                       controller: _emailController,
                       placeholder: 'Email',
                       validator: FormBuilderValidators.compose([
@@ -105,37 +131,56 @@ class _UserAddScreenState extends State<UserAddScreen> {
                         FormBuilderValidators.email(),
                       ]),
                     ),
+                    ),
                   ),
+                  SizedBox(height: 30),
+
                   InfoLabel(
                     label: 'Enter Password:',
-                    child: TextFormBox(
+                    child: Container(
+                      alignment: Alignment.center,
+                      constraints: BoxConstraints(maxWidth: 500, minHeight: 50),
+                      child:PasswordFormBox(
+
+                      revealMode: PasswordRevealMode.peekAlways,
                       controller: _passwordController,
                       placeholder: 'Password',
-                      onChanged: (value) {
-                        setState(() {
-                          _password = value;
-                        });
-                      },
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(),
                       ]),
                     ),
+                    ),
                   ),
+                  SizedBox(height: 30),
+
                   InfoLabel(
                     label: 'Enter Confirm Password:',
-                    child: TextFormBox(
+                    child:
+                    Container(
+                      alignment: Alignment.center,
+                      constraints: BoxConstraints(maxWidth: 500, minHeight: 50),
+                      child:
+                      PasswordFormBox(
+                        revealMode: PasswordRevealMode.peekAlways,
                       controller: _confirmPasswordController,
                       placeholder: 'Confirm Password',
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(),
                         FormBuilderValidators.equal(_password,
                             errorText: 'Passwords do not match'),
                       ]),
                     ),
+                    ),
                   ),
+                  SizedBox(height: 30),
+
                   InfoLabel(
                     label: 'Select Role:',
-                    child: ComboboxFormField<String>(
+                    child: Container(
+                      alignment: Alignment.center,
+                      constraints: BoxConstraints(maxWidth: 500, minHeight: 50),
+                      child:ComboboxFormField<String>(
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(),
                       ]),
@@ -164,7 +209,10 @@ class _UserAddScreenState extends State<UserAddScreen> {
                         _roleController.text = value!;
                       },
                     ),
+                    ),
                   ),
+                  SizedBox(height: 60),
+
                   FilledButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
@@ -178,7 +226,7 @@ class _UserAddScreenState extends State<UserAddScreen> {
                         bool res = await context.read<UserProvider>().addUser(
                             email, password, fName, lName, role, context);
 
-                        if (res) {
+                        if (res == true) {
                           // reset form
                           _firstNameController.clear();
                           _lastNameController.clear();
@@ -195,7 +243,14 @@ class _UserAddScreenState extends State<UserAddScreen> {
                         print('Form is invalid');
                       }
                     },
-                    child: Text('Save'),
+                    child: context.watch<UserProvider>().isLoading
+                        ? const ProgressRing()
+                        :
+                    Container(
+                      alignment: Alignment.center,
+                      width: 200,
+                      height: 30,
+                      child:Text('Save'),),
                   ),
                   /*SizedBox(height: 40),
                   FormBuilderTextField(
