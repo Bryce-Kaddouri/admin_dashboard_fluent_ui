@@ -8,7 +8,6 @@ import '../../data/model/category_model.dart';
 import '../category_provider/category_provider.dart';
 
 class CategoryListScreen extends StatefulWidget {
-
   CategoryListScreen({super.key});
 
   @override
@@ -389,11 +388,8 @@ class _CategoryListScreenState extends State<CategoryListScreen>
                                           onPressed: () {
                                             print(
                                                 'category id: ${category.id}');
-                                            context.push(
-                                                '/category-update/${category.id}');
-                                            context
-                                                .read<CategoryProvider>()
-                                                .setCategoryModel(category);
+                                            context.go(
+                                                '/category/update/${category.id}');
                                           },
                                           child: const Icon(FluentIcons.edit),
                                         ),

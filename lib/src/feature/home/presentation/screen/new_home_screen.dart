@@ -1,31 +1,26 @@
 import 'package:admin_dashboard/src/feature/category/presentation/screen/category_add_screen.dart';
 import 'package:admin_dashboard/src/feature/category/presentation/screen/category_list_screen.dart';
-import 'package:admin_dashboard/src/feature/home/presentation/provider/home_provider.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/product_add_screen.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/product_list_screen.dart';
 import 'package:admin_dashboard/src/feature/user/presentation/screen/user_add_screen.dart';
 import 'package:admin_dashboard/src/feature/user/presentation/screen/user_list_screen.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
 class NewHomeScreen extends StatefulWidget {
   Widget child;
   int index;
 
   NewHomeScreen({Key? key, required this.child, required this.index})
-      :
-        super(key: key);
-
-
-
-
+      : super(key: key);
 
   @override
   State<NewHomeScreen> createState() => _NewHomeScreenState();
 }
 
-class _NewHomeScreenState extends State<NewHomeScreen> {
+// keep alive
+class _NewHomeScreenState extends State<NewHomeScreen>
+    with AutomaticKeepAliveClientMixin {
   PaneDisplayMode displayMode = PaneDisplayMode.open;
 
   String getTitleScreen(int index) {
@@ -71,20 +66,9 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
     }
   }
 
-
-  @override
-  void initState() {
-    super.initState();
-    GoRouter.of(context).toString();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return NavigationView(
       appBar: NavigationAppBar(
         automaticallyImplyLeading: false,
@@ -131,7 +115,6 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
           ),
           PaneItemSeparator(),
           PaneItemExpander(
-
             icon: const Icon(FluentIcons.category_classification),
             title: const Text('Category', overflow: TextOverflow.ellipsis),
             body: Container(),
@@ -143,8 +126,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                 icon: const Icon(FluentIcons.list),
                 title: const Text('Category List',
                     overflow: TextOverflow.ellipsis),
-                body: CategoryListScreen(
-                ),
+                body: CategoryListScreen(),
               ),
               PaneItem(
                 onTap: () {
@@ -158,13 +140,6 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
             ],
           ),
           PaneItemExpander(
-            initiallyExpanded: context.watch<HomeProvider>().productIsExpanded,
-            onTap: () {
-              Future.delayed(Duration(milliseconds: 500), () {
-                context.read<HomeProvider>().setProductExpanded(
-                    !context.read<HomeProvider>().productIsExpanded);
-              });
-            },
             icon: const Icon(FluentIcons.product),
             title: const Text('Product', overflow: TextOverflow.ellipsis),
             body: Container(
@@ -248,13 +223,6 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
             ],
           ),
           PaneItemExpander(
-            initiallyExpanded: context.read<HomeProvider>().userIsExpanded,
-            onTap: () {
-              Future.delayed(Duration(seconds: 1), () {
-                context.read<HomeProvider>().setUserExpanded(
-                    !context.read<HomeProvider>().userIsExpanded);
-              });
-            },
             icon: const Icon(FluentIcons.account_management),
             title: const Text('User', overflow: TextOverflow.ellipsis),
             body: Container(
@@ -376,4 +344,8 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

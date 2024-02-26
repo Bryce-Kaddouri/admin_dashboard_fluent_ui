@@ -395,10 +395,6 @@ class _UserListScreenState extends State<UserListScreen> {
                                 padding: const EdgeInsets.all(0),
                                 child: ListTile(
                                   cursor: SystemMouseCursors.click,
-                                  onPressed: () {
-                                    context.go(
-                                        '/user-detail/${user.id.toString()}');
-                                  },
                                   leading: Container(
                                     height: 50,
                                     width: 100,
