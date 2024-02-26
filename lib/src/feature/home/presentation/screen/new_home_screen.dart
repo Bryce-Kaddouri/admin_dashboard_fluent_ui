@@ -10,11 +10,13 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class NewHomeScreen extends StatefulWidget {
-  NewHomeScreen({Key? key})
+  Widget child;
+  int index;
+
+  NewHomeScreen({Key? key, required this.child, required this.index})
       :
         super(key: key);
 
-  static int index = 0;
 
 
 
@@ -94,14 +96,14 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                 : MediaQuery.of(context).size.width - 60,
             alignment: Alignment.center,
             child: Text(
-              getTitleScreen(NewHomeScreen.index),
+              getTitleScreen(widget.index),
               style: TextStyle(fontSize: 20),
             ),
           ),
         ),
       ),
       pane: NavigationPane(
-        selected: NewHomeScreen.index,
+        selected: widget.index,
         onChanged: (index) {
           if (index != 1 &&
               index != 4 &&
@@ -129,13 +131,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
           ),
           PaneItemSeparator(),
           PaneItemExpander(
-            initiallyExpanded: context.read<HomeProvider>().categoryIsExpanded,
-            onTap: () {
-              Future.delayed(Duration(seconds: 1), () {
-                context.read<HomeProvider>().setCategoryExpanded(
-                    !context.read<HomeProvider>().categoryIsExpanded);
-              });
-            },
+
             icon: const Icon(FluentIcons.category_classification),
             title: const Text('Category', overflow: TextOverflow.ellipsis),
             body: Container(),
@@ -148,7 +144,6 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                 title: const Text('Category List',
                     overflow: TextOverflow.ellipsis),
                 body: CategoryListScreen(
-                  mainPageController: PageController(),
                 ),
               ),
               PaneItem(

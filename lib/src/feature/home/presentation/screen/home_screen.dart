@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen>
               controller: pageController,
               children: [
                 StatScreen(),
-                CategoryListScreen(mainPageController: pageController),
+                CategoryListScreen(),
                 CategoryAddScreen(),
                 ProductListScreen(),
                 ProductAddScreen(),

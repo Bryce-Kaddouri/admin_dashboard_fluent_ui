@@ -1,4 +1,5 @@
 import 'package:admin_dashboard/src/feature/auth/presentation/provider/auth_provider.dart';
+import 'package:admin_dashboard/src/feature/category/presentation/screen/category_list_screen.dart';
 import 'package:admin_dashboard/src/feature/home/presentation/screen/new_home_screen.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/update_product_screen.dart';
 import 'package:admin_dashboard/src/feature/user/presentation/screen/user_update_screen.dart';
@@ -39,7 +40,9 @@ class RouterHelper {
 
       navigatorKey: Get.key,
       redirect: (context, state) {
-        // check if user is logged in
+
+      
+       /* // check if user is logged in
         // if not, redirect to login page
 
         print('state: ${state.matchedLocation}');
@@ -68,15 +71,58 @@ class RouterHelper {
           return '/login';
         } else {
           return state.uri.path;
-        }
+        }*/
       },
       routes: [
-        GoRoute(
+        ShellRoute(
+            builder:  (BuildContext context, GoRouterState state, Widget child)
+            {
+              print('state: ${state.path}');
+              print('state: ${state.matchedLocation}');
+
+              int index = 0;
+              if (state.matchedLocation == '/') {
+                index = 1;
+              } else if (state.matchedLocation == '/category') {
+                index = 2;
+              }else if (state.matchedLocation == '/category/add') {
+                index = 3;
+              }
+
+              return NewHomeScreen(child: child, index: index);
+            }, routes: [
+              GoRoute(path: '/',
+                builder: (state, context){
+                return Container(
+                  child: Text('Home'),
+                );
+                }
+              ),
+              GoRoute(path: '/category',
+                builder: (state, context){
+                  return CategoryListScreen();
+                },
+                routes: [
+                  GoRoute(path: 'add',
+                    builder: (state, context){
+                      return Container(
+                        child: Text('Add Category'),
+                      );
+                    }
+                  ),
+
+                ]
+          )
+
+
+          ]
+        )
+        /*GoRoute(
           path: '/',
           builder: (context,
-                  state) => /*HomeScreen(
+                  state) => *//*HomeScreen(
             currentIndex: 0,
-          ),*/
+          ),*//*
               NewHomeScreen(
             key: state.pageKey,
           ),
@@ -139,9 +185,9 @@ class RouterHelper {
                   int idInt = int.parse(id);
                   return UpdateProductScreen(
                     productId: idInt,
-/*
+*//*
                     productId: idInt,
-*/
+*//*
                   );
                 }
               },
@@ -178,7 +224,8 @@ class RouterHelper {
               },
             ),
           ],
-        ),
+        ),*/
+        ,
         GoRoute(
           path: '/login',
           builder: (context, state) => SignInScreen(),

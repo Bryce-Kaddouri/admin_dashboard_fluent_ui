@@ -8,9 +8,8 @@ import '../../data/model/category_model.dart';
 import '../category_provider/category_provider.dart';
 
 class CategoryListScreen extends StatefulWidget {
-  PageController mainPageController;
 
-  CategoryListScreen({super.key, required this.mainPageController});
+  CategoryListScreen({super.key});
 
   @override
   State<CategoryListScreen> createState() => _CategoryListScreenState();
