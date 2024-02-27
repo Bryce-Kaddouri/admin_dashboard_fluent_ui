@@ -6,6 +6,9 @@ import 'package:admin_dashboard/src/feature/user/presentation/screen/user_add_sc
 import 'package:admin_dashboard/src/feature/user/presentation/screen/user_list_screen.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
+import '../../../auth/presentation/provider/auth_provider.dart';
 
 class NewHomeScreen extends StatefulWidget {
   Widget child;
@@ -252,6 +255,36 @@ class _NewHomeScreenState extends State<NewHomeScreen>
             ],
           ),
           PaneItemExpander(
+            icon: const Icon(FluentIcons.hexadite_investigation_semi_auto),
+            title: const Text('Customer', overflow: TextOverflow.ellipsis),
+            body: Container(
+              padding: const EdgeInsets.all(16.0),
+              child: const Text(
+                'Manage your user here',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            items: [
+              PaneItem(
+                  onTap: () {
+                    context.go('/customer');
+                  },
+                  icon: const Icon(FluentIcons.list),
+                  title: const Text('Customer List',
+                      overflow: TextOverflow.ellipsis),
+                  body: UserListScreen()),
+              PaneItem(
+                onTap: () {
+                  context.go('/customer/add');
+                },
+                icon: const Icon(FluentIcons.add),
+                title: const Text('Customer User',
+                    overflow: TextOverflow.ellipsis),
+                body: UserAddScreen(),
+              ),
+            ],
+          ),
+          PaneItemExpander(
             icon: const Icon(FluentIcons.book_answers),
             title: const Text('Catalog', overflow: TextOverflow.ellipsis),
             body: Container(
@@ -285,17 +318,6 @@ class _NewHomeScreenState extends State<NewHomeScreen>
                 ),
               ),
             ],
-          ),
-          PaneItem(
-            icon: const Icon(FluentIcons.settings),
-            title: const Text('Settings', overflow: TextOverflow.ellipsis),
-            body: Container(
-              padding: const EdgeInsets.all(16.0),
-              child: const Text(
-                'Change your settings here',
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
           ),
         ],
         header: Container(
@@ -335,8 +357,58 @@ class _NewHomeScreenState extends State<NewHomeScreen>
           PaneItemAction(
             icon: const Icon(FluentIcons.sign_out),
             title: Text('Logout', overflow: TextOverflow.ellipsis),
-            onTap: () {
+            onTap: () async {
               // Your Logic to Add New `NavigationPaneItem`
+
+              bool? result = await showDialog<bool>(
+                context: context,
+                builder: (context) => ContentDialog(
+                  title: Container(
+                    alignment: Alignment.center,
+                    child: Text('Logout', style: TextStyle(fontSize: 20)),
+                  ),
+                  content: Container(
+                    width: double.infinity,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(FluentIcons.sign_out, size: 50, color: Colors.red),
+                        SizedBox(height: 20),
+                        Text('Are you sure you want to logout?'),
+                      ],
+                    ),
+                  ),
+                  actions: [
+                    Button(
+                      child: const Text('Logout'),
+                      onPressed: () {
+                        Navigator.pop(context, true);
+                        // Delete file here
+                      },
+                      style: ButtonStyle(
+                        padding: ButtonState.all<EdgeInsetsGeometry>(
+                          const EdgeInsets.all(10),
+                        ),
+                      ),
+                    ),
+                    FilledButton(
+                      child: const Text('Cancel'),
+                      onPressed: () => Navigator.pop(context, false),
+                      style: ButtonStyle(
+                        padding: ButtonState.all<EdgeInsetsGeometry>(
+                          const EdgeInsets.all(10),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+              if (result != null && result) {
+                context.read<AuthProvider>().logout();
+                context.go('/login');
+              }
               print('Logout');
             },
           ),

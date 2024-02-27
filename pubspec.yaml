@@ -49,6 +49,7 @@ dependencies:
   community_charts_flutter: ^1.0.2
   fl_chart: ^0.66.1
   fluent_ui: ^4.8.6
+  intl_phone_field: ^3.2.0
 
 dev_dependencies:
   flutter_test:
