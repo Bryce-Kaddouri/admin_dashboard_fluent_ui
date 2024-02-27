@@ -1,4 +1,6 @@
 import 'package:admin_dashboard/src/feature/category/presentation/screen/category_list_screen.dart';
+import 'package:admin_dashboard/src/feature/customer/presentation/screen/customer_add_screen.dart';
+import 'package:admin_dashboard/src/feature/customer/presentation/screen/customer_list_screen.dart';
 import 'package:admin_dashboard/src/feature/home/presentation/screen/new_home_screen.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/update_product_screen.dart';
 import 'package:admin_dashboard/src/feature/user/presentation/screen/user_add_screen.dart';
@@ -90,6 +92,10 @@ class RouterHelper {
                 index = 12;
               } else if (state.matchedLocation == '/user/add') {
                 index = 13;
+              } else if (state.matchedLocation == '/customer') {
+                index = 15;
+              } else if (state.matchedLocation == '/customer/add') {
+                index = 16;
               }
 
               return NewHomeScreen(child: child, index: index);
@@ -142,6 +148,18 @@ class RouterHelper {
                         path: 'add',
                         builder: (state, context) {
                           return UserAddScreen();
+                        }),
+                  ]),
+              GoRoute(
+                  path: '/customer',
+                  builder: (context, state) {
+                    return CustomerListScreen();
+                  },
+                  routes: [
+                    GoRoute(
+                        path: 'add',
+                        builder: (state, context) {
+                          return CustomerAddScreen();
                         }),
                   ]),
             ]),

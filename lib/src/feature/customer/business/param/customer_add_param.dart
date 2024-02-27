@@ -3,16 +3,12 @@ import '../../data/model/customer_model.dart';
 class CustomerAddParam {
   final String fName;
   final String lName;
-  final DateTime createdAt;
-  final DateTime updatedAt;
   final PhoneNumberModel phoneNumber;
   final bool isEnable;
 
   CustomerAddParam({
     required this.fName,
     required this.lName,
-    required this.createdAt,
-    required this.updatedAt,
     required this.phoneNumber,
     required this.isEnable,
   });
@@ -21,9 +17,8 @@ class CustomerAddParam {
     return {
       'f_name': fName,
       'l_name': lName,
-      'created_at': createdAt.toIso8601String(),
-      'updated_at': updatedAt.toIso8601String(),
-      'phone_number': phoneNumber.toJson(),
+      'phone_number': phoneNumber.number,
+      'country_code': phoneNumber.countryCode,
       'is_enable': isEnable,
     };
   }

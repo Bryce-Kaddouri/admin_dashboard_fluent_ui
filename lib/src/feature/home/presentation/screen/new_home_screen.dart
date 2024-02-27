@@ -1,5 +1,7 @@
 import 'package:admin_dashboard/src/feature/category/presentation/screen/category_add_screen.dart';
 import 'package:admin_dashboard/src/feature/category/presentation/screen/category_list_screen.dart';
+import 'package:admin_dashboard/src/feature/customer/presentation/screen/customer_add_screen.dart';
+import 'package:admin_dashboard/src/feature/customer/presentation/screen/customer_list_screen.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/product_add_screen.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/product_list_screen.dart';
 import 'package:admin_dashboard/src/feature/user/presentation/screen/user_add_screen.dart';
@@ -59,9 +61,9 @@ class _NewHomeScreenState extends State<NewHomeScreen>
       case 14:
         return 'Catalog';
       case 15:
-        return 'Page List';
+        return 'Customer List';
       case 16:
-        return 'Add Page';
+        return 'Add Customer';
       case 17:
         return 'Settings';
       default:
@@ -272,7 +274,7 @@ class _NewHomeScreenState extends State<NewHomeScreen>
                   icon: const Icon(FluentIcons.list),
                   title: const Text('Customer List',
                       overflow: TextOverflow.ellipsis),
-                  body: UserListScreen()),
+                  body: CustomerListScreen()),
               PaneItem(
                 onTap: () {
                   context.go('/customer/add');
@@ -280,7 +282,7 @@ class _NewHomeScreenState extends State<NewHomeScreen>
                 icon: const Icon(FluentIcons.add),
                 title: const Text('Customer User',
                     overflow: TextOverflow.ellipsis),
-                body: UserAddScreen(),
+                body: CustomerAddScreen(),
               ),
             ],
           ),

@@ -5,10 +5,10 @@ import '../../../../core/data/usecase/usecase.dart';
 import '../param/customer_add_param.dart';
 import '../repository/customer_repository.dart';
 
-class CustomerDeleteUseCase implements UseCase<bool, CustomerAddParam> {
+class CustomerAddUseCase implements UseCase<bool, CustomerAddParam> {
   final CustomerRepository customerRepository;
 
-  const CustomerDeleteUseCase({
+  const CustomerAddUseCase({
     required this.customerRepository,
   });
 

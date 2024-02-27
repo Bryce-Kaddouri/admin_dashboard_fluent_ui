@@ -19,6 +19,14 @@ import 'package:admin_dashboard/src/feature/category/business/usecase/category_u
 import 'package:admin_dashboard/src/feature/category/data/datasource/category_datasource.dart';
 import 'package:admin_dashboard/src/feature/category/data/repository/category_repository_impl.dart';
 import 'package:admin_dashboard/src/feature/category/presentation/category_provider/category_provider.dart';
+import 'package:admin_dashboard/src/feature/customer/business/usecase/customer_add_usecase.dart';
+import 'package:admin_dashboard/src/feature/customer/business/usecase/customer_delete_usecase.dart';
+import 'package:admin_dashboard/src/feature/customer/business/usecase/customer_get_customer_by_id_usecase.dart';
+import 'package:admin_dashboard/src/feature/customer/business/usecase/customer_get_customers_usecase.dart';
+import 'package:admin_dashboard/src/feature/customer/business/usecase/customer_update_usecase.dart';
+import 'package:admin_dashboard/src/feature/customer/data/datasource/customer_datasource.dart';
+import 'package:admin_dashboard/src/feature/customer/data/repository/customer_repository_impl.dart';
+import 'package:admin_dashboard/src/feature/customer/presentation/provider/customer_provider.dart';
 import 'package:admin_dashboard/src/feature/home/presentation/provider/home_provider.dart';
 import 'package:admin_dashboard/src/feature/product/business/repository/product_repository.dart';
 import 'package:admin_dashboard/src/feature/product/business/usecase/product_add_usecase.dart';
@@ -66,6 +74,8 @@ Future<void> main() async {
       ProductRepositoryImpl(dataSource: ProductDataSource());
   UserRepository userRepository =
       UserRepositoryImpl(dataSource: UserDataSource());
+  CustomerRepositoryImpl customerRepository =
+      CustomerRepositoryImpl(dataSource: CustomerDataSource());
 
   // set path strategy
   usePathUrlStrategy();
@@ -135,6 +145,12 @@ Future<void> main() async {
                 UserDeleteUseCase(userRepository: userRepository),
           ),
         ),
+        ChangeNotifierProvider<CustomerProvider>(
+          create: (context) => CustomerProvider(customerAddUseCase: CustomerAddUseCase(customerRepository: customerRepository), customerUpdateUseCase: CustomerUpdateUseCase(customerRepository: customerRepository), customerDeleteUseCase: CustomerDeleteUseCase(customerRepository: customerRepository), customerGetCustomerByIdUseCase: CustomerGetCustomerByIdUseCase(customerRepository: customerRepository), customerGetCustomersUseCase: CustomerGetCustomersUseCase(customerRepository: customerRepository),
+
+          ),
+        ),
+
         ChangeNotifierProvider<HomeProvider>(
           create: (context) => HomeProvider(),
         ),

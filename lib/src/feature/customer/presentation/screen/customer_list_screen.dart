@@ -1,11 +1,12 @@
 import 'package:admin_dashboard/src/feature/category/data/datasource/category_datasource.dart';
+import 'package:admin_dashboard/src/feature/customer/presentation/provider/customer_provider.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../category/data/model/category_model.dart';
-import '../category_provider/category_provider.dart';
+import '../../data/model/customer_model.dart';
 
 class CustomerListScreen extends StatefulWidget {
   CustomerListScreen({super.key});
@@ -55,7 +56,7 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                     child: TextBox(
                       prefixMode: OverlayVisibilityMode.always,
                       onChanged: (value) {
-                        context.read<CategoryProvider>().setSearchText(value);
+                        context.read<CustomerProvider>().setSearchText(value);
                       },
                       prefix: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -77,7 +78,7 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                 // select between 10, 25, 50, 100 and 250
                 DropDownButton(
                   title: Text(
-                    context.watch<CategoryProvider>().nbItemPerPage.toString(),
+                    context.watch<CustomerProvider>().nbItemPerPage.toString(),
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -86,9 +87,9 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                   items: [
                     MenuFlyoutItem(
                       selected:
-                          context.watch<CategoryProvider>().nbItemPerPage == 10,
+                          context.watch<CustomerProvider>().nbItemPerPage == 10,
                       leading:
-                          context.watch<CategoryProvider>().nbItemPerPage == 10
+                          context.watch<CustomerProvider>().nbItemPerPage == 10
                               ? Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(5),
@@ -104,15 +105,15 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                         child: Text('10'),
                       ),
                       onPressed: () {
-                        context.read<CategoryProvider>().setNbItemPerPage(10);
+                        context.read<CustomerProvider>().setNbItemPerPage(10);
                       },
                     ),
                     MenuFlyoutSeparator(),
                     MenuFlyoutItem(
                       selected:
-                          context.watch<CategoryProvider>().nbItemPerPage == 25,
+                          context.watch<CustomerProvider>().nbItemPerPage == 25,
                       leading:
-                          context.watch<CategoryProvider>().nbItemPerPage == 25
+                          context.watch<CustomerProvider>().nbItemPerPage == 25
                               ? Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(5),
@@ -128,15 +129,15 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                         child: Text('25'),
                       ),
                       onPressed: () {
-                        context.read<CategoryProvider>().setNbItemPerPage(25);
+                        context.read<CustomerProvider>().setNbItemPerPage(25);
                       },
                     ),
                     MenuFlyoutSeparator(),
                     MenuFlyoutItem(
                       selected:
-                          context.watch<CategoryProvider>().nbItemPerPage == 50,
+                          context.watch<CustomerProvider>().nbItemPerPage == 50,
                       leading:
-                          context.watch<CategoryProvider>().nbItemPerPage == 50
+                          context.watch<CustomerProvider>().nbItemPerPage == 50
                               ? Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(5),
@@ -152,16 +153,16 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                         child: Text('50'),
                       ),
                       onPressed: () {
-                        context.read<CategoryProvider>().setNbItemPerPage(50);
+                        context.read<CustomerProvider>().setNbItemPerPage(50);
                       },
                     ),
                     MenuFlyoutSeparator(),
                     MenuFlyoutItem(
                       selected:
-                          context.watch<CategoryProvider>().nbItemPerPage ==
+                          context.watch<CustomerProvider>().nbItemPerPage ==
                               100,
                       leading:
-                          context.watch<CategoryProvider>().nbItemPerPage == 100
+                          context.watch<CustomerProvider>().nbItemPerPage == 100
                               ? Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(5),
@@ -177,16 +178,16 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                         child: Text('100'),
                       ),
                       onPressed: () {
-                        context.read<CategoryProvider>().setNbItemPerPage(100);
+                        context.read<CustomerProvider>().setNbItemPerPage(100);
                       },
                     ),
                     MenuFlyoutSeparator(),
                     MenuFlyoutItem(
                       selected:
-                          context.watch<CategoryProvider>().nbItemPerPage ==
+                          context.watch<CustomerProvider>().nbItemPerPage ==
                               250,
                       leading:
-                          context.watch<CategoryProvider>().nbItemPerPage == 250
+                          context.watch<CustomerProvider>().nbItemPerPage == 250
                               ? Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(5),
@@ -202,7 +203,7 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                         child: Text('250'),
                       ),
                       onPressed: () {
-                        context.read<CategoryProvider>().setNbItemPerPage(250);
+                        context.read<CustomerProvider>().setNbItemPerPage(250);
                       },
                     ),
                   ],
@@ -229,31 +230,31 @@ class _CustomerListScreenState extends State<CustomerListScreen>
           ),
           Expanded(
               child: Container(
-            child: StreamBuilder<List<CategoryModel>>(
-              stream: CategoryDataSource().getCategoryByIdStream(),
+            child: FutureBuilder<List<CustomerModel>>(
+              future: context.read<CustomerProvider>().getCustomers(),
               builder: (context, snapshot) {
                 print('snapshot: ${snapshot.connectionState}');
                 print('snapshot: ${snapshot.data}');
                 if (snapshot.hasData) {
-                  List<CategoryModel>? categories = snapshot.data;
-                  if (categories == null || categories.isEmpty) {
+                  List<CustomerModel>? customers = snapshot.data;
+                  if (customers == null || customers.isEmpty) {
                     return const Center(
                       child: Text('No data'),
                     );
                   }
-                  categories = categories
-                      .where((element) => element.name
+                  customers = customers
+                      .where((element) => element.fName
                           .toString()
                           .toLowerCase()
                           .contains(context
-                              .watch<CategoryProvider>()
+                              .watch<CustomerProvider>()
                               .searchText
                               .toLowerCase()))
                       .toList();
-                  print('categories: ${categories.length}');
+                  print('categories: ${customers.length}');
 
-                  if (categories.isEmpty &&
-                      context.watch<CategoryProvider>().searchText.isNotEmpty) {
+                  if (customers.isEmpty &&
+                      context.watch<CustomerProvider>().searchText.isNotEmpty) {
                     return const Center(
                       child: Text(
                         'No data, try another search',
@@ -262,11 +263,11 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                     );
                   }
 
-                  int nbPages = categories.length ~/
-                      context.watch<CategoryProvider>().nbItemPerPage;
+                  int nbPages = customers.length ~/
+                      context.watch<CustomerProvider>().nbItemPerPage;
                   print('nbPages: $nbPages');
-                  if (categories.length %
-                          context.watch<CategoryProvider>().nbItemPerPage !=
+                  if (customers.length %
+                          context.watch<CustomerProvider>().nbItemPerPage !=
                       0) {
                     nbPages++;
                   }
@@ -288,18 +289,20 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                                     ? index
                                     : (indexPage *
                                             context
-                                                .watch<CategoryProvider>()
+                                                .watch<CustomerProvider>()
                                                 .nbItemPerPage) +
                                         index;
-                                if (correctIndex > categories!.length - 1) {
+                                if (correctIndex > customers!.length - 1) {
                                   return Container();
                                 }
-                                final category = categories![correctIndex];
+
+                                CustomerModel customer = customers[correctIndex];
+                               /* final category = categories![correctIndex];
                                 print('index: $index');
                                 print('indexPage: $indexPage');
                                 print(
                                     'correct index: ${indexPage == 0 ? index : (indexPage * context.watch<CategoryProvider>().nbItemPerPage) + index}');
-                                print('-' * 50);
+                                print('-' * 50);*/
 
                                 return Card(
                                   margin: const EdgeInsets.all(10),
@@ -317,7 +320,7 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                                             child: Container(
                                               alignment: Alignment.center,
                                               child: Text(
-                                                '${category.id}',
+                                                '${customer.id}',
                                                 style: TextStyle(
                                                   color: Colors.black,
                                                   fontWeight: FontWeight.bold,
@@ -326,49 +329,11 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                                               ),
                                             ),
                                           ),
-                                          Container(
-                                              width: 50,
-                                              height: 50,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                color: Colors.blue,
-                                              ),
-                                              child: /*FutureBuilder<String?>(
-                                              future: context.read<CategoryProvider>().getSignedUrl(category?.imageUrl ?? ''),
-                                              builder: (context, snapshot) {
-                                                print('snapshot stqte: ${snapshot.connectionState}');
-                                                print('snapshot: ${snapshot.data}');
-                                                if (snapshot.connectionState == ConnectionState.done) {
-                                                  if (snapshot.hasData) {
-                                                    return */
-                                                  Image.network(
-                                                category.imageUrl ?? '',
-                                                fit: BoxFit.cover,
-                                                errorBuilder: (context, error,
-                                                    stackTrace) {
-                                                  return const Icon(
-                                                      FluentIcons.photo_error,
-                                                      color: Colors.white);
-                                                },
-                                              )
-                                              /*} else {
-                                                    return const Icon(FluentIcons.photo_error, color: Colors.white);
-                                                  }
-                                                } else {
-                                                  return const Center(
-                                                    child: ProgressRing(
-                                                    ),
-                                                  );
-                                                }
-                                              },
-                                            ),*/
-                                              ),
                                         ],
                                       ),
                                     ),
-                                    title: Text(category?.name ?? ''),
-                                    subtitle: Text(category?.description ?? ''),
+                                    title: Text('${customer.lName} ${customer.fName}'),
+                                    subtitle: Text('${customer.phoneNumber.countryCode}${customer.phoneNumber.number}'),
                                     trailing: Row(
                                       children: [
                                         FilledButton(
@@ -387,9 +352,9 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                                           ),
                                           onPressed: () {
                                             print(
-                                                'category id: ${category.id}');
+                                                'category id: ${customer.id}');
                                             context.go(
-                                                '/category/update/${category.id}');
+                                                '/customer/update/${customer.id}');
                                           },
                                           child: const Icon(FluentIcons.edit),
                                         ),
@@ -411,7 +376,7 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                                           onPressed: () {
                                             print('delete');
                                             print(
-                                                'category id: ${category.id}');
+                                                'category id: ${customer.id}');
                                             Get.defaultDialog(
                                               contentPadding:
                                                   EdgeInsets.all(20),
@@ -432,9 +397,9 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                                               confirmTextColor: Colors.white,
                                               onConfirm: () async {
                                                 bool res = await context
-                                                    .read<CategoryProvider>()
-                                                    .deleteCategory(
-                                                        category.id);
+                                                    .read<CustomerProvider>()
+                                                    .deleteCustomer(
+                                                        customer.id);
                                                 Get.back();
                                                 if (res) {
                                                   Get.snackbar(

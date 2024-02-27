@@ -25,7 +25,7 @@ class CustomerModel {
         lName: json['l_name'],
         createdAt: DateTime.parse(json['created_at']),
         updatedAt: DateTime.parse(json['updated_at']),
-        phoneNumber: PhoneNumberModel.fromJson(json['phone_number']),
+        phoneNumber: PhoneNumberModel.fromJson(json),
         isEnable: json['is_enable'],
       );
     } catch (e) {
@@ -36,6 +36,16 @@ class CustomerModel {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'f_name': fName,
+      'l_name': lName,
+      'created_at': createdAt.toIso8601String(),
+      'updated_at': updatedAt.toIso8601String(),
+      'phone_number': phoneNumber.toJson(),
+      'is_enable': isEnable,
+    };
+  }
+  Map<String, dynamic> toJsonAdd() {
+    return {
       'f_name': fName,
       'l_name': lName,
       'created_at': createdAt.toIso8601String(),
@@ -58,7 +68,7 @@ class PhoneNumberModel {
   factory PhoneNumberModel.fromJson(Map<String, dynamic> json) {
     return PhoneNumberModel(
       countryCode: json['country_code'],
-      number: json['number'],
+      number: json['phone_number'],
     );
   }
 

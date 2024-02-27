@@ -1,6 +1,13 @@
 import 'package:admin_dashboard/src/feature/category/business/usecase/category_add_usecase.dart';
 import 'package:admin_dashboard/src/feature/category/business/usecase/category_get_categories_usecase.dart';
 import 'package:admin_dashboard/src/feature/category/business/usecase/category_update_usecase.dart';
+import 'package:admin_dashboard/src/feature/customer/business/param/customer_add_param.dart';
+import 'package:admin_dashboard/src/feature/customer/business/usecase/customer_add_usecase.dart';
+import 'package:admin_dashboard/src/feature/customer/business/usecase/customer_delete_usecase.dart';
+import 'package:admin_dashboard/src/feature/customer/business/usecase/customer_get_customer_by_id_usecase.dart';
+import 'package:admin_dashboard/src/feature/customer/business/usecase/customer_get_customers_usecase.dart';
+import 'package:admin_dashboard/src/feature/customer/business/usecase/customer_update_usecase.dart';
+import 'package:admin_dashboard/src/feature/customer/data/model/customer_model.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -15,23 +22,19 @@ import '../../../category/business/usecase/category_get_signed_url_usecase.dart'
 import '../../../category/business/usecase/category_upload_image_usecase.dart';
 import '../../../category/data/model/category_model.dart';
 
-class CategoryProvider with ChangeNotifier {
-  final CategoryAddUseCase categoryAddUseCase;
-  final CategoryGetCategoriesUseCase categoryGetCategoriesUseCase;
-  final CategoryGetCategoryByIdUseCase categoryGetCategoryByIdUseCase;
-  final CategoryUpdateUseCase categoryUpdateCategoryUseCase;
-  final CategoryUploadImageUseCase categoryUploadImageUseCase;
-  final CategoryGetSignedUrlUseCase categoryGetSignedUrlUseCase;
-  final CategoryDeleteUseCase categoryDeleteUseCase;
+class CustomerProvider with ChangeNotifier {
+  final CustomerAddUseCase customerAddUseCase;
+  final CustomerUpdateUseCase customerUpdateUseCase;
+  final CustomerDeleteUseCase customerDeleteUseCase;
+  final CustomerGetCustomerByIdUseCase customerGetCustomerByIdUseCase;
+  final CustomerGetCustomersUseCase customerGetCustomersUseCase;
 
-  CategoryProvider({
-    required this.categoryAddUseCase,
-    required this.categoryGetCategoriesUseCase,
-    required this.categoryGetCategoryByIdUseCase,
-    required this.categoryUpdateCategoryUseCase,
-    required this.categoryUploadImageUseCase,
-    required this.categoryGetSignedUrlUseCase,
-    required this.categoryDeleteUseCase,
+  CustomerProvider({
+    required this.customerAddUseCase,
+    required this.customerUpdateUseCase,
+    required this.customerDeleteUseCase,
+    required this.customerGetCustomerByIdUseCase,
+    required this.customerGetCustomersUseCase,
   });
 
   bool _isLoading = false;
@@ -40,15 +43,6 @@ class CategoryProvider with ChangeNotifier {
 
   void setLoading(bool value) {
     _isLoading = value;
-    notifyListeners();
-  }
-
-  CategoryModel? _categoryModel;
-
-  CategoryModel? get categoryModel => _categoryModel;
-
-  void setCategoryModel(CategoryModel? value) {
-    _categoryModel = value;
     notifyListeners();
   }
 
@@ -79,142 +73,40 @@ class CategoryProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<CategoryModel> _categoryList = [];
+  Future<List<CustomerModel>> getCustomers() async {
 
-  List<CategoryModel> get categoryList => _categoryList;
-
-  void setCategoryList(List<CategoryModel> value) {
-    _categoryList = value;
-    notifyListeners();
-  }
-
-  void getCategories() async {
-    _isLoading = true;
-    notifyListeners();
-    List<CategoryModel> categoryList = [];
-    final result = await categoryGetCategoriesUseCase.call(NoParams());
+    List<CustomerModel> customerList = [];
+    final result = await customerGetCustomersUseCase.call(NoParams());
 
     await result.fold((l) async {
-      _addCategoryErrorMessage = l.errorMessage;
+      print( l.errorMessage);
     }, (r) async {
       print(r);
-      categoryList = r;
+      customerList = r;
     });
 
-    _categoryList = categoryList;
-    _isLoading = false;
-    notifyListeners();
+    return customerList;
   }
 
-  Future<List<CategoryModel>?> getCategoriesAsync() async {
-    List<CategoryModel> categoryList = [];
 
-    final result = await categoryGetCategoriesUseCase.call(NoParams());
+  Future<bool> addCustomer(String fName, String lName, String phoneNumber, String countryCode, bool isEnable, BuildContext context) async {
 
-    await result.fold((l) async {
-      return null;
-    }, (r) async {
-      print(r);
-      categoryList = r;
-    });
-
-    return categoryList;
-  }
-
-  Future<XFile?> pickImage() async {
-    final ImagePicker picker = ImagePicker();
-    ImageSource source = ImageSource.gallery;
-    if (!kIsWeb) {
-      Get.dialog(
-        AlertDialog(
-          title: Text('Select Image Source'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                title: Text('Camera'),
-                onTap: () {
-                  source = ImageSource.camera;
-                  Get.back();
-                },
-              ),
-              ListTile(
-                title: Text('Gallery'),
-                onTap: () {
-                  source = ImageSource.gallery;
-                  Get.back();
-                },
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-    final XFile? image = await picker.pickImage(source: source);
-    return image;
-  }
-
-  String _addCategoryErrorMessage = '';
-
-  String get addCategoryErrorMessage => _addCategoryErrorMessage;
-
-  void setAddCategoryErrorMessage(String value) {
-    _addCategoryErrorMessage = value;
-    notifyListeners();
-  }
-
-  Future<String?> uploadImage(Uint8List bytes) async {
-    _isLoading = true;
-    String? url;
-    notifyListeners();
-    final result = await categoryUploadImageUseCase.call(bytes);
-
-    await result.fold((l) async {
-      _addCategoryErrorMessage = l.errorMessage;
-
-      url = null;
-    }, (r) async {
-      print(r);
-      url = r;
-    });
-
-    _isLoading = false;
-    notifyListeners();
-    return url;
-  }
-
-  Future<String?> getSignedUrl(String path) async {
-    path = path.split('/').last;
-    String? url;
-
-    final result = await categoryGetSignedUrlUseCase.call(path);
-
-    await result.fold((l) async {
-      _addCategoryErrorMessage = l.errorMessage;
-
-      url = null;
-    }, (r) async {
-      print(r);
-      url = r;
-    });
-
-    return url;
-  }
-
-  Future<bool> addCategory(String name, String? description, String imageUrl,
-      BuildContext context) async {
     _isLoading = true;
     notifyListeners();
 
     bool isSuccess = false;
-    final result = await categoryAddUseCase.call(CategoryAddParam(
-      name: name,
-      description: description,
-      imageUrl: imageUrl,
+    final result = await customerAddUseCase.call(CustomerAddParam(
+      fName: fName,
+      lName: lName,
+      phoneNumber: PhoneNumberModel(
+        number: phoneNumber,
+        countryCode: countryCode,
+      ),
+      isEnable: true
     ));
 
     await result.fold((l) async {
-      _addCategoryErrorMessage = l.errorMessage;
+      print(l.errorMessage);
 
       await fluent.displayInfoBar(
         context,
@@ -223,7 +115,7 @@ class CategoryProvider with ChangeNotifier {
             title: const Text('Error!'),
             content: fluent.RichText(
                 text: fluent.TextSpan(
-              text: 'The user has not been added because of an error. ',
+              text: 'The customer has not been added because of an error. ',
               children: [
                 fluent.TextSpan(
                   text: l.errorMessage,
@@ -247,14 +139,13 @@ class CategoryProvider with ChangeNotifier {
 
       isSuccess = false;
     }, (r) async {
-      print(r.toJson());
       await fluent.displayInfoBar(
         context,
         builder: (context, close) {
           return fluent.InfoBar(
             title: const Text('Success!'),
             content: const Text(
-                'The category has been added successfully. You can add another category or close the form.'),
+                'The customer has been added successfully. You can add another customer or close the form.'),
             action: IconButton(
               icon: const Icon(fluent.FluentIcons.clear),
               onPressed: close,
@@ -273,30 +164,30 @@ class CategoryProvider with ChangeNotifier {
     return isSuccess;
   }
 
-  Future<CategoryModel?> getCategoryById(int id) async {
-    CategoryModel? categoryModel;
-    final result = await categoryGetCategoryByIdUseCase.call(id);
+  Future<CustomerModel?> getCustomerById(int id) async {
+    CustomerModel? customerModel;
+    final result = await customerGetCustomerByIdUseCase.call(id);
 
     await result.fold((l) async {
-      _addCategoryErrorMessage = l.errorMessage;
+      print(l.errorMessage);
     }, (r) async {
       print(r.toJson());
-      categoryModel = CategoryModel.fromJson(r.toJson());
+      customerModel = CustomerModel.fromJson(r.toJson());
     });
 
-    return categoryModel;
+    return customerModel;
   }
 
-  Future<bool> updateCategory(
-      CategoryModel category, BuildContext context) async {
+  Future<bool> updateCustomer(
+      CustomerModel customer, BuildContext context) async {
     _isLoading = true;
     notifyListeners();
     bool isSuccess = false;
-    CategoryModel? categoryModel;
-    final result = await categoryUpdateCategoryUseCase.call(category);
+
+    final result = await customerUpdateUseCase.call(customer);
 
     await result.fold((l) async {
-      _addCategoryErrorMessage = l.errorMessage;
+       print(l.errorMessage);
       await fluent.displayInfoBar(
         context,
         builder: (context, close) {
@@ -304,7 +195,7 @@ class CategoryProvider with ChangeNotifier {
             title: const Text('Error!'),
             content: fluent.RichText(
                 text: fluent.TextSpan(
-              text: 'The user has not been added because of an error. ',
+              text: 'The customer has not been added because of an error. ',
               children: [
                 fluent.TextSpan(
                   text: l.errorMessage,
@@ -327,14 +218,13 @@ class CategoryProvider with ChangeNotifier {
       );
       isSuccess = false;
     }, (r) async {
-      print(r.toJson());
       await fluent.displayInfoBar(
         context,
         builder: (context, close) {
           return fluent.InfoBar(
             title: const Text('Success!'),
             content: const Text(
-                'The category has been added successfully. You can add another category or close the form.'),
+                'The customer has been added successfully. You can add another category or close the form.'),
             action: IconButton(
               icon: const Icon(fluent.FluentIcons.clear),
               onPressed: close,
@@ -354,18 +244,17 @@ class CategoryProvider with ChangeNotifier {
     return isSuccess;
   }
 
-  Future<bool> deleteCategory(int id) async {
+  Future<bool> deleteCustomer(int id) async {
     _isLoading = true;
     bool isSuccess = false;
     notifyListeners();
-    final result = await categoryDeleteUseCase.call(id);
+    final result = await customerDeleteUseCase.call(id);
 
     await result.fold((l) async {
-      _addCategoryErrorMessage = l.errorMessage;
+      print(l.errorMessage);
 
       isSuccess = false;
     }, (r) async {
-      print(r.toJson());
       isSuccess = true;
     });
 

@@ -13,40 +13,43 @@ class CustomerDataSource {
       CustomerAddParam params) async {
     try {
       List<Map<String, dynamic>> response =
-          await _client.from('categories').insert(params.toJson()).select();
+          await _client.from('customers').insert(params.toJson()).select();
       print(response);
       if (response.isNotEmpty) {
         print('response is not empty');
-        CategoryModel categoryModel = CategoryModel.fromJson(response[0]);
-        print(categoryModel.toJson());
         return const Right(true);
       } else {
-        return Left(DatabaseFailure(errorMessage: 'Error adding category'));
+        return Left(DatabaseFailure(errorMessage: 'Error adding customer'));
       }
     } on PostgrestException catch (error) {
       print('postgrest error');
       print(error);
-      return Left(DatabaseFailure(errorMessage: 'Error adding category'));
+      return Left(DatabaseFailure(errorMessage: 'Error adding customer'));
     } catch (e) {
       print(e);
-      return Left(DatabaseFailure(errorMessage: 'Error adding category'));
+      return Left(DatabaseFailure(errorMessage: 'Error adding customer'));
     }
   }
 
   Future<Either<DatabaseFailure, List<CustomerModel>>> getCustomers() async {
     try {
       List<Map<String, dynamic>> response = await _client
-          .from('categories')
+          .from('customers')
           .select()
           .order('id', ascending: true);
       if (response.isNotEmpty) {
+        print('response is not empty customers');
+        print(response);
         List<CustomerModel> customerList =
             response.map((e) => CustomerModel.fromJson(e)).toList();
+        print(customerList);
         return Right(customerList);
       } else {
         return Left(DatabaseFailure(errorMessage: 'Error getting categories'));
       }
     } catch (e) {
+      print('error getting categories');
+      print(e);
       return Left(DatabaseFailure(errorMessage: 'Error getting categories'));
     }
   }
@@ -54,7 +57,7 @@ class CustomerDataSource {
   Future<Either<DatabaseFailure, CustomerModel>> getCustomerById(int id) async {
     try {
       List<Map<String, dynamic>> response = await _client
-          .from('categories')
+          .from('customers')
           .select()
           .eq('id', id)
           .limit(1)
@@ -72,23 +75,22 @@ class CustomerDataSource {
 
   Stream<List<CategoryModel>> getCustomerByIdStream() {
     var res = _client
-        .from('categories')
+        .from('customers')
         .stream(primaryKey: ['id']).order('id', ascending: true);
     return res
         .map((event) => event.map((e) => CategoryModel.fromJson(e)).toList());
   }
 
   Future<Either<DatabaseFailure, bool>> updateCustomer(
-      CustomerModel categoryModel) async {
+      CustomerModel customerModel) async {
     try {
       print('categoryModel from update datasource');
-      print(categoryModel.toJson());
-      Map<String, dynamic> categoryMap = categoryModel.toJson();
-      categoryMap.removeWhere((key, value) => key == 'id');
+      print(customerModel.toJson());
+      Map<String, dynamic> customerMap = customerModel.toJson();
       List<Map<String, dynamic>> response = await _client
-          .from('categories')
-          .update(categoryMap)
-          .eq('id', categoryModel.id)
+          .from('customers')
+          .update(customerMap)
+          .eq('id', customerModel.id)
           .select();
       print('response update');
       print(response);
@@ -112,7 +114,7 @@ class CustomerDataSource {
   Future<Either<DatabaseFailure, bool>> deleteCustomer(int id) async {
     try {
       List<Map<String, dynamic>> response = await _client
-          .from('categories')
+          .from('customers')
           .delete()
           .eq('id', id)
           .limit(1)

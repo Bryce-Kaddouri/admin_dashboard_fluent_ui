@@ -6,11 +6,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../../category/data/model/category_model.dart';
-import '../category_provider/category_provider.dart';
+import '../../data/model/customer_model.dart';
+import '../provider/customer_provider.dart';
 
 class UpdateCustomerScreen extends StatelessWidget {
-  final int categoryId;
-  UpdateCustomerScreen({super.key, required this.categoryId});
+  final int customerId;
+  UpdateCustomerScreen({super.key, required this.customerId});
 
   @override
   Widget build(BuildContext context) {
@@ -52,16 +53,16 @@ class UpdateCustomerScreen extends StatelessWidget {
             margin: EdgeInsets.only(left: 20, right: 20, bottom: 20),
             child: FutureBuilder(
               future:
-                  context.read<CategoryProvider>().getCategoryById(categoryId),
+                  context.read<CustomerProvider>().getCustomerById(customerId),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   print('data');
                   print(snapshot.data);
-                  CategoryModel categoryModel = snapshot.data as CategoryModel;
+                  CustomerModel customerModel = snapshot.data as CustomerModel;
                   return Container(
                     width: MediaQuery.of(context).size.width,
-                    child: UpdateCategoryForm(
-                      categoryModel: categoryModel,
+                    child: UpdateCustomerForm(
+                      customerModel: customerModel,
                     ),
                   );
                 } else if (snapshot.hasError) {
@@ -82,28 +83,27 @@ class UpdateCustomerScreen extends StatelessWidget {
   }
 }
 
-class UpdateCategoryForm extends StatefulWidget {
-  CategoryModel categoryModel;
-  UpdateCategoryForm({super.key, required this.categoryModel});
+class UpdateCustomerForm extends StatefulWidget {
+  CustomerModel customerModel;
+  UpdateCustomerForm({super.key, required this.customerModel});
 
   @override
-  State<UpdateCategoryForm> createState() => _UpdateCategoryFormState();
+  State<UpdateCustomerForm> createState() => _UpdateCustomerFormState();
 }
 
-class _UpdateCategoryFormState extends State<UpdateCategoryForm> {
+class _UpdateCustomerFormState extends State<UpdateCustomerForm> {
   final _formKey = GlobalKey<FormState>();
 
   // controller for name
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
-  Uint8List? image;
 
   @override
   void initState() {
     super.initState();
-    nameController.text = widget.categoryModel.name;
-    descriptionController.text = widget.categoryModel.description ?? '';
+    nameController.text = widget.customerModel.fName;
+    descriptionController.text = widget.customerModel.lName;
   }
 
   @override
@@ -112,76 +112,10 @@ class _UpdateCategoryFormState extends State<UpdateCategoryForm> {
       key: _formKey,
       child: Column(
         children: [
-          FormField<Uint8List>(
-              initialValue: image,
-              builder: (FormFieldState field) {
-                return Column(
-                  children: [
-                    Text('Image'),
-                    SizedBox(height: 10),
-                    if (image != null)
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        height: 200,
-                        width: 200,
-                        clipBehavior: Clip.antiAlias,
-                        child: AspectRatio(
-                          aspectRatio: 1,
-                          child: Image.memory(
-                            image!,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                      )
-                    else
-                      Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.grey,
-                          ),
-                          height: 200,
-                          width: 200,
-                          child: widget.categoryModel.imageUrl.isEmpty
-                              ? Center(
-                                  child: Text('No Image'),
-                                )
-                              : Image.network(
-                                  widget.categoryModel.imageUrl,
-                                  fit: BoxFit.fill,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Center(
-                                      child: Text('Error'),
-                                    );
-                                  },
-                                )),
-                    SizedBox(height: 10),
-                    FilledButton(
-                      onPressed: () async {
-                        XFile? result =
-                            await context.read<CategoryProvider>().pickImage();
-                        if (result != null) {
-                          Uint8List bytes = await result.readAsBytes();
-                          setState(() {
-                            image = bytes;
-                          });
-                        }
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: 200,
-                        height: 30,
-                        child:
-                            Text(image != null ? 'Change Image' : 'Pick Image'),
-                      ),
-                    ),
-                  ],
-                );
-              }),
+
           SizedBox(height: 50),
           InfoLabel(
-            label: 'Enter category name:',
+            label: 'Enter customer first name:',
             child: Container(
               alignment: Alignment.center,
               constraints: BoxConstraints(maxWidth: 500, maxHeight: 50),
@@ -190,7 +124,7 @@ class _UpdateCategoryFormState extends State<UpdateCategoryForm> {
                 placeholder: 'Name',
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter category name';
+                    return 'Please enter customer first name';
                   }
                   return null;
                 },
@@ -213,7 +147,7 @@ class _UpdateCategoryFormState extends State<UpdateCategoryForm> {
           ),
           const SizedBox(height: 100),
           FilledButton(
-              child: context.watch<CategoryProvider>().isLoading
+              child: context.watch<CustomerProvider>().isLoading
                   ? const ProgressRing()
                   : Container(
                       alignment: Alignment.center,
@@ -225,35 +159,10 @@ class _UpdateCategoryFormState extends State<UpdateCategoryForm> {
                   print('add category');
                   String name = nameController.text;
                   String description = descriptionController.text;
-                  // upload image
-                  if (image != null) {
-                    String? imageUrl = await context
-                        .read<CategoryProvider>()
-                        .uploadImage(image!);
-                    if (imageUrl != null) {
-                      CategoryModel oldCategory = widget.categoryModel;
-                      CategoryModel newCategory = CategoryModel(
-                        id: oldCategory.id,
-                        name:
-                            oldCategory.name != name ? name : oldCategory.name,
-                        description: oldCategory.description != description
-                            ? description
-                            : oldCategory.description,
-                        imageUrl: oldCategory.imageUrl != imageUrl
-                            ? imageUrl
-                            : oldCategory.imageUrl,
-                        createdAt: oldCategory.createdAt,
-                        updatedAt: DateTime.now(),
-                        isVisible: oldCategory.isVisible,
-                      );
-                      bool res = await context
-                          .read<CategoryProvider>()
-                          .updateCategory(newCategory, context);
-                    }
-                  } else {
-                    CategoryModel oldCategory = widget.categoryModel;
-                    CategoryModel newCategory = CategoryModel(
-                      id: oldCategory.id,
+
+                   /* CustomerModel oldCustomer = widget.customerModel;
+                  CustomerModel newCategory = CustomerModel(
+                      id: oldCustomer.id,
                       name: oldCategory.name != name ? name : oldCategory.name,
                       description: oldCategory.description != description
                           ? description
@@ -264,9 +173,9 @@ class _UpdateCategoryFormState extends State<UpdateCategoryForm> {
                       isVisible: oldCategory.isVisible,
                     );
                     bool res = await context
-                        .read<CategoryProvider>()
-                        .updateCategory(newCategory, context);
-                  }
+                        .read<CustomerProvider>()
+                        .updateCustomer(newCategory, context);*/
+
                 } else {
                   print('form is not valid');
                 }

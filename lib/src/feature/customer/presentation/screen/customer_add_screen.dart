@@ -3,6 +3,11 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
+// import material dart
+import 'package:flutter/material.dart' as material;
+
+import '../provider/customer_provider.dart';
 
 // add catgeory screen
 // name, description, image
@@ -18,11 +23,13 @@ class _CustomerAddScreenState extends State<CustomerAddScreen> {
   final _formKey = GlobalKey<FormState>();
 
   // controller for name
-  final TextEditingController nameController = TextEditingController();
+  final TextEditingController fNameController = TextEditingController();
+  final TextEditingController lNameController = TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController();
+  final TextEditingController countryCodeController = TextEditingController();
 
-  final TextEditingController descriptionController = TextEditingController();
 
-  Uint8List? image;
+
 
   @override
   Widget build(BuildContext context) {
@@ -33,82 +40,18 @@ class _CustomerAddScreenState extends State<CustomerAddScreen> {
             key: _formKey,
             child: Column(
               children: [
-                FormField<Uint8List>(
-                    initialValue: image,
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Please pick an image';
-                      }
-                      return null;
-                    },
-                    builder: (FormFieldState field) {
-                      return Column(
-                        children: [
-                          Text('Image'),
-                          SizedBox(height: 10),
-                          if (image != null)
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              height: 200,
-                              width: 200,
-                              clipBehavior: Clip.antiAlias,
-                              child: AspectRatio(
-                                aspectRatio: 1,
-                                child: Image.memory(
-                                  image!,
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                            )
-                          else
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.grey,
-                              ),
-                              height: 200,
-                              width: 200,
-                              child: Icon(FluentIcons.photo2_add),
-                            ),
-                          SizedBox(height: 10),
-                          FilledButton(
-                            onPressed: () async {
-                              XFile? result = await context
-                                  .read<CategoryProvider>()
-                                  .pickImage();
-                              if (result != null) {
-                                Uint8List bytes = await result.readAsBytes();
-                                setState(() {
-                                  image = bytes;
-                                });
-                              }
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: 200,
-                              height: 30,
-                              child: Text(image != null
-                                  ? 'Change Image'
-                                  : 'Pick Image'),
-                            ),
-                          ),
-                        ],
-                      );
-                    }),
                 SizedBox(height: 50),
                 InfoLabel(
-                  label: 'Enter category name:',
+                  label: 'Enter customer first name:',
                   child: Container(
                     alignment: Alignment.center,
                     constraints: BoxConstraints(maxWidth: 500, maxHeight: 50),
                     child: TextFormBox(
-                      controller: nameController,
-                      placeholder: 'Name',
+                      controller: fNameController,
+                      placeholder: 'First Name',
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter category name';
+                          return 'Please enter customer first name';
                         }
                         return null;
                       },
@@ -117,62 +60,98 @@ class _CustomerAddScreenState extends State<CustomerAddScreen> {
                 ),
                 SizedBox(height: 50),
                 InfoLabel(
-                  label: 'Enter category description:',
+                  label: 'Enter customer last name:',
                   child: Container(
                     alignment: Alignment.center,
                     constraints: BoxConstraints(maxWidth: 500, maxHeight: 50),
                     child: TextFormBox(
-                      controller: descriptionController,
-                      placeholder: 'Description',
-                      expands: false,
-                      maxLines: null,
+                      controller: lNameController,
+                      placeholder: 'Last Name',
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter customer last name';
+                        }
+                        return null;
+                      },
                     ),
                   ),
                 ),
+                SizedBox(height: 50),
+
+            Container(
+              alignment: Alignment.center,
+              height: 100,
+              constraints: BoxConstraints(maxWidth: 500, maxHeight: 100),
+              child:
+                material.Card(
+                  elevation: 0,
+                  child:
+                IntlPhoneField(
+                  validator: (value) {
+                    if (value == null ) {
+                      return 'Please enter phone number';
+                    }else if (value.isValidNumber() == false) {
+                      return 'Please enter valid phone number';
+                    }
+                    return null;
+                  },
+                  flagsButtonPadding: EdgeInsets.all(10),
+                  decoration: material.InputDecoration(
+                    contentPadding: EdgeInsets.all(10),
+                    constraints: BoxConstraints(maxWidth: 500, maxHeight: 100, minHeight: 100),
+
+                    labelText: 'Phone Number',
+                    border: material.OutlineInputBorder(
+                    ),
+                    enabledBorder: material.OutlineInputBorder(
+                    ),
+                    focusedBorder: material.OutlineInputBorder(
+                    ),
+                  ),
+                  initialCountryCode: 'IE',
+                  controller: phoneNumberController,
+                  onChanged: (phone) {
+                    print(phone.completeNumber);
+                    setState(() {
+                      countryCodeController.text = phone.countryCode;
+                    });
+                  },
+                ),
+                ),
+            ),
+
                 const SizedBox(height: 100),
                 FilledButton(
-                    child: context.watch<CategoryProvider>().isLoading
+                    child: context.watch<CustomerProvider>().isLoading
                         ? const ProgressRing()
                         : Container(
                             alignment: Alignment.center,
                             width: 200,
                             height: 30,
-                            child: const Text('Add Category')),
+                            child: const Text('Add Customer')),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         print('add category');
-                        String name = nameController.text;
-                        String description = descriptionController.text;
-                        // upload image
-                        if (image != null) {
-                          String? imageUrl = await context
-                              .read<CategoryProvider>()
-                              .uploadImage(image!);
-                          if (imageUrl != null) {
-                            bool res = await context
-                                .read<CategoryProvider>()
-                                .addCategory(
-                                    name, description, imageUrl, context);
-                            if (res) {
-                              nameController.clear();
-                              descriptionController.clear();
-                              setState(() {
-                                image = null;
-                              });
-                            }
-                          }
-                        } else {
+                        String fName = fNameController.text;
+                        String lName = lNameController.text;
+                        String phoneNumber = phoneNumberController.text;
+                        String countryCode = countryCodeController.text;
+                        print('fName: $fName');
+                        print('lName: $lName');
+                        print('phoneNumber: $phoneNumber');
+                        print('countryCode: $countryCode');
+
                           bool res = await context
-                              .read<CategoryProvider>()
-                              .addCategory(name, description, '', context);
+                              .read<CustomerProvider>()
+                              .addCustomer(fName, lName, phoneNumber, countryCode, true, context);
                           if (res) {
-                            nameController.clear();
-                            descriptionController.clear();
-                            setState(() {
-                              image = null;
-                            });
+                            fNameController.clear();
+                            lNameController.clear();
+                            phoneNumberController.clear();
+                            countryCodeController.clear();
+
                           }
-                        }
+
                       } else {
                         print('form is not valid');
                       }
