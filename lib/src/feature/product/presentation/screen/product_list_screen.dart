@@ -153,6 +153,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   alignment: Alignment.center,
                   duration: const Duration(milliseconds: 300),
                   child: TextBox(
+                    onChanged: (value) {
+                      context.read<ProductProvider>().setSearchText(value);
+                    },
                     prefixMode: OverlayVisibilityMode.always,
                     prefix: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -172,17 +175,39 @@ class _ProductListScreenState extends State<ProductListScreen> {
               ),
               // select between 10, 25, 50, 100 and 250
               DropDownButton(
-                title: Text('10'),
+                title: Text(
+                  context.watch<ProductProvider>().nbItemPerPage.toString(),
+                ),
                 items: [
-                  MenuFlyoutItem(text: const Text('10'), onPressed: () {}),
+                  MenuFlyoutItem(
+                      text: const Text('10'),
+                      onPressed: () {
+                        context.read<ProductProvider>().setNbItemPerPage(10);
+                      }),
                   MenuFlyoutSeparator(),
-                  MenuFlyoutItem(text: const Text('25'), onPressed: () {}),
+                  MenuFlyoutItem(
+                      text: const Text('25'),
+                      onPressed: () {
+                        context.read<ProductProvider>().setNbItemPerPage(25);
+                      }),
                   MenuFlyoutSeparator(),
-                  MenuFlyoutItem(text: const Text('50'), onPressed: () {}),
+                  MenuFlyoutItem(
+                      text: const Text('50'),
+                      onPressed: () {
+                        context.read<ProductProvider>().setNbItemPerPage(50);
+                      }),
                   MenuFlyoutSeparator(),
-                  MenuFlyoutItem(text: const Text('100'), onPressed: () {}),
+                  MenuFlyoutItem(
+                      text: const Text('100'),
+                      onPressed: () {
+                        context.read<ProductProvider>().setNbItemPerPage(100);
+                      }),
                   MenuFlyoutSeparator(),
-                  MenuFlyoutItem(text: const Text('250'), onPressed: () {}),
+                  MenuFlyoutItem(
+                      text: const Text('250'),
+                      onPressed: () {
+                        context.read<ProductProvider>().setNbItemPerPage(250);
+                      }),
                 ],
               ),
               SizedBox(width: 10),

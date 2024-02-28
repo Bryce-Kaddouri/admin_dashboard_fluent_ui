@@ -1,11 +1,8 @@
-import 'package:admin_dashboard/src/feature/category/presentation/category_provider/category_provider.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/foundation.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 // import material dart
 import 'package:flutter/material.dart' as material;
+import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:provider/provider.dart';
 
 import '../provider/customer_provider.dart';
 
@@ -27,9 +24,6 @@ class _CustomerAddScreenState extends State<CustomerAddScreen> {
   final TextEditingController lNameController = TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
   final TextEditingController countryCodeController = TextEditingController();
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -77,49 +71,45 @@ class _CustomerAddScreenState extends State<CustomerAddScreen> {
                   ),
                 ),
                 SizedBox(height: 50),
-
-            Container(
-              alignment: Alignment.center,
-              height: 100,
-              constraints: BoxConstraints(maxWidth: 500, maxHeight: 100),
-              child:
-                material.Card(
-                  elevation: 0,
-                  child:
-                IntlPhoneField(
-                  validator: (value) {
-                    if (value == null ) {
-                      return 'Please enter phone number';
-                    }else if (value.isValidNumber() == false) {
-                      return 'Please enter valid phone number';
-                    }
-                    return null;
-                  },
-                  flagsButtonPadding: EdgeInsets.all(10),
-                  decoration: material.InputDecoration(
-                    contentPadding: EdgeInsets.all(10),
-                    constraints: BoxConstraints(maxWidth: 500, maxHeight: 100, minHeight: 100),
-
-                    labelText: 'Phone Number',
-                    border: material.OutlineInputBorder(
-                    ),
-                    enabledBorder: material.OutlineInputBorder(
-                    ),
-                    focusedBorder: material.OutlineInputBorder(
+                Container(
+                  alignment: Alignment.center,
+                  height: 100,
+                  constraints: BoxConstraints(maxWidth: 500, maxHeight: 100),
+                  child: material.Card(
+                    color: Colors.transparent,
+                    elevation: 0,
+                    child: IntlPhoneField(
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Please enter phone number';
+                        } else if (value.isValidNumber() == false) {
+                          return 'Please enter valid phone number';
+                        }
+                        return null;
+                      },
+                      flagsButtonPadding: EdgeInsets.all(10),
+                      decoration: material.InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        contentPadding: EdgeInsets.all(10),
+                        constraints: BoxConstraints(
+                            maxWidth: 500, maxHeight: 100, minHeight: 100),
+                        labelText: 'Phone Number',
+                        border: material.OutlineInputBorder(),
+                        enabledBorder: material.OutlineInputBorder(),
+                        focusedBorder: material.OutlineInputBorder(),
+                      ),
+                      initialCountryCode: 'IE',
+                      controller: phoneNumberController,
+                      onChanged: (phone) {
+                        print(phone.completeNumber);
+                        setState(() {
+                          countryCodeController.text = phone.countryCode;
+                        });
+                      },
                     ),
                   ),
-                  initialCountryCode: 'IE',
-                  controller: phoneNumberController,
-                  onChanged: (phone) {
-                    print(phone.completeNumber);
-                    setState(() {
-                      countryCodeController.text = phone.countryCode;
-                    });
-                  },
                 ),
-                ),
-            ),
-
                 const SizedBox(height: 100),
                 FilledButton(
                     child: context.watch<CustomerProvider>().isLoading
@@ -141,17 +131,16 @@ class _CustomerAddScreenState extends State<CustomerAddScreen> {
                         print('phoneNumber: $phoneNumber');
                         print('countryCode: $countryCode');
 
-                          bool res = await context
-                              .read<CustomerProvider>()
-                              .addCustomer(fName, lName, phoneNumber, countryCode, true, context);
-                          if (res) {
-                            fNameController.clear();
-                            lNameController.clear();
-                            phoneNumberController.clear();
-                            countryCodeController.clear();
-
-                          }
-
+                        bool res = await context
+                            .read<CustomerProvider>()
+                            .addCustomer(fName, lName, phoneNumber, countryCode,
+                                true, context);
+                        if (res) {
+                          fNameController.clear();
+                          lNameController.clear();
+                          phoneNumberController.clear();
+                          countryCodeController.clear();
+                        }
                       } else {
                         print('form is not valid');
                       }

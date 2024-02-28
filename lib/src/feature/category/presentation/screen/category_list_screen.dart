@@ -276,13 +276,14 @@ class _CategoryListScreenState extends State<CategoryListScreen>
                     children: [
                       Expanded(
                         child: PageView.builder(
-                          itemCount: 2,
+                          itemCount: nbPages,
                           itemBuilder: (context, indexPage) {
                             return ListView.builder(
                               padding: const EdgeInsets.all(10),
                               shrinkWrap: true,
-                              itemCount: /*context.watch<CategoryProvider>().nbItemPerPage*/
-                                  10,
+                              itemCount: context
+                                  .watch<CategoryProvider>()
+                                  .nbItemPerPage,
                               itemBuilder: (context, index) {
                                 int correctIndex = indexPage == 0
                                     ? index
