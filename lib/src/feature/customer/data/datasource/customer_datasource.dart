@@ -23,7 +23,7 @@ class CustomerDataSource {
     } on PostgrestException catch (error) {
       print('postgrest error');
       print(error);
-      return Left(DatabaseFailure(errorMessage: 'Error adding customer'));
+      return Left(DatabaseFailure(errorMessage: error.message));
     } catch (e) {
       print(e);
       return Left(DatabaseFailure(errorMessage: 'Error adding customer'));
@@ -98,7 +98,7 @@ class CustomerDataSource {
     } on PostgrestException catch (error) {
       print('postgrest error');
       print(error);
-      return Left(DatabaseFailure(errorMessage: 'Error updating category'));
+      return Left(DatabaseFailure(errorMessage: error.message));
     } catch (e) {
       print('error updating category');
       return Left(DatabaseFailure(errorMessage: 'Error updating category'));

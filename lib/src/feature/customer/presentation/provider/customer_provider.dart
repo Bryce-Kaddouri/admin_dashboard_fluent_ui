@@ -1,3 +1,4 @@
+import 'package:admin_dashboard/src/core/helper/responsive_helper.dart';
 import 'package:admin_dashboard/src/feature/customer/business/param/customer_add_param.dart';
 import 'package:admin_dashboard/src/feature/customer/business/usecase/customer_add_usecase.dart';
 import 'package:admin_dashboard/src/feature/customer/business/usecase/customer_delete_usecase.dart';
@@ -179,17 +180,21 @@ class CustomerProvider with ChangeNotifier {
         context,
         builder: (context, close) {
           return fluent.InfoBar(
-            title: const Text('Error!'),
-            content: fluent.RichText(
-                text: fluent.TextSpan(
-              text: 'The customer has not been updated because of an error. ',
-              children: [
-                fluent.TextSpan(
-                  text: l.errorMessage,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ],
-            )),
+            isLong: false,
+            title: fluent.Container(
+              constraints: fluent.BoxConstraints(
+                  maxWidth: ResponsiveHelper.isMobile(context) ? 200 : 500),
+              child: fluent.RichText(
+                  text: fluent.TextSpan(
+                text: 'The customer has not been updated because of an error. ',
+                children: [
+                  fluent.TextSpan(
+                    text: l.errorMessage,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ],
+              )),
+            ),
 
             /*'The user has not been added because of an error. ${l.errorMessage}'*/
 

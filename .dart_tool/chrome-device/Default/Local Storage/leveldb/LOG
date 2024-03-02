@@ -1,4 +1,21 @@
-2024/03/02-18:50:51.124 4870 Reusing MANIFEST C:\Users\bricr\AppData\Local\Temp\flutter_tools.508b5282\flutter_tools_chrome_device.dbf71ab1\Default\Local Storage\leveldb/MANIFEST-000001
-2024/03/02-18:50:51.126 4870 Recovering log #4
-2024/03/02-18:50:51.130 4870 Reusing old log C:\Users\bricr\AppData\Local\Temp\flutter_tools.508b5282\flutter_tools_chrome_device.dbf71ab1\Default\Local Storage\leveldb/000004.log 
-2024/03/02-18:50:51.131 4870 Delete type=0 #3
+2024/03/02-22:39:17.535 19c0 Reusing MANIFEST C:\Users\bricr\AppData\Local\Temp\flutter_tools.5ec8f3a1\flutter_tools_chrome_device.b97935e1\Default\Local Storage\leveldb/MANIFEST-000001
+2024/03/02-22:39:17.539 19c0 Recovering log #4
+2024/03/02-22:39:17.544 19c0 Reusing old log C:\Users\bricr\AppData\Local\Temp\flutter_tools.5ec8f3a1\flutter_tools_chrome_device.b97935e1\Default\Local Storage\leveldb/000004.log 
+2024/03/02-22:39:17.546 19c0 Delete type=0 #3
+2024/03/02-22:45:20.588 2edc Level-0 table #7: started
+2024/03/02-22:45:20.591 2edc Level-0 table #7: 50798 bytes OK
+2024/03/02-22:45:20.592 2edc Delete type=0 #4
+2024/03/02-22:45:28.554 19c0 Level-0 table #9: started
+2024/03/02-22:45:28.566 19c0 Level-0 table #9: 46110 bytes OK
+2024/03/02-22:45:28.568 19c0 Delete type=0 #6
+2024/03/02-22:48:21.692 2edc Level-0 table #11: started
+2024/03/02-22:48:21.695 2edc Level-0 table #11: 61739 bytes OK
+2024/03/02-22:48:21.695 2edc Delete type=0 #8
+2024/03/02-22:48:21.696 2edc Compacting 4@0 + 0@1 files
+2024/03/02-22:48:21.699 2edc Generated table #12@0: 124 keys, 92216 bytes
+2024/03/02-22:48:21.699 2edc Compacted 4@0 + 0@1 files => 92216 bytes
+2024/03/02-22:48:21.699 2edc compacted to: files[ 0 1 0 0 0 0 0 ]
+2024/03/02-22:48:21.700 2edc Delete type=2 #3
+2024/03/02-22:48:21.700 2edc Delete type=2 #7
+2024/03/02-22:48:21.700 2edc Delete type=2 #9
+2024/03/02-22:48:21.700 2edc Delete type=2 #11

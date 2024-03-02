@@ -1,3 +1,12 @@
-2024/03/02-18:50:51.222 4870 Reusing MANIFEST C:\Users\bricr\AppData\Local\Temp\flutter_tools.508b5282\flutter_tools_chrome_device.dbf71ab1\Default\Session Storage/MANIFEST-000001
-2024/03/02-18:50:51.227 4870 Recovering log #3
-2024/03/02-18:50:51.231 4870 Reusing old log C:\Users\bricr\AppData\Local\Temp\flutter_tools.508b5282\flutter_tools_chrome_device.dbf71ab1\Default\Session Storage/000003.log 
+2024/03/02-22:39:17.610 19c0 Reusing MANIFEST C:\Users\bricr\AppData\Local\Temp\flutter_tools.5ec8f3a1\flutter_tools_chrome_device.b97935e1\Default\Session Storage/MANIFEST-000001
+2024/03/02-22:39:17.616 19c0 Recovering log #3
+2024/03/02-22:39:17.638 19c0 Reusing old log C:\Users\bricr\AppData\Local\Temp\flutter_tools.5ec8f3a1\flutter_tools_chrome_device.b97935e1\Default\Session Storage/000003.log 
+2024/03/02-22:45:28.445 2edc Level-0 table #5: started
+2024/03/02-22:45:28.453 2edc Level-0 table #5: 38923 bytes OK
+2024/03/02-22:45:28.458 2edc Delete type=0 #3
+2024/03/02-22:46:23.533 2edc Level-0 table #7: started
+2024/03/02-22:46:23.549 2edc Level-0 table #7: 91240 bytes OK
+2024/03/02-22:46:23.550 2edc Delete type=0 #4
+2024/03/02-22:47:56.774 2edc Level-0 table #9: started
+2024/03/02-22:47:56.780 2edc Level-0 table #9: 66217 bytes OK
+2024/03/02-22:47:56.781 2edc Delete type=0 #6
