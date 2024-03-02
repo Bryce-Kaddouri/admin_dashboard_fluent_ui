@@ -1,15 +1,15 @@
-import '../../data/model/customer_model.dart';
-
 class CustomerAddParam {
   final String fName;
   final String lName;
-  final PhoneNumberModel phoneNumber;
+  final String phoneNumber;
+  final String countryCode;
   final bool isEnable;
 
   CustomerAddParam({
     required this.fName,
     required this.lName,
     required this.phoneNumber,
+    required this.countryCode,
     required this.isEnable,
   });
 
@@ -17,8 +17,8 @@ class CustomerAddParam {
     return {
       'f_name': fName,
       'l_name': lName,
-      'phone_number': phoneNumber.number,
-      'country_code': phoneNumber.countryCode,
+      'phone_number': phoneNumber,
+      'country_code': countryCode,
       'is_enable': isEnable,
     };
   }

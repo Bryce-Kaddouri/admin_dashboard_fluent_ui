@@ -1,11 +1,10 @@
-import 'dart:typed_data';
-
 import 'package:fluent_ui/fluent_ui.dart';
+// import material dart
+import 'package:flutter/material.dart' as material;
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
 
-import '../../../category/data/model/category_model.dart';
 import '../../data/model/customer_model.dart';
 import '../provider/customer_provider.dart';
 
@@ -28,13 +27,13 @@ class UpdateCustomerScreen extends StatelessWidget {
             IconButton(
               icon: Icon(FluentIcons.back, size: 20),
               onPressed: () {
-                context.go('/category');
+                context.go('/customer');
               },
             ),
             Expanded(
               child: Container(
                 alignment: Alignment.center,
-                child: Text('Update Category', style: TextStyle(fontSize: 20)),
+                child: Text('Update Customer', style: TextStyle(fontSize: 20)),
               ),
             ),
           ],
@@ -51,14 +50,14 @@ class UpdateCustomerScreen extends StatelessWidget {
               .overlayBackgroundColor,
           child: Card(
             margin: EdgeInsets.only(left: 20, right: 20, bottom: 20),
-            child: FutureBuilder(
+            child: FutureBuilder<CustomerModel?>(
               future:
                   context.read<CustomerProvider>().getCustomerById(customerId),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   print('data');
                   print(snapshot.data);
-                  CustomerModel customerModel = snapshot.data as CustomerModel;
+                  CustomerModel customerModel = snapshot.data!;
                   return Container(
                     width: MediaQuery.of(context).size.width,
                     child: UpdateCustomerForm(
@@ -66,6 +65,8 @@ class UpdateCustomerScreen extends StatelessWidget {
                     ),
                   );
                 } else if (snapshot.hasError) {
+                  print('error');
+                  print(snapshot.error);
                   return Center(
                     child: Text('Error'),
                   );
@@ -94,16 +95,19 @@ class UpdateCustomerForm extends StatefulWidget {
 class _UpdateCustomerFormState extends State<UpdateCustomerForm> {
   final _formKey = GlobalKey<FormState>();
 
-  // controller for name
-  TextEditingController nameController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
-
+  // controller for first name
+  TextEditingController fNameController = TextEditingController();
+  TextEditingController lNameController = TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController countryCodeController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    nameController.text = widget.customerModel.fName;
-    descriptionController.text = widget.customerModel.lName;
+    fNameController.text = widget.customerModel.fName;
+    lNameController.text = widget.customerModel.lName;
+    phoneNumberController.text = widget.customerModel.phoneNumber;
+    countryCodeController.text = widget.customerModel.countryCode;
   }
 
   @override
@@ -112,7 +116,6 @@ class _UpdateCustomerFormState extends State<UpdateCustomerForm> {
       key: _formKey,
       child: Column(
         children: [
-
           SizedBox(height: 50),
           InfoLabel(
             label: 'Enter customer first name:',
@@ -120,8 +123,8 @@ class _UpdateCustomerFormState extends State<UpdateCustomerForm> {
               alignment: Alignment.center,
               constraints: BoxConstraints(maxWidth: 500, maxHeight: 50),
               child: TextFormBox(
-                controller: nameController,
-                placeholder: 'Name',
+                controller: fNameController,
+                placeholder: 'First Name',
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter customer first name';
@@ -133,15 +136,59 @@ class _UpdateCustomerFormState extends State<UpdateCustomerForm> {
           ),
           SizedBox(height: 50),
           InfoLabel(
-            label: 'Enter category description:',
+            label: 'Enter customer last name:',
             child: Container(
               alignment: Alignment.center,
               constraints: BoxConstraints(maxWidth: 500, maxHeight: 50),
               child: TextFormBox(
-                controller: descriptionController,
-                placeholder: 'Description',
-                expands: false,
-                maxLines: null,
+                controller: lNameController,
+                placeholder: 'Last Name',
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter customer last name';
+                  }
+                  return null;
+                },
+              ),
+            ),
+          ),
+          SizedBox(height: 50),
+          Container(
+            alignment: Alignment.center,
+            height: 100,
+            constraints: BoxConstraints(maxWidth: 500, maxHeight: 100),
+            child: material.Card(
+              color: Colors.transparent,
+              elevation: 0,
+              child: IntlPhoneField(
+                validator: (value) {
+                  if (value == null) {
+                    return 'Please enter phone number';
+                  } else if (value.isValidNumber() == false) {
+                    return 'Please enter valid phone number';
+                  }
+                  return null;
+                },
+                flagsButtonPadding: EdgeInsets.all(10),
+                decoration: material.InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  contentPadding: EdgeInsets.all(10),
+                  constraints: BoxConstraints(
+                      maxWidth: 500, maxHeight: 100, minHeight: 100),
+                  labelText: 'Phone Number',
+                  border: material.OutlineInputBorder(),
+                  enabledBorder: material.OutlineInputBorder(),
+                  focusedBorder: material.OutlineInputBorder(),
+                ),
+                initialCountryCode: 'IE',
+                controller: phoneNumberController,
+                onChanged: (phone) {
+                  print(phone.completeNumber);
+                  setState(() {
+                    countryCodeController.text = phone.countryCode;
+                  });
+                },
               ),
             ),
           ),
@@ -156,26 +203,34 @@ class _UpdateCustomerFormState extends State<UpdateCustomerForm> {
                       child: const Text('Update Category')),
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  print('add category');
-                  String name = nameController.text;
-                  String description = descriptionController.text;
+                  print('add customer');
+                  String fName = fNameController.text;
+                  String lName = lNameController.text;
+                  String phoneNumber = phoneNumberController.text;
+                  String countryCode = countryCodeController.text;
 
-                   /* CustomerModel oldCustomer = widget.customerModel;
-                  CustomerModel newCategory = CustomerModel(
+                  CustomerModel oldCustomer = widget.customerModel;
+                  CustomerModel newCustomer = CustomerModel(
                       id: oldCustomer.id,
-                      name: oldCategory.name != name ? name : oldCategory.name,
-                      description: oldCategory.description != description
-                          ? description
-                          : oldCategory.description,
-                      imageUrl: oldCategory.imageUrl,
-                      createdAt: oldCategory.createdAt,
+                      fName: oldCustomer.fName != fName
+                          ? fName
+                          : oldCustomer.fName,
+                      lName: oldCustomer.lName != lName
+                          ? lName
+                          : oldCustomer.lName,
+                      createdAt: oldCustomer.createdAt,
                       updatedAt: DateTime.now(),
-                      isVisible: oldCategory.isVisible,
-                    );
-                    bool res = await context
-                        .read<CustomerProvider>()
-                        .updateCustomer(newCategory, context);*/
+                      phoneNumber: oldCustomer.phoneNumber != phoneNumber
+                          ? phoneNumber
+                          : oldCustomer.phoneNumber,
+                      countryCode: oldCustomer.countryCode != countryCode
+                          ? countryCode
+                          : oldCustomer.countryCode,
+                      isEnable: oldCustomer.isEnable);
 
+                  bool res = await context
+                      .read<CustomerProvider>()
+                      .updateCustomer(newCustomer, context);
                 } else {
                   print('form is not valid');
                 }

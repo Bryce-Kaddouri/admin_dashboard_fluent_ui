@@ -1,4 +1,3 @@
-import 'package:admin_dashboard/src/feature/category/data/model/category_model.dart';
 import 'package:dartz/dartz.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -33,10 +32,8 @@ class CustomerDataSource {
 
   Future<Either<DatabaseFailure, List<CustomerModel>>> getCustomers() async {
     try {
-      List<Map<String, dynamic>> response = await _client
-          .from('customers')
-          .select()
-          .order('id', ascending: true);
+      List<Map<String, dynamic>> response =
+          await _client.from('customers').select().order('id', ascending: true);
       if (response.isNotEmpty) {
         print('response is not empty customers');
         print(response);
@@ -55,30 +52,28 @@ class CustomerDataSource {
   }
 
   Future<Either<DatabaseFailure, CustomerModel>> getCustomerById(int id) async {
+    print('get customer by id');
+    print(id.runtimeType);
     try {
-      List<Map<String, dynamic>> response = await _client
+      Map<String, dynamic> response = await _client
           .from('customers')
           .select()
           .eq('id', id)
-          .limit(1)
+          .single()
           .order('id', ascending: true);
-      if (response.isNotEmpty) {
-        CustomerModel customerModel = CustomerModel.fromJson(response[0]);
+      print('response get customer by id');
+      if (response != null) {
+        CustomerModel customerModel = CustomerModel.fromJson(response);
+        print('customerModel');
         return Right(customerModel);
       } else {
         return Left(DatabaseFailure(errorMessage: 'Error getting category'));
       }
     } catch (e) {
+      print('error getting customer');
+      print(e);
       return Left(DatabaseFailure(errorMessage: 'Error getting category'));
     }
-  }
-
-  Stream<List<CategoryModel>> getCustomerByIdStream() {
-    var res = _client
-        .from('customers')
-        .stream(primaryKey: ['id']).order('id', ascending: true);
-    return res
-        .map((event) => event.map((e) => CategoryModel.fromJson(e)).toList());
   }
 
   Future<Either<DatabaseFailure, bool>> updateCustomer(

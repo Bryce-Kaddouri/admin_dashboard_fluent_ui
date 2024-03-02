@@ -4,7 +4,8 @@ class CustomerModel {
   final String lName;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final PhoneNumberModel phoneNumber;
+  final String phoneNumber;
+  final String countryCode;
   final bool isEnable;
 
   CustomerModel({
@@ -14,6 +15,7 @@ class CustomerModel {
     required this.createdAt,
     required this.updatedAt,
     required this.phoneNumber,
+    required this.countryCode,
     required this.isEnable,
   });
 
@@ -25,7 +27,8 @@ class CustomerModel {
         lName: json['l_name'],
         createdAt: DateTime.parse(json['created_at']),
         updatedAt: DateTime.parse(json['updated_at']),
-        phoneNumber: PhoneNumberModel.fromJson(json),
+        phoneNumber: json['phone_number'],
+        countryCode: json['country_code'],
         isEnable: json['is_enable'],
       );
     } catch (e) {
@@ -40,42 +43,21 @@ class CustomerModel {
       'l_name': lName,
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
-      'phone_number': phoneNumber.toJson(),
+      'phone_number': phoneNumber,
+      'country_code': countryCode,
       'is_enable': isEnable,
     };
   }
+
   Map<String, dynamic> toJsonAdd() {
     return {
       'f_name': fName,
       'l_name': lName,
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
-      'phone_number': phoneNumber.toJson(),
-      'is_enable': isEnable,
-    };
-  }
-}
-
-class PhoneNumberModel {
-  final String countryCode;
-  final String number;
-
-  PhoneNumberModel({
-    required this.countryCode,
-    required this.number,
-  });
-
-  factory PhoneNumberModel.fromJson(Map<String, dynamic> json) {
-    return PhoneNumberModel(
-      countryCode: json['country_code'],
-      number: json['phone_number'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
+      'phone_number': phoneNumber,
       'country_code': countryCode,
-      'number': number,
+      'is_enable': isEnable,
     };
   }
 }

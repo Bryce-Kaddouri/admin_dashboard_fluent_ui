@@ -141,7 +141,7 @@
     },
     {
       "name": "flutter",
-      "rootUri": "file:///C:/Users/bricr/flutter/packages/flutter",
+      "rootUri": "file:///C:/src/flutter/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -159,7 +159,7 @@
     },
     {
       "name": "flutter_localizations",
-      "rootUri": "file:///C:/Users/bricr/flutter/packages/flutter_localizations",
+      "rootUri": "file:///C:/src/flutter/packages/flutter_localizations",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -171,13 +171,13 @@
     },
     {
       "name": "flutter_test",
-      "rootUri": "file:///C:/Users/bricr/flutter/packages/flutter_test",
+      "rootUri": "file:///C:/src/flutter/packages/flutter_test",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "flutter_web_plugins",
-      "rootUri": "file:///C:/Users/bricr/flutter/packages/flutter_web_plugins",
+      "rootUri": "file:///C:/src/flutter/packages/flutter_web_plugins",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -314,24 +314,6 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "leak_tracker",
-      "rootUri": "file:///C:/Users/bricr/AppData/Local/Pub/Cache/hosted/pub.dev/leak_tracker-9.0.18",
-      "packageUri": "lib/",
-      "languageVersion": "3.1"
-    },
-    {
-      "name": "leak_tracker_flutter_testing",
-      "rootUri": "file:///C:/Users/bricr/AppData/Local/Pub/Cache/hosted/pub.dev/leak_tracker_flutter_testing-2.0.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.1"
-    },
-    {
-      "name": "leak_tracker_testing",
-      "rootUri": "file:///C:/Users/bricr/AppData/Local/Pub/Cache/hosted/pub.dev/leak_tracker_testing-1.0.6",
-      "packageUri": "lib/",
-      "languageVersion": "3.1"
-    },
-    {
       "name": "lints",
       "rootUri": "file:///C:/Users/bricr/AppData/Local/Pub/Cache/hosted/pub.dev/lints-2.1.1",
       "packageUri": "lib/",
@@ -345,13 +327,13 @@
     },
     {
       "name": "matcher",
-      "rootUri": "file:///C:/Users/bricr/AppData/Local/Pub/Cache/hosted/pub.dev/matcher-0.12.16+1",
+      "rootUri": "file:///C:/Users/bricr/AppData/Local/Pub/Cache/hosted/pub.dev/matcher-0.12.16",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "2.18"
     },
     {
       "name": "material_color_utilities",
-      "rootUri": "file:///C:/Users/bricr/AppData/Local/Pub/Cache/hosted/pub.dev/material_color_utilities-0.8.0",
+      "rootUri": "file:///C:/Users/bricr/AppData/Local/Pub/Cache/hosted/pub.dev/material_color_utilities-0.5.0",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -363,7 +345,7 @@
     },
     {
       "name": "meta",
-      "rootUri": "file:///C:/Users/bricr/AppData/Local/Pub/Cache/hosted/pub.dev/meta-1.11.0",
+      "rootUri": "file:///C:/Users/bricr/AppData/Local/Pub/Cache/hosted/pub.dev/meta-1.10.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -381,9 +363,9 @@
     },
     {
       "name": "path",
-      "rootUri": "file:///C:/Users/bricr/AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.0",
+      "rootUri": "file:///C:/Users/bricr/AppData/Local/Pub/Cache/hosted/pub.dev/path-1.8.3",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "2.12"
     },
     {
       "name": "path_provider",
@@ -519,7 +501,7 @@
     },
     {
       "name": "sky_engine",
-      "rootUri": "file:///C:/Users/bricr/flutter/bin/cache/pkg/sky_engine",
+      "rootUri": "file:///C:/src/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -638,10 +620,10 @@
       "languageVersion": "2.14"
     },
     {
-      "name": "vm_service",
-      "rootUri": "file:///C:/Users/bricr/AppData/Local/Pub/Cache/hosted/pub.dev/vm_service-13.0.0",
+      "name": "web",
+      "rootUri": "file:///C:/Users/bricr/AppData/Local/Pub/Cache/hosted/pub.dev/web-0.3.0",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.2"
     },
     {
       "name": "web_socket_channel",
@@ -674,7 +656,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2024-02-28T22:44:35.944672Z",
+  "generated": "2024-03-01T22:03:39.443579Z",
   "generator": "pub",
-  "generatorVersion": "3.3.0-260.0.dev"
+  "generatorVersion": "3.2.6"
 }

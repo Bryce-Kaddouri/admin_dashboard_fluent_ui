@@ -1,6 +1,7 @@
 import 'package:admin_dashboard/src/feature/category/presentation/screen/category_list_screen.dart';
 import 'package:admin_dashboard/src/feature/customer/presentation/screen/customer_add_screen.dart';
 import 'package:admin_dashboard/src/feature/customer/presentation/screen/customer_list_screen.dart';
+import 'package:admin_dashboard/src/feature/customer/presentation/screen/update_customer_screen.dart';
 import 'package:admin_dashboard/src/feature/home/presentation/screen/new_home_screen.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/update_product_screen.dart';
 import 'package:admin_dashboard/src/feature/user/presentation/screen/user_add_screen.dart';
@@ -205,6 +206,21 @@ class RouterHelper {
                 );
               } else {
                 return UserUpdateScreen(uid: id);
+              }
+            }),
+        GoRoute(
+            path: '/customer/update/:id',
+            builder: (context, state) {
+              String? idString = state.pathParameters['id'];
+              if (idString == null) {
+                return Scaffold(
+                  body: Center(
+                    child: Text('Customer Not found'),
+                  ),
+                );
+              } else {
+                int id = int.parse(idString);
+                return UpdateCustomerScreen(customerId: id);
               }
             }),
         GoRoute(

@@ -1,6 +1,3 @@
-import 'package:admin_dashboard/src/feature/category/business/usecase/category_add_usecase.dart';
-import 'package:admin_dashboard/src/feature/category/business/usecase/category_get_categories_usecase.dart';
-import 'package:admin_dashboard/src/feature/category/business/usecase/category_update_usecase.dart';
 import 'package:admin_dashboard/src/feature/customer/business/param/customer_add_param.dart';
 import 'package:admin_dashboard/src/feature/customer/business/usecase/customer_add_usecase.dart';
 import 'package:admin_dashboard/src/feature/customer/business/usecase/customer_delete_usecase.dart';
@@ -9,18 +6,9 @@ import 'package:admin_dashboard/src/feature/customer/business/usecase/customer_g
 import 'package:admin_dashboard/src/feature/customer/business/usecase/customer_update_usecase.dart';
 import 'package:admin_dashboard/src/feature/customer/data/model/customer_model.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/data/usecase/usecase.dart';
-import '../../../category/business/param/category_add_param.dart';
-import '../../../category/business/usecase/category_delete_usecase.dart';
-import '../../../category/business/usecase/category_get_category_by_id_usecase.dart';
-import '../../../category/business/usecase/category_get_signed_url_usecase.dart';
-import '../../../category/business/usecase/category_upload_image_usecase.dart';
-import '../../../category/data/model/category_model.dart';
 
 class CustomerProvider with ChangeNotifier {
   final CustomerAddUseCase customerAddUseCase;
@@ -74,12 +62,11 @@ class CustomerProvider with ChangeNotifier {
   }
 
   Future<List<CustomerModel>> getCustomers() async {
-
     List<CustomerModel> customerList = [];
     final result = await customerGetCustomersUseCase.call(NoParams());
 
     await result.fold((l) async {
-      print( l.errorMessage);
+      print(l.errorMessage);
     }, (r) async {
       print(r);
       customerList = r;
@@ -88,22 +75,18 @@ class CustomerProvider with ChangeNotifier {
     return customerList;
   }
 
-
-  Future<bool> addCustomer(String fName, String lName, String phoneNumber, String countryCode, bool isEnable, BuildContext context) async {
-
+  Future<bool> addCustomer(String fName, String lName, String phoneNumber,
+      String countryCode, bool isEnable, BuildContext context) async {
     _isLoading = true;
     notifyListeners();
 
     bool isSuccess = false;
     final result = await customerAddUseCase.call(CustomerAddParam(
-      fName: fName,
-      lName: lName,
-      phoneNumber: PhoneNumberModel(
-        number: phoneNumber,
+        fName: fName,
+        lName: lName,
+        phoneNumber: phoneNumber,
         countryCode: countryCode,
-      ),
-      isEnable: true
-    ));
+        isEnable: true));
 
     await result.fold((l) async {
       print(l.errorMessage);
@@ -170,9 +153,13 @@ class CustomerProvider with ChangeNotifier {
 
     await result.fold((l) async {
       print(l.errorMessage);
+      print('error from getCustomerById');
+      print(l);
     }, (r) async {
       print(r.toJson());
-      customerModel = CustomerModel.fromJson(r.toJson());
+      customerModel = r;
+
+      print('customerModel: $customerModel');
     });
 
     return customerModel;
@@ -187,7 +174,7 @@ class CustomerProvider with ChangeNotifier {
     final result = await customerUpdateUseCase.call(customer);
 
     await result.fold((l) async {
-       print(l.errorMessage);
+      print(l.errorMessage);
       await fluent.displayInfoBar(
         context,
         builder: (context, close) {
@@ -195,7 +182,7 @@ class CustomerProvider with ChangeNotifier {
             title: const Text('Error!'),
             content: fluent.RichText(
                 text: fluent.TextSpan(
-              text: 'The customer has not been added because of an error. ',
+              text: 'The customer has not been updated because of an error. ',
               children: [
                 fluent.TextSpan(
                   text: l.errorMessage,
@@ -224,7 +211,7 @@ class CustomerProvider with ChangeNotifier {
           return fluent.InfoBar(
             title: const Text('Success!'),
             content: const Text(
-                'The customer has been added successfully. You can add another category or close the form.'),
+                'The customer has been updated successfully. You can update another customer or close the form.'),
             action: IconButton(
               icon: const Icon(fluent.FluentIcons.clear),
               onPressed: close,

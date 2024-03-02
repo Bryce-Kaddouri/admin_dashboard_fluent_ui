@@ -1,11 +1,9 @@
-import 'package:admin_dashboard/src/feature/category/data/datasource/category_datasource.dart';
 import 'package:admin_dashboard/src/feature/customer/presentation/provider/customer_provider.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../../category/data/model/category_model.dart';
 import '../../data/model/customer_model.dart';
 
 class CustomerListScreen extends StatefulWidget {
@@ -282,8 +280,9 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                             return ListView.builder(
                               padding: const EdgeInsets.all(10),
                               shrinkWrap: true,
-                              itemCount: context.watch<CustomerProvider>().nbItemPerPage,
-
+                              itemCount: context
+                                  .watch<CustomerProvider>()
+                                  .nbItemPerPage,
                               itemBuilder: (context, index) {
                                 int correctIndex = indexPage == 0
                                     ? index
@@ -296,8 +295,9 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                                   return Container();
                                 }
 
-                                CustomerModel customer = customers[correctIndex];
-                               /* final category = categories![correctIndex];
+                                CustomerModel customer =
+                                    customers[correctIndex];
+                                /* final category = categories![correctIndex];
                                 print('index: $index');
                                 print('indexPage: $indexPage');
                                 print(
@@ -332,8 +332,10 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                                         ],
                                       ),
                                     ),
-                                    title: Text('${customer.lName} ${customer.fName}'),
-                                    subtitle: Text('${customer.phoneNumber.countryCode}${customer.phoneNumber.number}'),
+                                    title: Text(
+                                        '${customer.lName} ${customer.fName}'),
+                                    subtitle: Text(
+                                        '${customer.countryCode}${customer.phoneNumber}'),
                                     trailing: Row(
                                       children: [
                                         FilledButton(
