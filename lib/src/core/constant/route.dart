@@ -1,3 +1,4 @@
+import 'package:admin_dashboard/src/core/share_component/scafold_mobile.dart';
 import 'package:admin_dashboard/src/feature/category/presentation/screen/category_list_screen.dart';
 import 'package:admin_dashboard/src/feature/customer/presentation/screen/customer_add_screen.dart';
 import 'package:admin_dashboard/src/feature/customer/presentation/screen/customer_list_screen.dart';
@@ -6,7 +7,8 @@ import 'package:admin_dashboard/src/feature/home/presentation/screen/new_home_sc
 import 'package:admin_dashboard/src/feature/product/presentation/screen/update_product_screen.dart';
 import 'package:admin_dashboard/src/feature/user/presentation/screen/user_add_screen.dart';
 import 'package:admin_dashboard/src/feature/user/presentation/screen/user_list_screen.dart';
-import 'package:flutter/material.dart';
+import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/material.dart' as material;
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,6 +16,7 @@ import '../../feature/auth/presentation/screen/signin_screen.dart';
 import '../../feature/category/presentation/screen/update_category_screen.dart';
 import '../../feature/setting/presentation/screen/setting_screen.dart';
 import '../../feature/user/presentation/screen/user_update_screen.dart';
+import '../helper/responsive_helper.dart';
 
 /*class Routes {
   static const String home = '/home';
@@ -80,29 +83,47 @@ class RouterHelper {
               print('state: ${state.matchedLocation}');
 
               int index = 0;
+              String title = '';
               if (state.matchedLocation == '/') {
                 index = 1;
+                title = 'Home';
               } else if (state.matchedLocation == '/category') {
                 index = 2;
+                title = 'Category';
               } else if (state.matchedLocation == '/category/add') {
                 index = 3;
+                title = 'Add Category';
               } else if (state.matchedLocation == '/product') {
                 index = 5;
+                title = 'Product';
               } else if (state.matchedLocation == '/product/add') {
                 index = 6;
+                title = 'Add Product';
               } else if (state.matchedLocation == '/user') {
                 index = 12;
+                title = 'User';
               } else if (state.matchedLocation == '/user/add') {
                 index = 13;
+                title = 'Add User';
               } else if (state.matchedLocation == '/customer') {
                 index = 15;
+                title = 'Customer';
               } else if (state.matchedLocation == '/customer/add') {
                 index = 16;
+                title = 'Add Customer';
               } else if (state.matchedLocation == '/setting') {
                 index = 20;
+                title = 'Setting';
               }
 
-              return NewHomeScreen(child: child, index: index);
+              if (!ResponsiveHelper.isMobile(context)) {
+                return NewHomeScreen(child: child, index: index);
+              } else {
+                return ScaffoldMobile(
+                  title: title,
+                  child: child,
+                );
+              }
             },
             routes: [
               GoRoute(
@@ -176,8 +197,8 @@ class RouterHelper {
             builder: (context, state) {
               String? id = state.pathParameters['id'];
               if (id == null) {
-                return Scaffold(
-                  body: Center(
+                return ScaffoldPage(
+                  content: Center(
                     child: Text('Product Not found'),
                   ),
                 );
@@ -191,8 +212,8 @@ class RouterHelper {
             builder: (context, state) {
               String? id = state.pathParameters['id'];
               if (id == null) {
-                return Scaffold(
-                  body: Center(
+                return ScaffoldPage(
+                  content: Center(
                     child: Text('Product Not found'),
                   ),
                 );
@@ -206,8 +227,8 @@ class RouterHelper {
             builder: (context, state) {
               String? id = state.pathParameters['id'];
               if (id == null) {
-                return Scaffold(
-                  body: Center(
+                return ScaffoldPage(
+                  content: Center(
                     child: Text('Product Not found'),
                   ),
                 );
@@ -220,8 +241,8 @@ class RouterHelper {
             builder: (context, state) {
               String? idString = state.pathParameters['id'];
               if (idString == null) {
-                return Scaffold(
-                  body: Center(
+                return ScaffoldPage(
+                  content: Center(
                     child: Text('Customer Not found'),
                   ),
                 );
@@ -240,7 +261,7 @@ class RouterHelper {
 }
 
 // custome route class to custom transition
-class CustomRoute<T> extends MaterialPageRoute<T> {
+class CustomRoute<T> extends material.MaterialPageRoute<T> {
   CustomRoute({
     required WidgetBuilder builder,
     RouteSettings? settings,
