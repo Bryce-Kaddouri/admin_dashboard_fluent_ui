@@ -79,6 +79,7 @@ class _ProductUpdateFormState extends State<ProductUpdateForm> {
   final TextEditingController priceController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController categoryController = TextEditingController();
+  String imageUrl = '';
 
   List<CategoryModel> lstCategory = [];
   CategoryModel? selectedObjectCategory;
@@ -104,6 +105,7 @@ class _ProductUpdateFormState extends State<ProductUpdateForm> {
             selectedObjectCategory = lstCategory.firstWhere(
               (element) => element.id == value.categoryId,
             );
+            imageUrl = value.imageUrl;
           });
         }
       });
@@ -136,6 +138,22 @@ class _ProductUpdateFormState extends State<ProductUpdateForm> {
                       aspectRatio: 1,
                       child: Image.memory(
                         image!,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  )
+                else if (imageUrl.isNotEmpty)
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    height: 200,
+                    width: 200,
+                    clipBehavior: Clip.antiAlias,
+                    child: AspectRatio(
+                      aspectRatio: 1,
+                      child: Image.network(
+                        imageUrl,
                         fit: BoxFit.fill,
                       ),
                     ),

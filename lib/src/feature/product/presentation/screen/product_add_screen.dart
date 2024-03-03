@@ -23,7 +23,9 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
   final _formKey = GlobalKey<FormState>();
   Uint8List? image;
   final TextEditingController nameController = TextEditingController();
-  final TextEditingController priceController = TextEditingController();
+  final TextEditingController priceController = TextEditingController(
+    text: '1.00',
+  );
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController categoryController = TextEditingController();
 
@@ -133,9 +135,7 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
                   constraints: BoxConstraints(maxWidth: 500, maxHeight: 50),
                   child: NumberFormBox<double>(
                     precision: 2,
-                    value: priceController.text.isEmpty
-                        ? null
-                        : double.parse(priceController.text),
+                    value: double.parse(priceController.text),
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(
                         RegExp(r'^\d+\.?\d{0,2}'),
@@ -236,27 +236,10 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
                           .addProduct(name, description, imageUrl ?? '', price,
                               categoryId, context);
                       if (res) {
-                        await displayInfoBar(
-                          context,
-                          builder: (context, close) {
-                            return InfoBar(
-                              title: const Text('Success!'),
-                              content: const Text(
-                                  'The product has been added successfully. You can add another product or close the form.'),
-                              action: IconButton(
-                                icon: const Icon(FluentIcons.clear),
-                                onPressed: close,
-                              ),
-                              severity: InfoBarSeverity.success,
-                            );
-                          },
-                          alignment: Alignment.topRight,
-                          duration: const Duration(seconds: 5),
-                        );
                         // reset form
                         nameController.clear();
                         descriptionController.clear();
-                        priceController.clear();
+                        priceController.text = '1.00';
                         categoryController.clear();
                         setState(() {
                           image = null;
