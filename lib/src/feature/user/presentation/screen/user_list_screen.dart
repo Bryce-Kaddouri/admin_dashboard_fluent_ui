@@ -1,3 +1,4 @@
+import 'package:admin_dashboard/src/core/helper/responsive_helper.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -40,140 +41,8 @@ class _UserListScreenState extends State<UserListScreen> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        /* Container(
-          height: 60,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Colors.grey,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10),
-              topRight: Radius.circular(10),
-            ),
-            border: Border.all(
-              color: Colors.blue,
-              width: 4,
-            ),
-          ),
-          child: Row(
-            children: [
-              SizedBox(width: 10),
-              */ /*Expanded(
-                child: FormBuilderTextField(
-                  name: 'sarch',
-                  controller: context.watch<UserProvider>().searchController,
-                  onChanged: (value) {
-                    print('value: $value');
-                    context.read<UserProvider>().setSearchText(value!);
-                  },
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.search),
-                    suffixIcon: InkWell(
-                      child: Icon(Icons.clear),
-                      onTap: () {
-                        context.read<UserProvider>().setSearchText('');
-                        context.read<UserProvider>().setTextController('');
-                      },
-                    ),
-                    contentPadding: EdgeInsets.all(10),
-                    constraints: BoxConstraints(
-                      maxHeight: 40,
-                    ),
-                    hintText: 'Search a user ...',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                ),
-              ),*/ /*
-              SizedBox(width: 10),
-              */ /*   Expanded(
-                child: Container(
-                  height: 40,
-                  child: FormBuilderCheckboxGroup(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      contentPadding: EdgeInsets.all(10),
-                      filled: true,
-                      fillColor: Colors.white,
-                    ),
-                    name: 'role',
-                    initialValue: ['ADMIN', 'COOKER', 'SELLER', 'BOOK'],
-                    options: List.generate(
-                            4,
-                            (index) =>
-                                ['ADMIN', 'COOKER', 'SELLER', 'BOOK'][index])
-                        .map((e) => FormBuilderFieldOption(value: e))
-                        .toList(),
-                    onChanged: (value) {
-                      print('value: $value');
-                      context.read<UserProvider>().setRoles(value!);
-
-*/ /* */ /*
-                context.read<UserProvider>().setSearchText(value!);
-*/ /* */ /*
-                    },
-                  ),
-                ),
-              ),*/ /*
-              */ /* Container(
-                width: 80,
-                height: 40,
-                child: FormBuilderDropdown(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      contentPadding: EdgeInsets.all(10),
-                      filled: true,
-                      fillColor: Colors.white,
-                    ),
-                    onChanged: (value) {
-                      print('value: $value');
-                      context.read<UserProvider>().setNbItemPerPage(value!);
-                    },
-                    initialValue: context.watch<UserProvider>().nbItemPerPage,
-                    name: 'item_per_page',
-                    items: [
-                      DropdownMenuItem(
-                        child: Text('10'),
-                        value: 10,
-                      ),
-                      DropdownMenuItem(
-                        child: Text('25'),
-                        value: 25,
-                      ),
-                      DropdownMenuItem(
-                        child: Text('50'),
-                        value: 50,
-                      ),
-                    ]),
-              ),*/ /*
-              SizedBox(width: 10),
-              */ /*  Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.blueAccent,
-                ),
-                child: InkWell(
-                  child: Icon(Icons.add, color: Colors.white),
-                  onTap: () {
-                    print('add');
-                    context.read<UserProvider>().setSelectedUser(null);
-
-                  },
-                ),
-              ),*/ /*
-            ],
-          ),
-        ),*/
         Card(
-          padding: const EdgeInsets.all(5),
+          padding: const EdgeInsets.symmetric(horizontal: 5),
           child: Row(
             children: [
               Expanded(
@@ -200,72 +69,197 @@ class _UserListScreenState extends State<UserListScreen> {
                 ),
               ),
               Container(
-                child: Row(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(children: [
-                        Text('ADMIN'),
-                        SizedBox(width: 5),
-                        Checkbox(
-                          onChanged: (value) {
-                            context
-                                .read<UserProvider>()
-                                .setAdminIsChecked(value!);
-                          },
-                          checked: context.watch<UserProvider>().adminIsChecked,
-                        ),
-                      ]),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(children: [
-                        Text('COOKER'),
-                        SizedBox(width: 5),
-                        Checkbox(
-                          onChanged: (value) {
-                            context
-                                .read<UserProvider>()
-                                .setCookerIsChecked(value!);
-                          },
-                          checked:
-                              context.watch<UserProvider>().cookerIsChecked,
-                        ),
-                      ]),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(children: [
-                        Text('SELLER'),
-                        SizedBox(width: 5),
-                        Checkbox(
-                          onChanged: (value) {
-                            context
-                                .read<UserProvider>()
-                                .setSellerIsChecked(value!);
-                          },
-                          checked:
-                              context.watch<UserProvider>().sellerIsChecked,
-                        ),
-                      ]),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(children: [
-                        Text('BOOK'),
-                        SizedBox(width: 5),
-                        Checkbox(
-                          onChanged: (value) {
-                            context
-                                .read<UserProvider>()
-                                .setBookIsChecked(value!);
-                          },
-                          checked: context.watch<UserProvider>().bookIsChecked,
-                        ),
-                      ]),
-                    )
-                  ],
-                ),
+                child: ResponsiveHelper.isMobile(context)
+                    ? Container(
+                        alignment: Alignment.center,
+                        child: Stack(children: [
+                          Container(
+                            margin: const EdgeInsets.all(10),
+                            height: 30,
+                            child: DropDownButton(
+                              trailing: null,
+                              title: Icon(FluentIcons.filter),
+                              items: [
+                                MenuFlyoutItem(
+                                    leading: Checkbox(
+                                      checked: context
+                                          .watch<UserProvider>()
+                                          .adminIsChecked,
+                                      onChanged: (value) {},
+                                    ),
+                                    text: const Text('ADMIN'),
+                                    onPressed: () {
+                                      context
+                                          .read<UserProvider>()
+                                          .setAdminIsChecked(!context
+                                              .read<UserProvider>()
+                                              .adminIsChecked);
+                                    }),
+                                MenuFlyoutSeparator(),
+                                MenuFlyoutItem(
+                                    leading: Checkbox(
+                                      checked: context
+                                          .watch<UserProvider>()
+                                          .cookerIsChecked,
+                                      onChanged: (value) {},
+                                    ),
+                                    text: const Text('COOKER'),
+                                    onPressed: () {
+                                      context
+                                          .read<UserProvider>()
+                                          .setCookerIsChecked(!context
+                                              .read<UserProvider>()
+                                              .cookerIsChecked);
+                                    }),
+                                MenuFlyoutSeparator(),
+                                MenuFlyoutItem(
+                                    leading: Checkbox(
+                                      checked: context
+                                          .watch<UserProvider>()
+                                          .sellerIsChecked,
+                                      onChanged: (value) {},
+                                    ),
+                                    text: const Text('SELLER'),
+                                    onPressed: () {
+                                      context
+                                          .read<UserProvider>()
+                                          .setSellerIsChecked(!context
+                                              .read<UserProvider>()
+                                              .sellerIsChecked);
+                                    }),
+                                MenuFlyoutSeparator(),
+                                MenuFlyoutItem(
+                                    leading: Checkbox(
+                                      checked: context
+                                          .watch<UserProvider>()
+                                          .bookIsChecked,
+                                      onChanged: (value) {},
+                                    ),
+                                    text: const Text('BOOK'),
+                                    onPressed: () {
+                                      context
+                                          .read<UserProvider>()
+                                          .setBookIsChecked(!context
+                                              .read<UserProvider>()
+                                              .bookIsChecked);
+                                    }),
+                              ],
+                            ),
+                          ),
+                          Builder(builder: (context) {
+                            int nbChecked = 0;
+                            if (context.watch<UserProvider>().adminIsChecked) {
+                              nbChecked++;
+                            }
+                            if (context.watch<UserProvider>().cookerIsChecked) {
+                              nbChecked++;
+                            }
+                            if (context.watch<UserProvider>().sellerIsChecked) {
+                              nbChecked++;
+                            }
+                            if (context.watch<UserProvider>().bookIsChecked) {
+                              nbChecked++;
+                            }
+                            if (nbChecked > 0) {
+                              return Positioned(
+                                right: 5,
+                                top: 5,
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  height: 16,
+                                  width: 16,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.red,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      nbChecked.toString(),
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                            return Container();
+                          }),
+                        ]),
+                      )
+                    : Row(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Row(children: [
+                              Text('ADMIN'),
+                              SizedBox(width: 5),
+                              Checkbox(
+                                onChanged: (value) {
+                                  context
+                                      .read<UserProvider>()
+                                      .setAdminIsChecked(value!);
+                                },
+                                checked: context
+                                    .watch<UserProvider>()
+                                    .adminIsChecked,
+                              ),
+                            ]),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Row(children: [
+                              Text('COOKER'),
+                              SizedBox(width: 5),
+                              Checkbox(
+                                onChanged: (value) {
+                                  context
+                                      .read<UserProvider>()
+                                      .setCookerIsChecked(value!);
+                                },
+                                checked: context
+                                    .watch<UserProvider>()
+                                    .cookerIsChecked,
+                              ),
+                            ]),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Row(children: [
+                              Text('SELLER'),
+                              SizedBox(width: 5),
+                              Checkbox(
+                                onChanged: (value) {
+                                  context
+                                      .read<UserProvider>()
+                                      .setSellerIsChecked(value!);
+                                },
+                                checked: context
+                                    .watch<UserProvider>()
+                                    .sellerIsChecked,
+                              ),
+                            ]),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Row(children: [
+                              Text('BOOK'),
+                              SizedBox(width: 5),
+                              Checkbox(
+                                onChanged: (value) {
+                                  context
+                                      .read<UserProvider>()
+                                      .setBookIsChecked(value!);
+                                },
+                                checked:
+                                    context.watch<UserProvider>().bookIsChecked,
+                              ),
+                            ]),
+                          )
+                        ],
+                      ),
               ),
 
               // select between 10, 25, 50, 100 and 250

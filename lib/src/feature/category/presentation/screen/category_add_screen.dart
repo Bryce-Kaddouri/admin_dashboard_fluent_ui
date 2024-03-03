@@ -28,7 +28,8 @@ class _CategoryAddScreenState extends State<CategoryAddScreen> {
   Widget build(BuildContext context) {
     return Container(
         padding: const EdgeInsets.all(20),
-        child: Column(children: [
+        child: SingleChildScrollView(
+            child: Column(children: [
           Form(
             key: _formKey,
             child: Column(
@@ -180,6 +181,6 @@ class _CategoryAddScreenState extends State<CategoryAddScreen> {
               ],
             ),
           ),
-        ]));
+        ])));
   }
 }

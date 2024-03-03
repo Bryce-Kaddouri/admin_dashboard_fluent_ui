@@ -48,6 +48,7 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
 
     return SingleChildScrollView(
       child: Container(
+        padding: const EdgeInsets.all(20),
         child: Form(
           key: _formKey,
           child: Column(

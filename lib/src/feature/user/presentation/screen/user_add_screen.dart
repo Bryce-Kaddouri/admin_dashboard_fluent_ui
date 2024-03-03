@@ -60,6 +60,7 @@ class _UserAddScreenState extends State<UserAddScreen> {
     });
     // _initData();
   }
+
   @override
   Widget build(BuildContext context) {
 /*
@@ -68,6 +69,7 @@ class _UserAddScreenState extends State<UserAddScreen> {
 
     return SingleChildScrollView(
       child: Container(
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
             Text(
@@ -84,135 +86,125 @@ class _UserAddScreenState extends State<UserAddScreen> {
                 children: [
                   InfoLabel(
                     label: 'Enter First Name:',
-                    child:
-                    Container(
+                    child: Container(
                       alignment: Alignment.center,
                       constraints: BoxConstraints(maxWidth: 500, minHeight: 50),
-                      child:
-                    TextFormBox(
-                      controller: _firstNameController,
-                      placeholder: 'First Name',
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter first name';
-                        }
-                        return null;
-                      },
+                      child: TextFormBox(
+                        controller: _firstNameController,
+                        placeholder: 'First Name',
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter first name';
+                          }
+                          return null;
+                        },
+                      ),
                     ),
                   ),
-                  ),
                   SizedBox(height: 30),
-
                   InfoLabel(
                     label: 'Enter Last Name:',
                     child: Container(
                       alignment: Alignment.center,
                       constraints: BoxConstraints(maxWidth: 500, minHeight: 50),
-                      child:TextFormBox(
-                      controller: _lastNameController,
-                      placeholder: 'Last Name',
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                      ]),
+                      child: TextFormBox(
+                        controller: _lastNameController,
+                        placeholder: 'Last Name',
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(),
+                        ]),
+                      ),
                     ),
-                  ),),
+                  ),
                   SizedBox(height: 30),
-
                   InfoLabel(
                     label: 'Enter Email:',
                     child: Container(
                       alignment: Alignment.center,
                       constraints: BoxConstraints(maxWidth: 500, minHeight: 50),
-                      child:TextFormBox(
-                      controller: _emailController,
-                      placeholder: 'Email',
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                        FormBuilderValidators.email(),
-                      ]),
-                    ),
+                      child: TextFormBox(
+                        controller: _emailController,
+                        placeholder: 'Email',
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(),
+                          FormBuilderValidators.email(),
+                        ]),
+                      ),
                     ),
                   ),
                   SizedBox(height: 30),
-
                   InfoLabel(
                     label: 'Enter Password:',
                     child: Container(
                       alignment: Alignment.center,
                       constraints: BoxConstraints(maxWidth: 500, minHeight: 50),
-                      child:PasswordFormBox(
-
-                      revealMode: PasswordRevealMode.peekAlways,
-                      controller: _passwordController,
-                      placeholder: 'Password',
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                      ]),
-                    ),
+                      child: PasswordFormBox(
+                        revealMode: PasswordRevealMode.peekAlways,
+                        controller: _passwordController,
+                        placeholder: 'Password',
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(),
+                        ]),
+                      ),
                     ),
                   ),
                   SizedBox(height: 30),
-
                   InfoLabel(
                     label: 'Enter Confirm Password:',
-                    child:
-                    Container(
+                    child: Container(
                       alignment: Alignment.center,
                       constraints: BoxConstraints(maxWidth: 500, minHeight: 50),
-                      child:
-                      PasswordFormBox(
+                      child: PasswordFormBox(
                         revealMode: PasswordRevealMode.peekAlways,
-                      controller: _confirmPasswordController,
-                      placeholder: 'Confirm Password',
+                        controller: _confirmPasswordController,
+                        placeholder: 'Confirm Password',
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                        FormBuilderValidators.equal(_password,
-                            errorText: 'Passwords do not match'),
-                      ]),
-                    ),
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(),
+                          FormBuilderValidators.equal(_password,
+                              errorText: 'Passwords do not match'),
+                        ]),
+                      ),
                     ),
                   ),
                   SizedBox(height: 30),
-
                   InfoLabel(
                     label: 'Select Role:',
                     child: Container(
                       alignment: Alignment.center,
                       constraints: BoxConstraints(maxWidth: 500, minHeight: 50),
-                      child:ComboboxFormField<String>(
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                      ]),
-                      isExpanded: true,
-                      value: _roleController.text,
-                      placeholder: Text('Select Role'),
-                      items: [
-                        ComboBoxItem(
-                          child: Text('ADMIN'),
-                          value: 'ADMIN',
-                        ),
-                        ComboBoxItem(
-                          child: Text('COOKER'),
-                          value: 'COOKER',
-                        ),
-                        ComboBoxItem(
-                          child: Text('SELLER'),
-                          value: 'SELLER',
-                        ),
-                        ComboBoxItem(
-                          child: Text('BOOK'),
-                          value: 'BOOK',
-                        ),
-                      ],
-                      onChanged: (String? value) {
-                        _roleController.text = value!;
-                      },
-                    ),
+                      child: ComboboxFormField<String>(
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(),
+                        ]),
+                        isExpanded: true,
+                        value: _roleController.text,
+                        placeholder: Text('Select Role'),
+                        items: [
+                          ComboBoxItem(
+                            child: Text('ADMIN'),
+                            value: 'ADMIN',
+                          ),
+                          ComboBoxItem(
+                            child: Text('COOKER'),
+                            value: 'COOKER',
+                          ),
+                          ComboBoxItem(
+                            child: Text('SELLER'),
+                            value: 'SELLER',
+                          ),
+                          ComboBoxItem(
+                            child: Text('BOOK'),
+                            value: 'BOOK',
+                          ),
+                        ],
+                        onChanged: (String? value) {
+                          _roleController.text = value!;
+                        },
+                      ),
                     ),
                   ),
                   SizedBox(height: 60),
-
                   FilledButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
@@ -245,12 +237,12 @@ class _UserAddScreenState extends State<UserAddScreen> {
                     },
                     child: context.watch<UserProvider>().isLoading
                         ? const ProgressRing()
-                        :
-                    Container(
-                      alignment: Alignment.center,
-                      width: 200,
-                      height: 30,
-                      child:Text('Save'),),
+                        : Container(
+                            alignment: Alignment.center,
+                            width: 200,
+                            height: 30,
+                            child: Text('Save'),
+                          ),
                   ),
                   /*SizedBox(height: 40),
                   FormBuilderTextField(

@@ -1,9 +1,12 @@
 import 'package:admin_dashboard/src/core/share_component/scafold_mobile.dart';
+import 'package:admin_dashboard/src/feature/category/presentation/screen/category_add_screen.dart';
 import 'package:admin_dashboard/src/feature/category/presentation/screen/category_list_screen.dart';
 import 'package:admin_dashboard/src/feature/customer/presentation/screen/customer_add_screen.dart';
 import 'package:admin_dashboard/src/feature/customer/presentation/screen/customer_list_screen.dart';
 import 'package:admin_dashboard/src/feature/customer/presentation/screen/update_customer_screen.dart';
 import 'package:admin_dashboard/src/feature/home/presentation/screen/new_home_screen.dart';
+import 'package:admin_dashboard/src/feature/product/presentation/screen/product_add_screen.dart';
+import 'package:admin_dashboard/src/feature/product/presentation/screen/product_list_screen.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/update_product_screen.dart';
 import 'package:admin_dashboard/src/feature/user/presentation/screen/user_add_screen.dart';
 import 'package:admin_dashboard/src/feature/user/presentation/screen/user_list_screen.dart';
@@ -117,10 +120,11 @@ class RouterHelper {
               }
 
               if (!ResponsiveHelper.isMobile(context)) {
-                return NewHomeScreen(child: child, index: index);
+                return NewHomeScreen(index: index, child: child);
               } else {
                 return ScaffoldMobile(
                   title: title,
+                  selectedIndex: index,
                   child: child,
                 );
               }
@@ -142,25 +146,19 @@ class RouterHelper {
                     GoRoute(
                         path: 'add',
                         builder: (state, context) {
-                          return Container(
-                            child: Text('Add Category'),
-                          );
+                          return CategoryAddScreen();
                         }),
                   ]),
               GoRoute(
                   path: '/product',
                   builder: (context, state) {
-                    return Container(
-                      child: Text('Product'),
-                    );
+                    return ProductListScreen();
                   },
                   routes: [
                     GoRoute(
                         path: 'add',
                         builder: (state, context) {
-                          return Container(
-                            child: Text('Add Product'),
-                          );
+                          return ProductAddScreen();
                         }),
                   ]),
               GoRoute(
