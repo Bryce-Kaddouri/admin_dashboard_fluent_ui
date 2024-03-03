@@ -12,6 +12,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../feature/auth/presentation/screen/signin_screen.dart';
 import '../../feature/category/presentation/screen/update_category_screen.dart';
+import '../../feature/setting/presentation/screen/setting_screen.dart';
 import '../../feature/user/presentation/screen/user_update_screen.dart';
 
 /*class Routes {
@@ -97,6 +98,8 @@ class RouterHelper {
                 index = 15;
               } else if (state.matchedLocation == '/customer/add') {
                 index = 16;
+              } else if (state.matchedLocation == '/setting') {
+                index = 20;
               }
 
               return NewHomeScreen(child: child, index: index);
@@ -163,6 +166,10 @@ class RouterHelper {
                           return CustomerAddScreen();
                         }),
                   ]),
+              GoRoute(
+                path: '/setting',
+                builder: (context, state) => SettingScreen(),
+              ),
             ]),
         GoRoute(
             path: '/category/update/:id',

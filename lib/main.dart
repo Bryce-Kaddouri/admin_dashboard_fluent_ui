@@ -39,6 +39,7 @@ import 'package:admin_dashboard/src/feature/product/business/usecase/product_upl
 import 'package:admin_dashboard/src/feature/product/data/datasource/product_datasource.dart';
 import 'package:admin_dashboard/src/feature/product/data/repository/product_repository_impl.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/provider/product_provider.dart';
+import 'package:admin_dashboard/src/feature/theme/presentation/provider/theme_provider.dart';
 import 'package:admin_dashboard/src/feature/user/business/repository/user_repository.dart';
 import 'package:admin_dashboard/src/feature/user/business/usecase/user_add_usecase.dart';
 import 'package:admin_dashboard/src/feature/user/business/usecase/user_delete_usecase.dart';
@@ -146,13 +147,24 @@ Future<void> main() async {
           ),
         ),
         ChangeNotifierProvider<CustomerProvider>(
-          create: (context) => CustomerProvider(customerAddUseCase: CustomerAddUseCase(customerRepository: customerRepository), customerUpdateUseCase: CustomerUpdateUseCase(customerRepository: customerRepository), customerDeleteUseCase: CustomerDeleteUseCase(customerRepository: customerRepository), customerGetCustomerByIdUseCase: CustomerGetCustomerByIdUseCase(customerRepository: customerRepository), customerGetCustomersUseCase: CustomerGetCustomersUseCase(customerRepository: customerRepository),
-
+          create: (context) => CustomerProvider(
+            customerAddUseCase:
+                CustomerAddUseCase(customerRepository: customerRepository),
+            customerUpdateUseCase:
+                CustomerUpdateUseCase(customerRepository: customerRepository),
+            customerDeleteUseCase:
+                CustomerDeleteUseCase(customerRepository: customerRepository),
+            customerGetCustomerByIdUseCase: CustomerGetCustomerByIdUseCase(
+                customerRepository: customerRepository),
+            customerGetCustomersUseCase: CustomerGetCustomersUseCase(
+                customerRepository: customerRepository),
           ),
         ),
-
         ChangeNotifierProvider<HomeProvider>(
           create: (context) => HomeProvider(),
+        ),
+        ChangeNotifierProvider<ThemeProvider>(
+          create: (context) => ThemeProvider(),
         ),
       ],
       child: MyApp(),
@@ -160,20 +172,36 @@ Future<void> main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
 
+class _MyAppState extends State<MyApp> {
+  // This widget is the root of your application.
   GoRouter router = RouterHelper().getRouter();
+
   GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<ThemeProvider>().getThemeMode();
+  }
 
   @override
   Widget build(BuildContext context) {
     return FluentApp.router(
       theme: FluentThemeData.light(),
       darkTheme: FluentThemeData.dark(),
+      themeMode: context.watch<ThemeProvider>().themeMode == 'system'
+          ? ThemeMode.system
+          : context.watch<ThemeProvider>().themeMode == 'light'
+              ? ThemeMode.light
+              : ThemeMode.dark,
       /* defaultTransition: Transition.fadeIn,
       scaffoldMessengerKey: scaffoldMessengerKey,*/
       routerDelegate: router.routerDelegate,

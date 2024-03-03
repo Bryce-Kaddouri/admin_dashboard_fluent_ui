@@ -4,6 +4,7 @@ import 'package:admin_dashboard/src/feature/customer/presentation/screen/custome
 import 'package:admin_dashboard/src/feature/customer/presentation/screen/customer_list_screen.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/product_add_screen.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/product_list_screen.dart';
+import 'package:admin_dashboard/src/feature/setting/presentation/screen/setting_screen.dart';
 import 'package:admin_dashboard/src/feature/user/presentation/screen/user_add_screen.dart';
 import 'package:admin_dashboard/src/feature/user/presentation/screen/user_list_screen.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -348,13 +349,10 @@ class _NewHomeScreenState extends State<NewHomeScreen>
           PaneItem(
             icon: const Icon(FluentIcons.settings),
             title: Text('Setting', overflow: TextOverflow.ellipsis),
-            body: Container(
-              padding: const EdgeInsets.all(16.0),
-              child: const Text(
-                'Change your settings here',
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
+            body: SettingScreen(),
+            onTap: () {
+              context.go('/setting');
+            },
           ),
           PaneItemAction(
             icon: const Icon(FluentIcons.sign_out),
