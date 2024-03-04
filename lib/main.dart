@@ -181,7 +181,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
-  GoRouter router = RouterHelper().getRouter();
+  GoRouter? router ;
 
   GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
@@ -190,6 +190,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     context.read<ThemeProvider>().getThemeMode();
+    router = RouterHelper().getRouter(context);
   }
 
   @override
@@ -204,9 +205,9 @@ class _MyAppState extends State<MyApp> {
               : ThemeMode.dark,
       /* defaultTransition: Transition.fadeIn,
       scaffoldMessengerKey: scaffoldMessengerKey,*/
-      routerDelegate: router.routerDelegate,
-      routeInformationParser: router.routeInformationParser,
-      routeInformationProvider: router.routeInformationProvider,
+      routerDelegate: router!.routerDelegate,
+      routeInformationParser: router!.routeInformationParser,
+      routeInformationProvider: router!.routeInformationProvider,
       /* routingCallback: (routing) {
         print('route: ${routing?.current}');
 

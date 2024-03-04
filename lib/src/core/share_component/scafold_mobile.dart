@@ -192,7 +192,7 @@ class _ScaffoldMobileState extends fluent.State<ScaffoldMobile> {
                       leading: Icon(fluent.FluentIcons.sign_out),
                       selected: widget.selectedIndex == 15,
                       onPressed: () {
-                        context.read<AuthProvider>().logout();
+                        context.read<AuthProvider>().logout().then((value) => context.go('/login'));
                       },
                     ),
                   ],

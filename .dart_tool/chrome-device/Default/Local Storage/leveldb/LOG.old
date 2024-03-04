@@ -1,6 +1,9 @@
-2024/03/03-17:26:07.474 4cf8 Reusing MANIFEST C:\Users\bricr\AppData\Local\Temp\flutter_tools.9ab15d36\flutter_tools_chrome_device.64dba3d6\Default\Local Storage\leveldb/MANIFEST-000001
-2024/03/03-17:26:07.481 4cf8 Recovering log #10
-2024/03/03-17:26:07.486 4cf8 Reusing old log C:\Users\bricr\AppData\Local\Temp\flutter_tools.9ab15d36\flutter_tools_chrome_device.64dba3d6\Default\Local Storage\leveldb/000010.log 
-2024/03/03-17:26:07.488 4cf8 Delete type=2 #3
-2024/03/03-17:26:07.489 4cf8 Delete type=0 #3
-2024/03/03-17:26:07.489 4cf8 Delete type=0 #4
+2024/03/03-21:25:15.099 6244 Reusing MANIFEST C:\Users\bricr\AppData\Local\Temp\flutter_tools.cf2b14bc\flutter_tools_chrome_device.f34482b4\Default\Local Storage\leveldb/MANIFEST-000001
+2024/03/03-21:25:15.105 6244 Recovering log #10
+2024/03/03-21:25:15.111 6244 Reusing old log C:\Users\bricr\AppData\Local\Temp\flutter_tools.cf2b14bc\flutter_tools_chrome_device.f34482b4\Default\Local Storage\leveldb/000010.log 
+2024/03/03-21:25:15.115 6244 Delete type=2 #3
+2024/03/03-21:25:15.115 6244 Delete type=0 #3
+2024/03/03-21:25:15.115 6244 Delete type=0 #4
+2024/03/03-21:54:31.491 6244 Level-0 table #15: started
+2024/03/03-21:54:31.503 6244 Level-0 table #15: 64607 bytes OK
+2024/03/03-21:54:31.504 6244 Delete type=0 #10

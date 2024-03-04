@@ -5,6 +5,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:fluent_ui/fluent_ui.dart' as fluent;
 
 class SignInScreen extends StatelessWidget {
   SignInScreen({super.key});
@@ -58,32 +59,28 @@ class SignInScreen extends StatelessWidget {
                         )
                         .then((value) {
                       if (value) {
-                        context.go('/home');
+                        context.go('/');
                       } else {
-                        Get.snackbar(
-                          'Error',
-                          context.read<AuthProvider>().loginErrorMessage!,
-                          backgroundColor: Colors.red,
-                          colorText: Colors.white,
-                          margin: const EdgeInsets.all(10),
-                          padding: const EdgeInsets.all(10),
-                          snackPosition: SnackPosition.TOP,
-                          duration: const Duration(seconds: 3),
-                          icon: const Icon(
-                            Icons.error_outline,
-                            color: Colors.white,
-                          ),
-                          isDismissible: true,
-                          forwardAnimationCurve: Curves.easeOutBack,
-                          reverseAnimationCurve: Curves.easeInBack,
-                          onTap: (value) => Get.back(),
-                          mainButton: TextButton(
-                            onPressed: () => Get.back(),
-                            child: const Text(
-                              'OK',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
+                        fluent.displayInfoBar(
+                          context,
+                          builder: (context, close) {
+                            return fluent.InfoBar(
+                              title: const Text('Error!'),
+                              content: const Text(
+                                  'Invalid email or password. Please try again.'),
+
+
+                              /*'The user has not been added because of an error. ${l.errorMessage}'*/
+
+                              action: IconButton(
+                                icon: const Icon(fluent.FluentIcons.clear),
+                                onPressed: close,
+                              ),
+                              severity: fluent.InfoBarSeverity.error,
+                            );
+                          },
+                          alignment: Alignment.topRight,
+                          duration: const Duration(seconds: 5),
                         );
                       }
                     });

@@ -14,7 +14,9 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
+import '../../feature/auth/presentation/provider/auth_provider.dart';
 import '../../feature/auth/presentation/screen/signin_screen.dart';
 import '../../feature/category/presentation/screen/update_category_screen.dart';
 import '../../feature/setting/presentation/screen/setting_screen.dart';
@@ -44,11 +46,11 @@ import '../helper/responsive_helper.dart';
 }*/
 
 class RouterHelper {
-  GoRouter getRouter() {
+  GoRouter getRouter(BuildContext context) {
     return GoRouter(
       navigatorKey: Get.key,
       redirect: (context, state) {
-        /* // check if user is logged in
+         // check if user is logged in
         // if not, redirect to login page
 
         print('state: ${state.matchedLocation}');
@@ -57,28 +59,14 @@ class RouterHelper {
         bool isLoggedIn = context.read<AuthProvider>().checkIsLoggedIn();
         print('isLoggedIn: $isLoggedIn');
 
-        if(state.uri.path == '/'){
-          NewHomeScreen.index = 0;
-        }else if(state.uri.path == '/category') {
-          NewHomeScreen.index = 2;
-        }else if(state.uri.path == '/category/add') {
-          NewHomeScreen.index = 3;
-        }else if(state.uri.path == '/product') {
-          NewHomeScreen.index = 5;
-        }else if(state.uri.path == '/product/add') {
-          NewHomeScreen.index = 6;
-        }else if(state.uri.path == '/user') {
-          NewHomeScreen.index = 12;
-        }else if(state.uri.path == '/user/add') {
-          NewHomeScreen.index = 13;
-        }
 
         if (!isLoggedIn && state.uri.path != '/login') {
           return '/login';
         } else {
           return state.uri.path;
-        }*/
+        }
       },
+      initialLocation: context.read<AuthProvider>().checkIsLoggedIn() ? '/': '/login',
       routes: [
         ShellRoute(
             builder: (BuildContext context, GoRouterState state, Widget child) {
