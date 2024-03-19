@@ -1,40 +1,21 @@
 {
   "project_info": {
-    "project_number": "519233427923",
-    "project_id": "take-order-app",
-    "storage_bucket": "take-order-app.appspot.com"
+    "project_number": "825112518692",
+    "project_id": "admin-dashboard-app-2024",
+    "storage_bucket": "admin-dashboard-app-2024.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:519233427923:android:8a57c62fd583bc801c7726",
+        "mobilesdk_app_id": "1:825112518692:android:9cc1a8c4b32e023dd578b1",
         "android_client_info": {
-          "package_name": "com.example.admin_dashboard"
+          "package_name": "com.example.admin_dashboard_fluent_ui"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCY_9mlFqy7xPQDMUlCq4Md4r1_n-OKHa4"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:519233427923:android:cf958eec54cb6e551c7726",
-        "android_client_info": {
-          "package_name": "com.example.take_order_app"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCY_9mlFqy7xPQDMUlCq4Md4r1_n-OKHa4"
+          "current_key": "AIzaSyD_4a2eTZAJ7nL25BUiKdO-IgCDJMxFxus"
         }
       ],
       "services": {

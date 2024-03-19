@@ -1,7 +1,7 @@
 {
   "file_generated_by": "FlutterFire CLI",
   "purpose": "FirebaseAppID & ProjectID for this Firebase app in this directory",
-  "GOOGLE_APP_ID": "1:519233427923:ios:90bbde7a570c9d471c7726",
-  "FIREBASE_PROJECT_ID": "take-order-app",
-  "GCM_SENDER_ID": "519233427923"
+  "GOOGLE_APP_ID": "1:825112518692:ios:cb9c4d04a646bfcbd578b1",
+  "FIREBASE_PROJECT_ID": "admin-dashboard-app-2024",
+  "GCM_SENDER_ID": "825112518692"
 }
