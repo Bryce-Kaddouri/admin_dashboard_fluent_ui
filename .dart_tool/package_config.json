@@ -32,12 +32,6 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "collapsible_sidebar",
-      "rootUri": "file:///Users/bryce/.pub-cache/git/flutter_collapse_sidebar_custom-31692157218a5a3ec38fd6d4c8c8788c9e806e4c/",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
       "name": "collection",
       "rootUri": "file:///Users/bryce/.pub-cache/hosted/pub.dev/collection-1.18.0",
       "packageUri": "lib/",
@@ -734,7 +728,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2024-03-19T15:44:26.166159Z",
+  "generated": "2024-03-19T17:21:31.138204Z",
   "generator": "pub",
   "generatorVersion": "3.3.0"
 }

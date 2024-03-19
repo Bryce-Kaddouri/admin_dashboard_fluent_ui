@@ -37,13 +37,6 @@
             </list>
           </value>
         </entry>
-        <entry key="collapsible_sidebar">
-          <value>
-            <list>
-              <option value="$USER_HOME$/.pub-cache/git/flutter_collapse_sidebar_custom-31692157218a5a3ec38fd6d4c8c8788c9e806e4c//lib" />
-            </list>
-          </value>
-        </entry>
         <entry key="collection">
           <value>
             <list>
@@ -852,7 +845,6 @@
       </option>
     </properties>
     <CLASSES>
-      <root url="file://$USER_HOME$/.pub-cache/git/flutter_collapse_sidebar_custom-31692157218a5a3ec38fd6d4c8c8788c9e806e4c//lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/app_links-3.5.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/async-2.11.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/boolean_selector-2.1.1/lib" />
