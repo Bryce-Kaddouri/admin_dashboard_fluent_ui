@@ -26,6 +26,7 @@ class UserDataSource {
 
   Future<Either<DatabaseFailure, User>> addUser(UserAddParam params) async {
     try {
+      print(params.password);
       UserResponse res =
           await _supaAdminClient.auth.admin.createUser(AdminUserAttributes(
         email: params.email,
