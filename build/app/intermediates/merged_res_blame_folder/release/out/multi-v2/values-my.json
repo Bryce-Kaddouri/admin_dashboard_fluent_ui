@@ -1,27 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.admin_dashboard.app-mergeReleaseResources-22:/values-my/values-my.xml",
+            "outputFile": "com.example.admin_dashboard_fluent_ui.app-mergeReleaseResources-24:/values-my/values-my.xml",
             "map": [
                 {
-                    "source": "/Users/bryce/.gradle/caches/transforms-3/c4988ff80110f75080a936fc6f044848/transformed/core-1.10.1/res/values-my/values-my.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,158,262,365,467,572,678,797",
-                        "endColumns": "102,103,102,101,104,105,118,100",
-                        "endOffsets": "153,257,360,462,567,673,792,893"
-                    },
-                    "to": {
-                        "startLines": "2,3,4,5,6,7,8,13",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,158,262,365,467,572,678,1234",
-                        "endColumns": "102,103,102,101,104,105,118,100",
-                        "endOffsets": "153,257,360,462,567,673,792,1330"
-                    }
-                },
-                {
-                    "source": "/Users/bryce/.gradle/caches/transforms-3/d12883dde0390e08dd2a1192741cec1b/transformed/browser-1.5.0/res/values-my/values-my.xml",
+                    "source": "/Users/bryce/.gradle/caches/transforms-3/a3fbb37dd5ef93c98bc80ddf0289d0af/transformed/browser-1.5.0/res/values-my/values-my.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",
@@ -30,11 +13,45 @@
                         "endOffsets": "159,265,380,487"
                     },
                     "to": {
-                        "startLines": "9,10,11,12",
+                        "startLines": "10,11,12,13",
                         "startColumns": "4,4,4,4",
-                        "startOffsets": "797,906,1012,1127",
+                        "startOffsets": "951,1060,1166,1281",
                         "endColumns": "108,105,114,106",
-                        "endOffsets": "901,1007,1122,1229"
+                        "endOffsets": "1055,1161,1276,1383"
+                    }
+                },
+                {
+                    "source": "/Users/bryce/.gradle/caches/transforms-3/95e76454cff392b3dff66e1259c7e57f/transformed/jetified-play-services-basement-18.1.0/res/values-my/values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "195",
+                        "endColumns": "149",
+                        "endOffsets": "344"
+                    },
+                    "to": {
+                        "startLines": "9",
+                        "startColumns": "4",
+                        "startOffsets": "797",
+                        "endColumns": "153",
+                        "endOffsets": "946"
+                    }
+                },
+                {
+                    "source": "/Users/bryce/.gradle/caches/transforms-3/0b9c903fef8d2eb2a269c36999ef4a74/transformed/core-1.10.1/res/values-my/values-my.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,158,262,365,467,572,678,797",
+                        "endColumns": "102,103,102,101,104,105,118,100",
+                        "endOffsets": "153,257,360,462,567,673,792,893"
+                    },
+                    "to": {
+                        "startLines": "2,3,4,5,6,7,8,14",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,158,262,365,467,572,678,1388",
+                        "endColumns": "102,103,102,101,104,105,118,100",
+                        "endOffsets": "153,257,360,462,567,673,792,1484"
                     }
                 }
             ]

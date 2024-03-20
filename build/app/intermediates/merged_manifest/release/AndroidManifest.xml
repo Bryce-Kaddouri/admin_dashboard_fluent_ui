@@ -1,26 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.admin_dashboard"
+    package="com.example.admin_dashboard_fluent_ui"
     android:versionCode="1"
     android:versionName="1.0.0" >
 
     <uses-sdk
         android:minSdkVersion="19"
         android:targetSdkVersion="33" />
+    <!--
+         Required to query activities that can process text, see:
+         https://developer.android.com/training/package-visibility?hl=en and
+         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
+
+         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin.
+    -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.PROCESS_TEXT" />
+
+            <data android:mimeType="text/plain" />
+        </intent>
+    </queries>
 
     <permission
-        android:name="com.example.admin_dashboard.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+        android:name="com.example.admin_dashboard_fluent_ui.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.example.admin_dashboard.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+    <uses-permission android:name="com.example.admin_dashboard_fluent_ui.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
 
     <application
         android:name="android.app.Application"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:icon="@mipmap/ic_launcher"
-        android:label="admin_dashboard" >
+        android:label="admin_dashboard_fluent_ui" >
         <activity
-            android:name="com.example.admin_dashboard.MainActivity"
+            android:name="com.example.admin_dashboard_fluent_ui.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:exported="true"
             android:hardwareAccelerated="true"
@@ -52,9 +66,21 @@
             android:name="flutterEmbedding"
             android:value="2" />
 
+        <service
+            android:name="com.google.firebase.components.ComponentDiscoveryService"
+            android:directBootAware="true"
+            android:exported="false" >
+            <meta-data
+                android:name="com.google.firebase.components:io.flutter.plugins.firebase.core.FlutterFirebaseCoreRegistrar"
+                android:value="com.google.firebase.components.ComponentRegistrar" />
+            <meta-data
+                android:name="com.google.firebase.components:com.google.firebase.FirebaseCommonKtxRegistrar"
+                android:value="com.google.firebase.components.ComponentRegistrar" />
+        </service>
+
         <provider
             android:name="io.flutter.plugins.imagepicker.ImagePickerFileProvider"
-            android:authorities="com.example.admin_dashboard.flutter.image_provider"
+            android:authorities="com.example.admin_dashboard_fluent_ui.flutter.image_provider"
             android:exported="false"
             android:grantUriPermissions="true" >
             <meta-data
@@ -67,6 +93,17 @@
             android:exported="false"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
+        <provider
+            android:name="com.google.firebase.provider.FirebaseInitProvider"
+            android:authorities="com.example.admin_dashboard_fluent_ui.firebaseinitprovider"
+            android:directBootAware="true"
+            android:exported="false"
+            android:initOrder="100" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <uses-library
             android:name="androidx.window.extensions"
             android:required="false" />
@@ -76,7 +113,7 @@
 
         <provider
             android:name="androidx.startup.InitializationProvider"
-            android:authorities="com.example.admin_dashboard.androidx-startup"
+            android:authorities="com.example.admin_dashboard_fluent_ui.androidx-startup"
             android:exported="false" >
             <meta-data
                 android:name="androidx.profileinstaller.ProfileInstallerInitializer"

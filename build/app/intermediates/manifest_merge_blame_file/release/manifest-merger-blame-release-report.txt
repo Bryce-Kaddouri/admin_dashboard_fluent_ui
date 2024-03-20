@@ -1,6 +1,6 @@
 1<?xml version="1.0" encoding="utf-8"?>
 2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-3    package="com.example.admin_dashboard"
+3    package="com.example.admin_dashboard_fluent_ui"
 4    android:versionCode="1"
 5    android:versionName="1.0.0" >
 6
@@ -9,172 +9,234 @@
 8-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml
 9        android:targetSdkVersion="33" />
 9-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml
-10
-11    <permission
-11-->[androidx.core:core:1.10.1] /Users/bryce/.gradle/caches/transforms-3/c4988ff80110f75080a936fc6f044848/transformed/core-1.10.1/AndroidManifest.xml:22:5-24:47
-12        android:name="com.example.admin_dashboard.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-12-->[androidx.core:core:1.10.1] /Users/bryce/.gradle/caches/transforms-3/c4988ff80110f75080a936fc6f044848/transformed/core-1.10.1/AndroidManifest.xml:23:9-81
-13        android:protectionLevel="signature" />
-13-->[androidx.core:core:1.10.1] /Users/bryce/.gradle/caches/transforms-3/c4988ff80110f75080a936fc6f044848/transformed/core-1.10.1/AndroidManifest.xml:24:9-44
+10    <!--
+11         Required to query activities that can process text, see:
+12         https://developer.android.com/training/package-visibility?hl=en and
+13         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
 14
-15    <uses-permission android:name="com.example.admin_dashboard.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-15-->[androidx.core:core:1.10.1] /Users/bryce/.gradle/caches/transforms-3/c4988ff80110f75080a936fc6f044848/transformed/core-1.10.1/AndroidManifest.xml:26:5-97
-15-->[androidx.core:core:1.10.1] /Users/bryce/.gradle/caches/transforms-3/c4988ff80110f75080a936fc6f044848/transformed/core-1.10.1/AndroidManifest.xml:26:22-94
-16
-17    <application
-18        android:name="android.app.Application"
-18-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:4:9-42
-19        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-19-->[androidx.core:core:1.10.1] /Users/bryce/.gradle/caches/transforms-3/c4988ff80110f75080a936fc6f044848/transformed/core-1.10.1/AndroidManifest.xml:28:18-86
-20        android:icon="@mipmap/ic_launcher"
-20-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:5:9-43
-21        android:label="admin_dashboard" >
-21-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:3:9-40
-22        <activity
-22-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:6:9-26:20
-23            android:name="com.example.admin_dashboard.MainActivity"
-23-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:7:13-41
-24            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-24-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:11:13-163
-25            android:exported="true"
-25-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:8:13-36
-26            android:hardwareAccelerated="true"
-26-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:12:13-47
-27            android:launchMode="singleTop"
-27-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:9:13-43
-28            android:theme="@style/LaunchTheme"
-28-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:10:13-47
-29            android:windowSoftInputMode="adjustResize" >
-29-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:13:13-55
+15         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin.
+16    -->
+17    <queries>
+17-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:38:5-43:15
+18        <intent>
+18-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:39:9-42:18
+19            <action android:name="android.intent.action.PROCESS_TEXT" />
+19-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:40:13-72
+19-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:40:21-70
+20
+21            <data android:mimeType="text/plain" />
+21-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:41:13-50
+21-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:41:19-48
+22        </intent>
+23    </queries>
+24
+25    <permission
+25-->[androidx.core:core:1.10.1] /Users/bryce/.gradle/caches/transforms-3/0b9c903fef8d2eb2a269c36999ef4a74/transformed/core-1.10.1/AndroidManifest.xml:22:5-24:47
+26        android:name="com.example.admin_dashboard_fluent_ui.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+26-->[androidx.core:core:1.10.1] /Users/bryce/.gradle/caches/transforms-3/0b9c903fef8d2eb2a269c36999ef4a74/transformed/core-1.10.1/AndroidManifest.xml:23:9-81
+27        android:protectionLevel="signature" />
+27-->[androidx.core:core:1.10.1] /Users/bryce/.gradle/caches/transforms-3/0b9c903fef8d2eb2a269c36999ef4a74/transformed/core-1.10.1/AndroidManifest.xml:24:9-44
+28
+29    <uses-permission android:name="com.example.admin_dashboard_fluent_ui.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+29-->[androidx.core:core:1.10.1] /Users/bryce/.gradle/caches/transforms-3/0b9c903fef8d2eb2a269c36999ef4a74/transformed/core-1.10.1/AndroidManifest.xml:26:5-97
+29-->[androidx.core:core:1.10.1] /Users/bryce/.gradle/caches/transforms-3/0b9c903fef8d2eb2a269c36999ef4a74/transformed/core-1.10.1/AndroidManifest.xml:26:22-94
 30
-31            <!--
-32                 Specifies an Android theme to apply to this Activity as soon as
-33                 the Android process has started. This theme is visible to the user
-34                 while the Flutter UI initializes. After that, this theme continues
-35                 to determine the Window background behind the Flutter UI.
-36            -->
-37            <meta-data
-37-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:18:13-21:17
-38                android:name="io.flutter.embedding.android.NormalTheme"
-38-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:19:15-70
-39                android:resource="@style/NormalTheme" />
-39-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:20:15-52
-40
-41            <intent-filter>
-41-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:22:13-25:29
-42                <action android:name="android.intent.action.MAIN" />
-42-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:23:17-68
-42-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:23:25-66
-43
-44                <category android:name="android.intent.category.LAUNCHER" />
-44-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:24:17-76
-44-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:24:27-74
-45            </intent-filter>
-46        </activity>
-47        <!--
-48             Don't delete the meta-data below.
-49             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
-50        -->
-51        <meta-data
-51-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:29:9-31:33
-52            android:name="flutterEmbedding"
-52-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:30:13-44
-53            android:value="2" />
-53-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:31:13-30
+31    <application
+32        android:name="android.app.Application"
+32-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:4:9-42
+33        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+33-->[androidx.core:core:1.10.1] /Users/bryce/.gradle/caches/transforms-3/0b9c903fef8d2eb2a269c36999ef4a74/transformed/core-1.10.1/AndroidManifest.xml:28:18-86
+34        android:icon="@mipmap/ic_launcher"
+34-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:5:9-43
+35        android:label="admin_dashboard_fluent_ui" >
+35-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:3:9-50
+36        <activity
+36-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:6:9-26:20
+37            android:name="com.example.admin_dashboard_fluent_ui.MainActivity"
+37-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:7:13-41
+38            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+38-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:11:13-163
+39            android:exported="true"
+39-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:8:13-36
+40            android:hardwareAccelerated="true"
+40-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:12:13-47
+41            android:launchMode="singleTop"
+41-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:9:13-43
+42            android:theme="@style/LaunchTheme"
+42-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:10:13-47
+43            android:windowSoftInputMode="adjustResize" >
+43-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:13:13-55
+44
+45            <!--
+46                 Specifies an Android theme to apply to this Activity as soon as
+47                 the Android process has started. This theme is visible to the user
+48                 while the Flutter UI initializes. After that, this theme continues
+49                 to determine the Window background behind the Flutter UI.
+50            -->
+51            <meta-data
+51-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:18:13-21:17
+52                android:name="io.flutter.embedding.android.NormalTheme"
+52-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:19:15-70
+53                android:resource="@style/NormalTheme" />
+53-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:20:15-52
 54
-55        <provider
-55-->[:image_picker_android] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:10:9-18:20
-56            android:name="io.flutter.plugins.imagepicker.ImagePickerFileProvider"
-56-->[:image_picker_android] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:11:13-82
-57            android:authorities="com.example.admin_dashboard.flutter.image_provider"
-57-->[:image_picker_android] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:12:13-74
-58            android:exported="false"
-58-->[:image_picker_android] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:13:13-37
-59            android:grantUriPermissions="true" >
-59-->[:image_picker_android] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:14:13-47
-60            <meta-data
-60-->[:image_picker_android] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:15:13-17:75
-61                android:name="android.support.FILE_PROVIDER_PATHS"
-61-->[:image_picker_android] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:16:17-67
-62                android:resource="@xml/flutter_image_picker_file_paths" />
-62-->[:image_picker_android] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:17:17-72
-63        </provider>
-64
-65        <activity
-65-->[:url_launcher_android] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/url_launcher_android/intermediates/merged_manifest/release/AndroidManifest.xml:10:9-13:74
-66            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
-66-->[:url_launcher_android] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/url_launcher_android/intermediates/merged_manifest/release/AndroidManifest.xml:11:13-74
-67            android:exported="false"
-67-->[:url_launcher_android] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/url_launcher_android/intermediates/merged_manifest/release/AndroidManifest.xml:12:13-37
-68            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-68-->[:url_launcher_android] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/url_launcher_android/intermediates/merged_manifest/release/AndroidManifest.xml:13:13-71
-69
-70        <uses-library
-70-->[androidx.window:window:1.0.0-beta04] /Users/bryce/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:25:9-27:40
-71            android:name="androidx.window.extensions"
-71-->[androidx.window:window:1.0.0-beta04] /Users/bryce/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:26:13-54
-72            android:required="false" />
-72-->[androidx.window:window:1.0.0-beta04] /Users/bryce/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:27:13-37
-73        <uses-library
-73-->[androidx.window:window:1.0.0-beta04] /Users/bryce/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:28:9-30:40
-74            android:name="androidx.window.sidecar"
-74-->[androidx.window:window:1.0.0-beta04] /Users/bryce/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:29:13-51
-75            android:required="false" />
-75-->[androidx.window:window:1.0.0-beta04] /Users/bryce/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:30:13-37
-76
-77        <provider
-77-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/635b1770925726da461e843c0a3c6641/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:24:9-32:20
-78            android:name="androidx.startup.InitializationProvider"
-78-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/635b1770925726da461e843c0a3c6641/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:25:13-67
-79            android:authorities="com.example.admin_dashboard.androidx-startup"
-79-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/635b1770925726da461e843c0a3c6641/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:26:13-68
-80            android:exported="false" >
-80-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/635b1770925726da461e843c0a3c6641/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:27:13-37
-81            <meta-data
-81-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/635b1770925726da461e843c0a3c6641/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:29:13-31:52
-82                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-82-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/635b1770925726da461e843c0a3c6641/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:30:17-85
-83                android:value="androidx.startup" />
-83-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/635b1770925726da461e843c0a3c6641/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:31:17-49
-84        </provider>
-85
-86        <receiver
-86-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/635b1770925726da461e843c0a3c6641/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:34:9-52:20
-87            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-87-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/635b1770925726da461e843c0a3c6641/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:35:13-76
-88            android:directBootAware="false"
-88-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/635b1770925726da461e843c0a3c6641/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:36:13-44
-89            android:enabled="true"
-89-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/635b1770925726da461e843c0a3c6641/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:37:13-35
-90            android:exported="true"
-90-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/635b1770925726da461e843c0a3c6641/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:38:13-36
-91            android:permission="android.permission.DUMP" >
-91-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/635b1770925726da461e843c0a3c6641/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:39:13-57
-92            <intent-filter>
-92-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/635b1770925726da461e843c0a3c6641/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:40:13-42:29
-93                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
-93-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/635b1770925726da461e843c0a3c6641/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:17-91
-93-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/635b1770925726da461e843c0a3c6641/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:25-88
-94            </intent-filter>
-95            <intent-filter>
-95-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/635b1770925726da461e843c0a3c6641/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:43:13-45:29
-96                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
-96-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/635b1770925726da461e843c0a3c6641/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:17-85
-96-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/635b1770925726da461e843c0a3c6641/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:25-82
-97            </intent-filter>
-98            <intent-filter>
-98-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/635b1770925726da461e843c0a3c6641/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:46:13-48:29
-99                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
-99-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/635b1770925726da461e843c0a3c6641/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:17-88
-99-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/635b1770925726da461e843c0a3c6641/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:25-85
-100            </intent-filter>
-101            <intent-filter>
-101-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/635b1770925726da461e843c0a3c6641/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:49:13-51:29
-102                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
-102-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/635b1770925726da461e843c0a3c6641/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:17-95
-102-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/635b1770925726da461e843c0a3c6641/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:25-92
-103            </intent-filter>
-104        </receiver>
-105    </application>
+55            <intent-filter>
+55-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:22:13-25:29
+56                <action android:name="android.intent.action.MAIN" />
+56-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:23:17-68
+56-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:23:25-66
+57
+58                <category android:name="android.intent.category.LAUNCHER" />
+58-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:24:17-76
+58-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:24:27-74
+59            </intent-filter>
+60        </activity>
+61        <!--
+62             Don't delete the meta-data below.
+63             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+64        -->
+65        <meta-data
+65-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:29:9-31:33
+66            android:name="flutterEmbedding"
+66-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:30:13-44
+67            android:value="2" />
+67-->/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/AndroidManifest.xml:31:13-30
+68
+69        <service
+69-->[:firebase_core] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/firebase_core/intermediates/merged_manifest/release/AndroidManifest.xml:10:9-14:19
+70            android:name="com.google.firebase.components.ComponentDiscoveryService"
+70-->[:firebase_core] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/firebase_core/intermediates/merged_manifest/release/AndroidManifest.xml:10:18-89
+71            android:directBootAware="true"
+71-->[com.google.firebase:firebase-common:20.4.2] /Users/bryce/.gradle/caches/transforms-3/89c6fd71728d0adae7dd67686aa1cdf7/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:32:13-43
+72            android:exported="false" >
+72-->[com.google.firebase:firebase-common:20.4.2] /Users/bryce/.gradle/caches/transforms-3/89c6fd71728d0adae7dd67686aa1cdf7/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:33:13-37
+73            <meta-data
+73-->[:firebase_core] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/firebase_core/intermediates/merged_manifest/release/AndroidManifest.xml:11:13-13:85
+74                android:name="com.google.firebase.components:io.flutter.plugins.firebase.core.FlutterFirebaseCoreRegistrar"
+74-->[:firebase_core] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/firebase_core/intermediates/merged_manifest/release/AndroidManifest.xml:12:17-124
+75                android:value="com.google.firebase.components.ComponentRegistrar" />
+75-->[:firebase_core] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/firebase_core/intermediates/merged_manifest/release/AndroidManifest.xml:13:17-82
+76            <meta-data
+76-->[com.google.firebase:firebase-common:20.4.2] /Users/bryce/.gradle/caches/transforms-3/89c6fd71728d0adae7dd67686aa1cdf7/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:35:13-37:85
+77                android:name="com.google.firebase.components:com.google.firebase.FirebaseCommonKtxRegistrar"
+77-->[com.google.firebase:firebase-common:20.4.2] /Users/bryce/.gradle/caches/transforms-3/89c6fd71728d0adae7dd67686aa1cdf7/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:36:17-109
+78                android:value="com.google.firebase.components.ComponentRegistrar" />
+78-->[com.google.firebase:firebase-common:20.4.2] /Users/bryce/.gradle/caches/transforms-3/89c6fd71728d0adae7dd67686aa1cdf7/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:37:17-82
+79        </service>
+80
+81        <provider
+81-->[:image_picker_android] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:10:9-18:20
+82            android:name="io.flutter.plugins.imagepicker.ImagePickerFileProvider"
+82-->[:image_picker_android] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:11:13-82
+83            android:authorities="com.example.admin_dashboard_fluent_ui.flutter.image_provider"
+83-->[:image_picker_android] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:12:13-74
+84            android:exported="false"
+84-->[:image_picker_android] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:13:13-37
+85            android:grantUriPermissions="true" >
+85-->[:image_picker_android] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:14:13-47
+86            <meta-data
+86-->[:image_picker_android] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:15:13-17:75
+87                android:name="android.support.FILE_PROVIDER_PATHS"
+87-->[:image_picker_android] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:16:17-67
+88                android:resource="@xml/flutter_image_picker_file_paths" />
+88-->[:image_picker_android] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:17:17-72
+89        </provider>
+90
+91        <activity
+91-->[:url_launcher_android] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/url_launcher_android/intermediates/merged_manifest/release/AndroidManifest.xml:10:9-13:74
+92            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
+92-->[:url_launcher_android] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/url_launcher_android/intermediates/merged_manifest/release/AndroidManifest.xml:11:13-74
+93            android:exported="false"
+93-->[:url_launcher_android] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/url_launcher_android/intermediates/merged_manifest/release/AndroidManifest.xml:12:13-37
+94            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+94-->[:url_launcher_android] /Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/url_launcher_android/intermediates/merged_manifest/release/AndroidManifest.xml:13:13-71
+95
+96        <provider
+96-->[com.google.firebase:firebase-common:20.4.2] /Users/bryce/.gradle/caches/transforms-3/89c6fd71728d0adae7dd67686aa1cdf7/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:23:9-28:39
+97            android:name="com.google.firebase.provider.FirebaseInitProvider"
+97-->[com.google.firebase:firebase-common:20.4.2] /Users/bryce/.gradle/caches/transforms-3/89c6fd71728d0adae7dd67686aa1cdf7/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:24:13-77
+98            android:authorities="com.example.admin_dashboard_fluent_ui.firebaseinitprovider"
+98-->[com.google.firebase:firebase-common:20.4.2] /Users/bryce/.gradle/caches/transforms-3/89c6fd71728d0adae7dd67686aa1cdf7/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:25:13-72
+99            android:directBootAware="true"
+99-->[com.google.firebase:firebase-common:20.4.2] /Users/bryce/.gradle/caches/transforms-3/89c6fd71728d0adae7dd67686aa1cdf7/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:26:13-43
+100            android:exported="false"
+100-->[com.google.firebase:firebase-common:20.4.2] /Users/bryce/.gradle/caches/transforms-3/89c6fd71728d0adae7dd67686aa1cdf7/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:27:13-37
+101            android:initOrder="100" />
+101-->[com.google.firebase:firebase-common:20.4.2] /Users/bryce/.gradle/caches/transforms-3/89c6fd71728d0adae7dd67686aa1cdf7/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:28:13-36
+102
+103        <meta-data
+103-->[com.google.android.gms:play-services-basement:18.1.0] /Users/bryce/.gradle/caches/transforms-3/95e76454cff392b3dff66e1259c7e57f/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:21:9-23:69
+104            android:name="com.google.android.gms.version"
+104-->[com.google.android.gms:play-services-basement:18.1.0] /Users/bryce/.gradle/caches/transforms-3/95e76454cff392b3dff66e1259c7e57f/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:22:13-58
+105            android:value="@integer/google_play_services_version" />
+105-->[com.google.android.gms:play-services-basement:18.1.0] /Users/bryce/.gradle/caches/transforms-3/95e76454cff392b3dff66e1259c7e57f/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:23:13-66
 106
-107</manifest>
+107        <uses-library
+107-->[androidx.window:window:1.0.0-beta04] /Users/bryce/.gradle/caches/transforms-3/032f4dff274e516110d9363a9793a3e3/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:25:9-27:40
+108            android:name="androidx.window.extensions"
+108-->[androidx.window:window:1.0.0-beta04] /Users/bryce/.gradle/caches/transforms-3/032f4dff274e516110d9363a9793a3e3/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:26:13-54
+109            android:required="false" />
+109-->[androidx.window:window:1.0.0-beta04] /Users/bryce/.gradle/caches/transforms-3/032f4dff274e516110d9363a9793a3e3/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:27:13-37
+110        <uses-library
+110-->[androidx.window:window:1.0.0-beta04] /Users/bryce/.gradle/caches/transforms-3/032f4dff274e516110d9363a9793a3e3/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:28:9-30:40
+111            android:name="androidx.window.sidecar"
+111-->[androidx.window:window:1.0.0-beta04] /Users/bryce/.gradle/caches/transforms-3/032f4dff274e516110d9363a9793a3e3/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:29:13-51
+112            android:required="false" />
+112-->[androidx.window:window:1.0.0-beta04] /Users/bryce/.gradle/caches/transforms-3/032f4dff274e516110d9363a9793a3e3/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:30:13-37
+113
+114        <provider
+114-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/a0ecce03964d1d4dc26ffab32b08b16e/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:24:9-32:20
+115            android:name="androidx.startup.InitializationProvider"
+115-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/a0ecce03964d1d4dc26ffab32b08b16e/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:25:13-67
+116            android:authorities="com.example.admin_dashboard_fluent_ui.androidx-startup"
+116-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/a0ecce03964d1d4dc26ffab32b08b16e/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:26:13-68
+117            android:exported="false" >
+117-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/a0ecce03964d1d4dc26ffab32b08b16e/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:27:13-37
+118            <meta-data
+118-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/a0ecce03964d1d4dc26ffab32b08b16e/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:29:13-31:52
+119                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+119-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/a0ecce03964d1d4dc26ffab32b08b16e/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:30:17-85
+120                android:value="androidx.startup" />
+120-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/a0ecce03964d1d4dc26ffab32b08b16e/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:31:17-49
+121        </provider>
+122
+123        <receiver
+123-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/a0ecce03964d1d4dc26ffab32b08b16e/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:34:9-52:20
+124            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+124-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/a0ecce03964d1d4dc26ffab32b08b16e/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:35:13-76
+125            android:directBootAware="false"
+125-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/a0ecce03964d1d4dc26ffab32b08b16e/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:36:13-44
+126            android:enabled="true"
+126-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/a0ecce03964d1d4dc26ffab32b08b16e/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:37:13-35
+127            android:exported="true"
+127-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/a0ecce03964d1d4dc26ffab32b08b16e/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:38:13-36
+128            android:permission="android.permission.DUMP" >
+128-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/a0ecce03964d1d4dc26ffab32b08b16e/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:39:13-57
+129            <intent-filter>
+129-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/a0ecce03964d1d4dc26ffab32b08b16e/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:40:13-42:29
+130                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+130-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/a0ecce03964d1d4dc26ffab32b08b16e/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:17-91
+130-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/a0ecce03964d1d4dc26ffab32b08b16e/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:25-88
+131            </intent-filter>
+132            <intent-filter>
+132-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/a0ecce03964d1d4dc26ffab32b08b16e/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:43:13-45:29
+133                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+133-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/a0ecce03964d1d4dc26ffab32b08b16e/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:17-85
+133-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/a0ecce03964d1d4dc26ffab32b08b16e/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:25-82
+134            </intent-filter>
+135            <intent-filter>
+135-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/a0ecce03964d1d4dc26ffab32b08b16e/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:46:13-48:29
+136                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+136-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/a0ecce03964d1d4dc26ffab32b08b16e/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:17-88
+136-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/a0ecce03964d1d4dc26ffab32b08b16e/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:25-85
+137            </intent-filter>
+138            <intent-filter>
+138-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/a0ecce03964d1d4dc26ffab32b08b16e/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:49:13-51:29
+139                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+139-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/a0ecce03964d1d4dc26ffab32b08b16e/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:17-95
+139-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/bryce/.gradle/caches/transforms-3/a0ecce03964d1d4dc26ffab32b08b16e/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:25-92
+140            </intent-filter>
+141        </receiver>
+142    </application>
+143
+144</manifest>

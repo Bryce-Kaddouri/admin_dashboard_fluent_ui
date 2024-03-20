@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.admin_dashboard.app-mergeReleaseResources-22:/values-night-v8/values-night-v8.xml",
+            "outputFile": "com.example.admin_dashboard_fluent_ui.app-mergeReleaseResources-24:/values-night-v8/values-night-v8.xml",
             "map": [
                 {
                     "source": "/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/android/app/src/main/res/values-night/styles.xml",

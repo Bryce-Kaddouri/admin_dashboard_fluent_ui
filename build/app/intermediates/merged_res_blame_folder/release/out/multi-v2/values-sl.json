@@ -1,10 +1,27 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.admin_dashboard.app-mergeReleaseResources-22:/values-sl/values-sl.xml",
+            "outputFile": "com.example.admin_dashboard_fluent_ui.app-mergeReleaseResources-24:/values-sl/values-sl.xml",
             "map": [
                 {
-                    "source": "/Users/bryce/.gradle/caches/transforms-3/d12883dde0390e08dd2a1192741cec1b/transformed/browser-1.5.0/res/values-sl/values-sl.xml",
+                    "source": "/Users/bryce/.gradle/caches/transforms-3/95e76454cff392b3dff66e1259c7e57f/transformed/jetified-play-services-basement-18.1.0/res/values-sl/values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "195",
+                        "endColumns": "135",
+                        "endOffsets": "330"
+                    },
+                    "to": {
+                        "startLines": "9",
+                        "startColumns": "4",
+                        "startOffsets": "778",
+                        "endColumns": "139",
+                        "endOffsets": "913"
+                    }
+                },
+                {
+                    "source": "/Users/bryce/.gradle/caches/transforms-3/a3fbb37dd5ef93c98bc80ddf0289d0af/transformed/browser-1.5.0/res/values-sl/values-sl.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",
@@ -13,15 +30,15 @@
                         "endOffsets": "156,260,372,474"
                     },
                     "to": {
-                        "startLines": "9,10,11,12",
+                        "startLines": "10,11,12,13",
                         "startColumns": "4,4,4,4",
-                        "startOffsets": "778,884,988,1100",
+                        "startOffsets": "918,1024,1128,1240",
                         "endColumns": "105,103,111,101",
-                        "endOffsets": "879,983,1095,1197"
+                        "endOffsets": "1019,1123,1235,1337"
                     }
                 },
                 {
-                    "source": "/Users/bryce/.gradle/caches/transforms-3/c4988ff80110f75080a936fc6f044848/transformed/core-1.10.1/res/values-sl/values-sl.xml",
+                    "source": "/Users/bryce/.gradle/caches/transforms-3/0b9c903fef8d2eb2a269c36999ef4a74/transformed/core-1.10.1/res/values-sl/values-sl.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",
@@ -30,11 +47,11 @@
                         "endOffsets": "147,249,347,451,554,656,773,874"
                     },
                     "to": {
-                        "startLines": "2,3,4,5,6,7,8,13",
+                        "startLines": "2,3,4,5,6,7,8,14",
                         "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,152,254,352,456,559,661,1202",
+                        "startOffsets": "55,152,254,352,456,559,661,1342",
                         "endColumns": "96,101,97,103,102,101,116,100",
-                        "endOffsets": "147,249,347,451,554,656,773,1298"
+                        "endOffsets": "147,249,347,451,554,656,773,1438"
                     }
                 }
             ]

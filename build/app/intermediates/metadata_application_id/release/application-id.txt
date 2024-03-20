@@ -1,1 +1,1 @@
-com.example.admin_dashboard
+com.example.admin_dashboard_fluent_ui

@@ -1,27 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.admin_dashboard.app-mergeReleaseResources-22:/values-gu/values-gu.xml",
+            "outputFile": "com.example.admin_dashboard_fluent_ui.app-mergeReleaseResources-24:/values-gu/values-gu.xml",
             "map": [
                 {
-                    "source": "/Users/bryce/.gradle/caches/transforms-3/c4988ff80110f75080a936fc6f044848/transformed/core-1.10.1/res/values-gu/values-gu.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,149,252,349,451,553,651,773",
-                        "endColumns": "93,102,96,101,101,97,121,100",
-                        "endOffsets": "144,247,344,446,548,646,768,869"
-                    },
-                    "to": {
-                        "startLines": "2,3,4,5,6,7,8,13",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,149,252,349,451,553,651,1185",
-                        "endColumns": "93,102,96,101,101,97,121,100",
-                        "endOffsets": "144,247,344,446,548,646,768,1281"
-                    }
-                },
-                {
-                    "source": "/Users/bryce/.gradle/caches/transforms-3/d12883dde0390e08dd2a1192741cec1b/transformed/browser-1.5.0/res/values-gu/values-gu.xml",
+                    "source": "/Users/bryce/.gradle/caches/transforms-3/a3fbb37dd5ef93c98bc80ddf0289d0af/transformed/browser-1.5.0/res/values-gu/values-gu.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",
@@ -30,11 +13,45 @@
                         "endOffsets": "151,252,361,462"
                     },
                     "to": {
-                        "startLines": "9,10,11,12",
+                        "startLines": "10,11,12,13",
                         "startColumns": "4,4,4,4",
-                        "startOffsets": "773,874,975,1084",
+                        "startOffsets": "920,1021,1122,1231",
                         "endColumns": "100,100,108,100",
-                        "endOffsets": "869,970,1079,1180"
+                        "endOffsets": "1016,1117,1226,1327"
+                    }
+                },
+                {
+                    "source": "/Users/bryce/.gradle/caches/transforms-3/0b9c903fef8d2eb2a269c36999ef4a74/transformed/core-1.10.1/res/values-gu/values-gu.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,149,252,349,451,553,651,773",
+                        "endColumns": "93,102,96,101,101,97,121,100",
+                        "endOffsets": "144,247,344,446,548,646,768,869"
+                    },
+                    "to": {
+                        "startLines": "2,3,4,5,6,7,8,14",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,149,252,349,451,553,651,1332",
+                        "endColumns": "93,102,96,101,101,97,121,100",
+                        "endOffsets": "144,247,344,446,548,646,768,1428"
+                    }
+                },
+                {
+                    "source": "/Users/bryce/.gradle/caches/transforms-3/95e76454cff392b3dff66e1259c7e57f/transformed/jetified-play-services-basement-18.1.0/res/values-gu/values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "195",
+                        "endColumns": "142",
+                        "endOffsets": "337"
+                    },
+                    "to": {
+                        "startLines": "9",
+                        "startColumns": "4",
+                        "startOffsets": "773",
+                        "endColumns": "146",
+                        "endOffsets": "915"
                     }
                 }
             ]

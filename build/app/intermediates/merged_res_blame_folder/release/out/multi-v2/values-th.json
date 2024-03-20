@@ -1,27 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.admin_dashboard.app-mergeReleaseResources-22:/values-th/values-th.xml",
+            "outputFile": "com.example.admin_dashboard_fluent_ui.app-mergeReleaseResources-24:/values-th/values-th.xml",
             "map": [
                 {
-                    "source": "/Users/bryce/.gradle/caches/transforms-3/c4988ff80110f75080a936fc6f044848/transformed/core-1.10.1/res/values-th/values-th.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,151,254,352,450,553,658,770",
-                        "endColumns": "95,102,97,97,102,104,111,100",
-                        "endOffsets": "146,249,347,445,548,653,765,866"
-                    },
-                    "to": {
-                        "startLines": "2,3,4,5,6,7,8,13",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,151,254,352,450,553,658,1181",
-                        "endColumns": "95,102,97,97,102,104,111,100",
-                        "endOffsets": "146,249,347,445,548,653,765,1277"
-                    }
-                },
-                {
-                    "source": "/Users/bryce/.gradle/caches/transforms-3/d12883dde0390e08dd2a1192741cec1b/transformed/browser-1.5.0/res/values-th/values-th.xml",
+                    "source": "/Users/bryce/.gradle/caches/transforms-3/a3fbb37dd5ef93c98bc80ddf0289d0af/transformed/browser-1.5.0/res/values-th/values-th.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",
@@ -30,11 +13,45 @@
                         "endOffsets": "153,252,363,461"
                     },
                     "to": {
-                        "startLines": "9,10,11,12",
+                        "startLines": "10,11,12,13",
                         "startColumns": "4,4,4,4",
-                        "startOffsets": "770,873,972,1083",
+                        "startOffsets": "899,1002,1101,1212",
                         "endColumns": "102,98,110,97",
-                        "endOffsets": "868,967,1078,1176"
+                        "endOffsets": "997,1096,1207,1305"
+                    }
+                },
+                {
+                    "source": "/Users/bryce/.gradle/caches/transforms-3/95e76454cff392b3dff66e1259c7e57f/transformed/jetified-play-services-basement-18.1.0/res/values-th/values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "195",
+                        "endColumns": "124",
+                        "endOffsets": "319"
+                    },
+                    "to": {
+                        "startLines": "9",
+                        "startColumns": "4",
+                        "startOffsets": "770",
+                        "endColumns": "128",
+                        "endOffsets": "894"
+                    }
+                },
+                {
+                    "source": "/Users/bryce/.gradle/caches/transforms-3/0b9c903fef8d2eb2a269c36999ef4a74/transformed/core-1.10.1/res/values-th/values-th.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,151,254,352,450,553,658,770",
+                        "endColumns": "95,102,97,97,102,104,111,100",
+                        "endOffsets": "146,249,347,445,548,653,765,866"
+                    },
+                    "to": {
+                        "startLines": "2,3,4,5,6,7,8,14",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,151,254,352,450,553,658,1310",
+                        "endColumns": "95,102,97,97,102,104,111,100",
+                        "endOffsets": "146,249,347,445,548,653,765,1406"
                     }
                 }
             ]

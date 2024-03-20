@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/material.dart' as material;
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -14,9 +15,8 @@ class UpdateCategoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldPage.scrollable(
-      padding: EdgeInsets.zero,
-      header: Container(
+    return material.Scaffold(
+      /*header: Container(
         color:
             FluentTheme.of(context).navigationPaneTheme.overlayBackgroundColor,
         height: 60,
@@ -38,46 +38,54 @@ class UpdateCategoryScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),*/
+      appBar: material.AppBar(
+        elevation: 4,
+        shadowColor: FluentTheme.of(context).shadowColor,
+        surfaceTintColor: FluentTheme.of(context).navigationPaneTheme.backgroundColor,
+        backgroundColor: FluentTheme.of(context).navigationPaneTheme.backgroundColor,
+        centerTitle: true,
+        title: Text('Update Category'),
+        leading: material.BackButton(
+          onPressed: () {
+            context.go('/category');
+          },
+        ),
       ),
-      children: [
-        Container(
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.all(20),
           constraints: BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width,
             minHeight: MediaQuery.of(context).size.height - 60,
           ),
-          color: FluentTheme.of(context)
-              .navigationPaneTheme
-              .overlayBackgroundColor,
-          child: Card(
-            margin: EdgeInsets.only(left: 20, right: 20, bottom: 20),
-            child: FutureBuilder(
-              future:
-                  context.read<CategoryProvider>().getCategoryById(categoryId),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  print('data');
-                  print(snapshot.data);
-                  CategoryModel categoryModel = snapshot.data as CategoryModel;
-                  return Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: UpdateCategoryForm(
-                      categoryModel: categoryModel,
-                    ),
-                  );
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text('Error'),
-                  );
-                } else {
-                  return Center(
-                    child: ProgressRing(),
-                  );
-                }
-              },
-            ),
+          color: FluentTheme.of(context).navigationPaneTheme.overlayBackgroundColor,
+          child: FutureBuilder(
+            future: context.read<CategoryProvider>().getCategoryById(categoryId),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                print('data');
+                print(snapshot.data);
+                CategoryModel categoryModel = snapshot.data as CategoryModel;
+                return Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: UpdateCategoryForm(
+                    categoryModel: categoryModel,
+                  ),
+                );
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text('Error'),
+                );
+              } else {
+                return Center(
+                  child: ProgressRing(),
+                );
+              }
+            },
           ),
         ),
-      ],
+      ),
     );
   }
 }
@@ -159,8 +167,7 @@ class _UpdateCategoryFormState extends State<UpdateCategoryForm> {
                     SizedBox(height: 10),
                     FilledButton(
                       onPressed: () async {
-                        XFile? result =
-                            await context.read<CategoryProvider>().pickImage();
+                        XFile? result = await context.read<CategoryProvider>().pickImage();
                         if (result != null) {
                           Uint8List bytes = await result.readAsBytes();
                           setState(() {
@@ -172,8 +179,7 @@ class _UpdateCategoryFormState extends State<UpdateCategoryForm> {
                         alignment: Alignment.center,
                         width: 200,
                         height: 30,
-                        child:
-                            Text(image != null ? 'Change Image' : 'Pick Image'),
+                        child: Text(image != null ? 'Change Image' : 'Pick Image'),
                       ),
                     ),
                   ],
@@ -213,13 +219,7 @@ class _UpdateCategoryFormState extends State<UpdateCategoryForm> {
           ),
           const SizedBox(height: 100),
           FilledButton(
-              child: context.watch<CategoryProvider>().isLoading
-                  ? const ProgressRing()
-                  : Container(
-                      alignment: Alignment.center,
-                      width: 200,
-                      height: 30,
-                      child: const Text('Update Category')),
+              child: context.watch<CategoryProvider>().isLoading ? const ProgressRing() : Container(alignment: Alignment.center, width: 200, height: 30, child: const Text('Update Category')),
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   print('add category');
@@ -227,45 +227,32 @@ class _UpdateCategoryFormState extends State<UpdateCategoryForm> {
                   String description = descriptionController.text;
                   // upload image
                   if (image != null) {
-                    String? imageUrl = await context
-                        .read<CategoryProvider>()
-                        .uploadImage(image!);
+                    String? imageUrl = await context.read<CategoryProvider>().uploadImage(image!);
                     if (imageUrl != null) {
                       CategoryModel oldCategory = widget.categoryModel;
                       CategoryModel newCategory = CategoryModel(
                         id: oldCategory.id,
-                        name:
-                            oldCategory.name != name ? name : oldCategory.name,
-                        description: oldCategory.description != description
-                            ? description
-                            : oldCategory.description,
-                        imageUrl: oldCategory.imageUrl != imageUrl
-                            ? imageUrl
-                            : oldCategory.imageUrl,
+                        name: oldCategory.name != name ? name : oldCategory.name,
+                        description: oldCategory.description != description ? description : oldCategory.description,
+                        imageUrl: oldCategory.imageUrl != imageUrl ? imageUrl : oldCategory.imageUrl,
                         createdAt: oldCategory.createdAt,
                         updatedAt: DateTime.now(),
                         isVisible: oldCategory.isVisible,
                       );
-                      bool res = await context
-                          .read<CategoryProvider>()
-                          .updateCategory(newCategory, context);
+                      bool res = await context.read<CategoryProvider>().updateCategory(newCategory, context);
                     }
                   } else {
                     CategoryModel oldCategory = widget.categoryModel;
                     CategoryModel newCategory = CategoryModel(
                       id: oldCategory.id,
                       name: oldCategory.name != name ? name : oldCategory.name,
-                      description: oldCategory.description != description
-                          ? description
-                          : oldCategory.description,
+                      description: oldCategory.description != description ? description : oldCategory.description,
                       imageUrl: oldCategory.imageUrl,
                       createdAt: oldCategory.createdAt,
                       updatedAt: DateTime.now(),
                       isVisible: oldCategory.isVisible,
                     );
-                    bool res = await context
-                        .read<CategoryProvider>()
-                        .updateCategory(newCategory, context);
+                    bool res = await context.read<CategoryProvider>().updateCategory(newCategory, context);
                   }
                 } else {
                   print('form is not valid');

@@ -8,11 +8,7 @@ class ScaffoldMobile extends fluent.StatefulWidget {
   final String title;
   final Widget child;
   final int selectedIndex;
-  const ScaffoldMobile(
-      {super.key,
-      required this.title,
-      required this.child,
-      required this.selectedIndex});
+  const ScaffoldMobile({super.key, required this.title, required this.child, required this.selectedIndex});
 
   @override
   fluent.State<ScaffoldMobile> createState() => _ScaffoldMobileState();
@@ -23,13 +19,10 @@ class _ScaffoldMobileState extends fluent.State<ScaffoldMobile> {
   Widget build(BuildContext context) {
     print('selectedIndex: ${widget.selectedIndex}');
     return Scaffold(
+      backgroundColor: fluent.FluentTheme.of(context).navigationPaneTheme.backgroundColor,
       drawer: Drawer(
-        backgroundColor: fluent.FluentTheme.of(context)
-            .navigationPaneTheme
-            .overlayBackgroundColor,
-        surfaceTintColor: fluent.FluentTheme.of(context)
-            .navigationPaneTheme
-            .overlayBackgroundColor,
+        backgroundColor: fluent.FluentTheme.of(context).navigationPaneTheme.overlayBackgroundColor,
+        surfaceTintColor: fluent.FluentTheme.of(context).navigationPaneTheme.overlayBackgroundColor,
         child: Container(
           height: double.infinity,
           child: Column(
@@ -47,6 +40,7 @@ class _ScaffoldMobileState extends fluent.State<ScaffoldMobile> {
                       leading: Icon(fluent.FluentIcons.home),
                       onPressed: () {
                         context.go('/');
+                        Navigator.of(context).pop();
                       },
                     ),
                     ExpansionTile(
@@ -58,6 +52,7 @@ class _ScaffoldMobileState extends fluent.State<ScaffoldMobile> {
                             leading: Icon(fluent.FluentIcons.list),
                             onPressed: () {
                               context.go('/category');
+                              Navigator.of(context).pop();
                             }),
                         fluent.ListTile.selectable(
                           title: Text('Category Add'),
@@ -65,6 +60,7 @@ class _ScaffoldMobileState extends fluent.State<ScaffoldMobile> {
                           selected: widget.selectedIndex == 3,
                           onPressed: () {
                             context.go('/category/add');
+                            Navigator.of(context).pop();
                           },
                         ),
                       ],
@@ -79,6 +75,7 @@ class _ScaffoldMobileState extends fluent.State<ScaffoldMobile> {
                           selected: widget.selectedIndex == 5,
                           onPressed: () {
                             context.go('/product');
+                            Navigator.of(context).pop();
                           },
                         ),
                         fluent.ListTile.selectable(
@@ -87,6 +84,7 @@ class _ScaffoldMobileState extends fluent.State<ScaffoldMobile> {
                           selected: widget.selectedIndex == 6,
                           onPressed: () {
                             context.go('/product/add');
+                            Navigator.of(context).pop();
                           },
                         ),
                       ],
@@ -121,6 +119,7 @@ class _ScaffoldMobileState extends fluent.State<ScaffoldMobile> {
                           selected: widget.selectedIndex == 12,
                           onPressed: () {
                             context.go('/user');
+                            Navigator.of(context).pop();
                           },
                         ),
                         fluent.ListTile.selectable(
@@ -129,6 +128,7 @@ class _ScaffoldMobileState extends fluent.State<ScaffoldMobile> {
                           selected: widget.selectedIndex == 13,
                           onPressed: () {
                             context.go('/user/add');
+                            Navigator.of(context).pop();
                           },
                         ),
                       ],
@@ -143,6 +143,7 @@ class _ScaffoldMobileState extends fluent.State<ScaffoldMobile> {
                           selected: widget.selectedIndex == 15,
                           onPressed: () {
                             context.go('/customer');
+                            Navigator.of(context).pop();
                           },
                         ),
                         fluent.ListTile.selectable(
@@ -151,11 +152,11 @@ class _ScaffoldMobileState extends fluent.State<ScaffoldMobile> {
                           selected: widget.selectedIndex == 16,
                           onPressed: () {
                             context.go('/customer/add');
+                            Navigator.of(context).pop();
                           },
                         ),
                       ],
-                      leading: Icon(
-                          fluent.FluentIcons.hexadite_investigation_semi_auto),
+                      leading: Icon(fluent.FluentIcons.hexadite_investigation_semi_auto),
                     ),
                     ExpansionTile(
                       title: Text('Catalog'),
@@ -185,6 +186,7 @@ class _ScaffoldMobileState extends fluent.State<ScaffoldMobile> {
                       selected: widget.selectedIndex == 14,
                       onPressed: () {
                         context.go('/setting');
+                        Navigator.of(context).pop();
                       },
                     ),
                     fluent.ListTile.selectable(
@@ -193,6 +195,7 @@ class _ScaffoldMobileState extends fluent.State<ScaffoldMobile> {
                       selected: widget.selectedIndex == 15,
                       onPressed: () {
                         context.read<AuthProvider>().logout().then((value) => context.go('/login'));
+                        Navigator.of(context).pop();
                       },
                     ),
                   ],
@@ -203,6 +206,10 @@ class _ScaffoldMobileState extends fluent.State<ScaffoldMobile> {
         ),
       ),
       appBar: AppBar(
+        elevation: 4,
+        shadowColor: fluent.FluentTheme.of(context).shadowColor,
+        surfaceTintColor: fluent.FluentTheme.of(context).navigationPaneTheme.backgroundColor,
+        backgroundColor: fluent.FluentTheme.of(context).navigationPaneTheme.backgroundColor,
         centerTitle: true,
         title: Text(widget.title),
       ),

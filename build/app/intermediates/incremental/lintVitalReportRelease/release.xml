@@ -1,6 +1,6 @@
 <variant
     name="release"
-    package="com.example.admin_dashboard"
+    package="com.example.admin_dashboard_fluent_ui"
     minSdkVersion="19"
     targetSdkVersion="33"
     shrinking="true"
@@ -33,7 +33,7 @@
   </manifestPlaceholders>
   <mainArtifact
       classOutputs="/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/app/intermediates/javac/release/classes:/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/app/tmp/kotlin-classes/release:/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/app/kotlinToolingMetadata:/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/app/intermediates/compile_and_runtime_not_namespaced_r_class_jar/release/R.jar"
-      applicationId="com.example.admin_dashboard"
+      applicationId="com.example.admin_dashboard_fluent_ui"
       generatedSourceFolders="/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/app/generated/ap_generated_sources/release/out:/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/app/generated/aidl_source_output_dir/release/out:/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/app/generated/source/buildConfig/release:/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/app/generated/renderscript_source_output_dir/release/out"
       generatedResourceFolders="/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/app/generated/res/rs/release:/Users/bryce/private_project_flutter/supabase_folder/admin_dashboard_fluent_ui/build/app/generated/res/resValues/release">
   </mainArtifact>

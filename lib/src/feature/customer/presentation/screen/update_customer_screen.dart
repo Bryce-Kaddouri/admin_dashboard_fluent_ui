@@ -14,8 +14,8 @@ class UpdateCustomerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldPage.scrollable(
-      padding: EdgeInsets.zero,
+    return material.Scaffold(
+      /* padding: EdgeInsets.zero,
       header: Container(
         color:
             FluentTheme.of(context).navigationPaneTheme.overlayBackgroundColor,
@@ -38,48 +38,56 @@ class UpdateCustomerScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),*/
+      appBar: material.AppBar(
+        elevation: 4,
+        shadowColor: FluentTheme.of(context).shadowColor,
+        surfaceTintColor: FluentTheme.of(context).navigationPaneTheme.backgroundColor,
+        backgroundColor: FluentTheme.of(context).navigationPaneTheme.backgroundColor,
+        centerTitle: true,
+        title: Text('Update Customer'),
+        leading: material.BackButton(
+          onPressed: () {
+            context.go('/customer');
+          },
+        ),
       ),
-      children: [
-        Container(
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.all(20),
           constraints: BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width,
             minHeight: MediaQuery.of(context).size.height - 60,
           ),
-          color: FluentTheme.of(context)
-              .navigationPaneTheme
-              .overlayBackgroundColor,
-          child: Card(
-            margin: EdgeInsets.only(left: 20, right: 20, bottom: 20),
-            child: FutureBuilder<CustomerModel?>(
-              future:
-                  context.read<CustomerProvider>().getCustomerById(customerId),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  print('data');
-                  print(snapshot.data);
-                  CustomerModel customerModel = snapshot.data!;
-                  return Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: UpdateCustomerForm(
-                      customerModel: customerModel,
-                    ),
-                  );
-                } else if (snapshot.hasError) {
-                  print('error');
-                  print(snapshot.error);
-                  return Center(
-                    child: Text('Error'),
-                  );
-                } else {
-                  return Center(
-                    child: ProgressRing(),
-                  );
-                }
-              },
-            ),
+          color: FluentTheme.of(context).navigationPaneTheme.overlayBackgroundColor,
+          child: FutureBuilder<CustomerModel?>(
+            future: context.read<CustomerProvider>().getCustomerById(customerId),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                print('data');
+                print(snapshot.data);
+                CustomerModel customerModel = snapshot.data!;
+                return Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: UpdateCustomerForm(
+                    customerModel: customerModel,
+                  ),
+                );
+              } else if (snapshot.hasError) {
+                print('error');
+                print(snapshot.error);
+                return Center(
+                  child: Text('Error'),
+                );
+              } else {
+                return Center(
+                  child: ProgressRing(),
+                );
+              }
+            },
           ),
         ),
-      ],
+      ),
     );
   }
 }
@@ -174,8 +182,7 @@ class _UpdateCustomerFormState extends State<UpdateCustomerForm> {
                   filled: true,
                   fillColor: Colors.white,
                   contentPadding: EdgeInsets.all(10),
-                  constraints: BoxConstraints(
-                      maxWidth: 500, maxHeight: 100, minHeight: 100),
+                  constraints: BoxConstraints(maxWidth: 500, maxHeight: 100, minHeight: 100),
                   labelText: 'Phone Number',
                   border: material.OutlineInputBorder(),
                   enabledBorder: material.OutlineInputBorder(),
@@ -194,13 +201,7 @@ class _UpdateCustomerFormState extends State<UpdateCustomerForm> {
           ),
           const SizedBox(height: 100),
           FilledButton(
-              child: context.watch<CustomerProvider>().isLoading
-                  ? const ProgressRing()
-                  : Container(
-                      alignment: Alignment.center,
-                      width: 200,
-                      height: 30,
-                      child: const Text('Update Category')),
+              child: context.watch<CustomerProvider>().isLoading ? const ProgressRing() : Container(alignment: Alignment.center, width: 200, height: 30, child: const Text('Update Category')),
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   print('add customer');
@@ -210,27 +211,9 @@ class _UpdateCustomerFormState extends State<UpdateCustomerForm> {
                   String countryCode = countryCodeController.text;
 
                   CustomerModel oldCustomer = widget.customerModel;
-                  CustomerModel newCustomer = CustomerModel(
-                      id: oldCustomer.id,
-                      fName: oldCustomer.fName != fName
-                          ? fName
-                          : oldCustomer.fName,
-                      lName: oldCustomer.lName != lName
-                          ? lName
-                          : oldCustomer.lName,
-                      createdAt: oldCustomer.createdAt,
-                      updatedAt: DateTime.now(),
-                      phoneNumber: oldCustomer.phoneNumber != phoneNumber
-                          ? phoneNumber
-                          : oldCustomer.phoneNumber,
-                      countryCode: oldCustomer.countryCode != countryCode
-                          ? countryCode
-                          : oldCustomer.countryCode,
-                      isEnable: oldCustomer.isEnable);
+                  CustomerModel newCustomer = CustomerModel(id: oldCustomer.id, fName: oldCustomer.fName != fName ? fName : oldCustomer.fName, lName: oldCustomer.lName != lName ? lName : oldCustomer.lName, createdAt: oldCustomer.createdAt, updatedAt: DateTime.now(), phoneNumber: oldCustomer.phoneNumber != phoneNumber ? phoneNumber : oldCustomer.phoneNumber, countryCode: oldCustomer.countryCode != countryCode ? countryCode : oldCustomer.countryCode, isEnable: oldCustomer.isEnable);
 
-                  bool res = await context
-                      .read<CustomerProvider>()
-                      .updateCustomer(newCustomer, context);
+                  bool res = await context.read<CustomerProvider>().updateCustomer(newCustomer, context);
                 } else {
                   print('form is not valid');
                 }

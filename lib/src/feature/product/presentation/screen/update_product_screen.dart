@@ -1,6 +1,7 @@
 import 'package:admin_dashboard/src/feature/category/presentation/category_provider/category_provider.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart' as material;
 import 'package:flutter/services.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
@@ -20,8 +21,10 @@ class UpdateProductScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldPage.scrollable(
-      padding: EdgeInsets.zero,
+    return material.Scaffold(
+      backgroundColor: FluentTheme.of(context).navigationPaneTheme.backgroundColor,
+
+      /* padding: EdgeInsets.zero,
       header: Container(
         color:
             FluentTheme.of(context).navigationPaneTheme.overlayBackgroundColor,
@@ -44,22 +47,30 @@ class UpdateProductScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),*/
+      appBar: material.AppBar(
+        elevation: 4,
+        shadowColor: FluentTheme.of(context).shadowColor,
+        surfaceTintColor: FluentTheme.of(context).navigationPaneTheme.backgroundColor,
+        backgroundColor: FluentTheme.of(context).navigationPaneTheme.backgroundColor,
+        centerTitle: true,
+        title: Text('Update Product'),
+        leading: material.BackButton(
+          onPressed: () {
+            context.go('/product');
+          },
+        ),
       ),
-      children: [
-        Container(
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.all(20),
           constraints: BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width,
             minHeight: MediaQuery.of(context).size.height - 60,
           ),
-          color: FluentTheme.of(context)
-              .navigationPaneTheme
-              .overlayBackgroundColor,
-          child: Card(
-            margin: EdgeInsets.only(left: 20, right: 20, bottom: 20),
-            child: ProductUpdateForm(id: productId),
-          ),
+          child: ProductUpdateForm(id: productId),
         ),
-      ],
+      ),
     );
   }
 }
@@ -92,10 +103,7 @@ class _ProductUpdateFormState extends State<ProductUpdateForm> {
         lstCategory = value ?? [];
       });
     }).whenComplete(() {
-      return context
-          .read<ProductProvider>()
-          .getProductById(widget.id)
-          .then((ProductModel? value) {
+      return context.read<ProductProvider>().getProductById(widget.id).then((ProductModel? value) {
         if (value != null) {
           setState(() {
             nameController.text = value.name;
@@ -171,8 +179,7 @@ class _ProductUpdateFormState extends State<ProductUpdateForm> {
                 SizedBox(height: 10),
                 FilledButton(
                   onPressed: () async {
-                    XFile? result =
-                        await context.read<CategoryProvider>().pickImage();
+                    XFile? result = await context.read<CategoryProvider>().pickImage();
                     if (result != null) {
                       Uint8List bytes = await result.readAsBytes();
                       setState(() {
@@ -218,9 +225,7 @@ class _ProductUpdateFormState extends State<ProductUpdateForm> {
               constraints: BoxConstraints(maxWidth: 500, maxHeight: 50),
               child: NumberFormBox<double>(
                 precision: 2,
-                value: priceController.text.isEmpty
-                    ? null
-                    : double.parse(priceController.text),
+                value: priceController.text.isEmpty ? null : double.parse(priceController.text),
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(
                     RegExp(r'^\d+\.?\d{0,2}'),
@@ -265,8 +270,7 @@ class _ProductUpdateFormState extends State<ProductUpdateForm> {
               constraints: BoxConstraints(maxWidth: 500, maxHeight: 50),
               child: AutoSuggestBox.form(
                 validator: FormBuilderValidators.compose([
-                  FormBuilderValidators.required(
-                      errorText: 'Please select category'),
+                  FormBuilderValidators.required(errorText: 'Please select category'),
                 ]),
                 controller: categoryController,
                 placeholder: 'Select Category',
@@ -313,58 +317,34 @@ class _ProductUpdateFormState extends State<ProductUpdateForm> {
                   int categoryId = selectedObjectCategory!.id;
 
                   if (imageUrl != null) {
-                    String? imageUrl = await context
-                        .read<ProductProvider>()
-                        .uploadImage(image!);
-                    ProductModel? oldProduct = await context
-                        .read<ProductProvider>()
-                        .getProductById(widget.id);
+                    String? imageUrl = await context.read<ProductProvider>().uploadImage(image!);
+                    ProductModel? oldProduct = await context.read<ProductProvider>().getProductById(widget.id);
                     ProductModel newProduct = ProductModel(
                       id: oldProduct!.id,
                       name: oldProduct.name != name ? name : oldProduct.name,
-                      description: oldProduct.description != description
-                          ? description
-                          : oldProduct.description,
-                      imageUrl: oldProduct.imageUrl != imageUrl
-                          ? imageUrl ?? oldProduct.imageUrl
-                          : oldProduct.imageUrl,
+                      description: oldProduct.description != description ? description : oldProduct.description,
+                      imageUrl: oldProduct.imageUrl != imageUrl ? imageUrl ?? oldProduct.imageUrl : oldProduct.imageUrl,
                       createdAt: oldProduct.createdAt,
                       updatedAt: DateTime.now(),
                       isVisible: oldProduct.isVisible,
-                      price:
-                          oldProduct.price != price ? price : oldProduct.price,
-                      categoryId: oldProduct.categoryId != categoryId
-                          ? categoryId
-                          : oldProduct.categoryId,
+                      price: oldProduct.price != price ? price : oldProduct.price,
+                      categoryId: oldProduct.categoryId != categoryId ? categoryId : oldProduct.categoryId,
                     );
-                    bool res = await context
-                        .read<ProductProvider>()
-                        .updateProduct(newProduct, context);
+                    bool res = await context.read<ProductProvider>().updateProduct(newProduct, context);
                   } else {
-                    ProductModel? oldProduct = await context
-                        .read<ProductProvider>()
-                        .getProductById(widget.id);
+                    ProductModel? oldProduct = await context.read<ProductProvider>().getProductById(widget.id);
                     ProductModel newProduct = ProductModel(
                       id: oldProduct!.id,
                       name: oldProduct.name != name ? name : oldProduct.name,
-                      description: oldProduct.description != description
-                          ? description
-                          : oldProduct.description,
-                      imageUrl: oldProduct.imageUrl != imageUrl
-                          ? imageUrl ?? oldProduct.imageUrl
-                          : oldProduct.imageUrl,
+                      description: oldProduct.description != description ? description : oldProduct.description,
+                      imageUrl: oldProduct.imageUrl != imageUrl ? imageUrl ?? oldProduct.imageUrl : oldProduct.imageUrl,
                       createdAt: oldProduct.createdAt,
                       updatedAt: DateTime.now(),
                       isVisible: oldProduct.isVisible,
-                      price:
-                          oldProduct.price != price ? price : oldProduct.price,
-                      categoryId: oldProduct.categoryId != categoryId
-                          ? categoryId
-                          : oldProduct.categoryId,
+                      price: oldProduct.price != price ? price : oldProduct.price,
+                      categoryId: oldProduct.categoryId != categoryId ? categoryId : oldProduct.categoryId,
                     );
-                    bool res = await context
-                        .read<ProductProvider>()
-                        .updateProduct(newProduct, context);
+                    bool res = await context.read<ProductProvider>().updateProduct(newProduct, context);
                   }
                   // reset form
                   /*  nameController.clear();
