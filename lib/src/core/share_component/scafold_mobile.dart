@@ -16,6 +16,12 @@ class ScaffoldMobile extends fluent.StatefulWidget {
 
 class _ScaffoldMobileState extends fluent.State<ScaffoldMobile> {
   @override
+  void initState() {
+    super.initState();
+    context.read<AuthProvider>().getUserModel();
+  }
+
+  @override
   Widget build(BuildContext context) {
     print('selectedIndex: ${widget.selectedIndex}');
     return Scaffold(
@@ -24,9 +30,39 @@ class _ScaffoldMobileState extends fluent.State<ScaffoldMobile> {
         backgroundColor: fluent.FluentTheme.of(context).navigationPaneTheme.overlayBackgroundColor,
         surfaceTintColor: fluent.FluentTheme.of(context).navigationPaneTheme.overlayBackgroundColor,
         child: Container(
+          width: double.infinity,
           height: double.infinity,
           child: Column(
             children: [
+              DrawerHeader(
+                padding: EdgeInsets.only(top: 10),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: fluent.FluentTheme.of(context).menuColor,
+                    ),
+                  ),
+                  color: fluent.FluentTheme.of(context).menuColor,
+                ),
+                child: Container(
+                  width: double.infinity,
+                  child: Column(
+                    children: [
+                      fluent.CircleAvatar(
+                        radius: 50,
+                        child: Icon(fluent.FluentIcons.contact),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(5),
+                        child: Text(
+                          '${context.read<AuthProvider>().currentUser!.firstName ?? ''} ${context.read<AuthProvider>().currentUser!.lastName ?? ''}',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               Expanded(
                 child: ListView(
                   children: [

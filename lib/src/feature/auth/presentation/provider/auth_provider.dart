@@ -8,6 +8,7 @@ import '../../business/param/login_params.dart';
 import '../../business/usecase/auth_get_user_usecase.dart';
 import '../../business/usecase/auth_is_looged_in_usecase.dart';
 import '../../business/usecase/auth_logout_usecase.dart';
+import '../../data/user_model.dart';
 
 class AuthProvider with ChangeNotifier {
   final AuthLoginUseCase authLoginUseCase;
@@ -44,13 +45,30 @@ class AuthProvider with ChangeNotifier {
 
   String get loginErrorMessage => _loginErrorMessage;
 
+  CurrentUserModel? _currentUser;
+  CurrentUserModel? get currentUser => _currentUser;
+
+  void setUserInfo(CurrentUserModel user) {
+    _currentUser = user;
+    notifyListeners();
+  }
+
+  void getUserModel() {
+    final user = getUser();
+    if (user != null) {
+      setUserInfo(CurrentUserModel(
+        firstName: user.userMetadata?['fName'] ?? '',
+        lastName: user.userMetadata?['lName'] ?? '',
+      ));
+    }
+  }
+
   Future<bool> login(String email, String password) async {
     _isLoading = true;
     _loginErrorMessage = '';
     bool isSuccess = false;
     notifyListeners();
-    final result = await authLoginUseCase
-        .call(LoginParams(email: email, password: password));
+    final result = await authLoginUseCase.call(LoginParams(email: email, password: password));
 
     await result.fold((l) async {
       _loginErrorMessage = l.errorMessage;
