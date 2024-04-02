@@ -62,6 +62,14 @@ class CustomerProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _isExpanded = false;
+  bool get isExpanded => _isExpanded;
+
+  void setExpanded(bool value) {
+    _isExpanded = value;
+    notifyListeners();
+  }
+
   Future<List<CustomerModel>> getCustomers() async {
     List<CustomerModel> customerList = [];
     final result = await customerGetCustomersUseCase.call(NoParams());
@@ -76,18 +84,12 @@ class CustomerProvider with ChangeNotifier {
     return customerList;
   }
 
-  Future<bool> addCustomer(String fName, String lName, String phoneNumber,
-      String countryCode, bool isEnable, BuildContext context) async {
+  Future<bool> addCustomer(String fName, String lName, String phoneNumber, String countryCode, bool isEnable, BuildContext context) async {
     _isLoading = true;
     notifyListeners();
 
     bool isSuccess = false;
-    final result = await customerAddUseCase.call(CustomerAddParam(
-        fName: fName,
-        lName: lName,
-        phoneNumber: phoneNumber,
-        countryCode: countryCode,
-        isEnable: true));
+    final result = await customerAddUseCase.call(CustomerAddParam(fName: fName, lName: lName, phoneNumber: phoneNumber, countryCode: countryCode, isEnable: true));
 
     await result.fold((l) async {
       print(l.errorMessage);
@@ -128,8 +130,7 @@ class CustomerProvider with ChangeNotifier {
         builder: (context, close) {
           return fluent.InfoBar(
             title: const Text('Success!'),
-            content: const Text(
-                'The customer has been added successfully. You can add another customer or close the form.'),
+            content: const Text('The customer has been added successfully. You can add another customer or close the form.'),
             action: IconButton(
               icon: const Icon(fluent.FluentIcons.clear),
               onPressed: close,
@@ -166,8 +167,7 @@ class CustomerProvider with ChangeNotifier {
     return customerModel;
   }
 
-  Future<bool> updateCustomer(
-      CustomerModel customer, BuildContext context) async {
+  Future<bool> updateCustomer(CustomerModel customer, BuildContext context) async {
     _isLoading = true;
     notifyListeners();
     bool isSuccess = false;
@@ -182,8 +182,7 @@ class CustomerProvider with ChangeNotifier {
           return fluent.InfoBar(
             isLong: false,
             title: fluent.Container(
-              constraints: fluent.BoxConstraints(
-                  maxWidth: ResponsiveHelper.isMobile(context) ? 200 : 500),
+              constraints: fluent.BoxConstraints(maxWidth: ResponsiveHelper.isMobile(context) ? 200 : 500),
               child: fluent.RichText(
                   text: fluent.TextSpan(
                 text: 'The customer has not been updated because of an error. ',
@@ -215,8 +214,7 @@ class CustomerProvider with ChangeNotifier {
         builder: (context, close) {
           return fluent.InfoBar(
             title: const Text('Success!'),
-            content: const Text(
-                'The customer has been updated successfully. You can update another customer or close the form.'),
+            content: const Text('The customer has been updated successfully. You can update another customer or close the form.'),
             action: IconButton(
               icon: const Icon(fluent.FluentIcons.clear),
               onPressed: close,

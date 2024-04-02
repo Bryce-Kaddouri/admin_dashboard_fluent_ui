@@ -1,4 +1,8 @@
 import 'package:admin_dashboard/src/feature/auth/presentation/provider/auth_provider.dart';
+import 'package:admin_dashboard/src/feature/category/presentation/category_provider/category_provider.dart';
+import 'package:admin_dashboard/src/feature/customer/presentation/provider/customer_provider.dart';
+import 'package:admin_dashboard/src/feature/product/presentation/provider/product_provider.dart';
+import 'package:admin_dashboard/src/feature/user/presentation/provider/user_provider.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -80,6 +84,10 @@ class _ScaffoldMobileState extends fluent.State<ScaffoldMobile> {
                       },
                     ),
                     ExpansionTile(
+                      onExpansionChanged: (value) {
+                        context.read<CategoryProvider>().setExpanded(value);
+                      },
+                      initiallyExpanded: context.watch<CategoryProvider>().isExpanded,
                       title: Text('Category'),
                       children: [
                         fluent.ListTile.selectable(
@@ -103,6 +111,10 @@ class _ScaffoldMobileState extends fluent.State<ScaffoldMobile> {
                       leading: Icon(fluent.FluentIcons.category_classification),
                     ),
                     ExpansionTile(
+                      onExpansionChanged: (value) {
+                        context.read<ProductProvider>().setExpanded(value);
+                      },
+                      initiallyExpanded: context.watch<ProductProvider>().isExpanded,
                       title: Text('Product'),
                       children: [
                         fluent.ListTile.selectable(
@@ -147,6 +159,10 @@ class _ScaffoldMobileState extends fluent.State<ScaffoldMobile> {
                       leading: Icon(fluent.FluentIcons.clipboard_list),
                     ),
                     ExpansionTile(
+                      onExpansionChanged: (value) {
+                        context.read<UserProvider>().setExpanded(value);
+                      },
+                      initiallyExpanded: context.watch<UserProvider>().isExpanded,
                       title: Text('User'),
                       children: [
                         fluent.ListTile.selectable(
@@ -171,6 +187,10 @@ class _ScaffoldMobileState extends fluent.State<ScaffoldMobile> {
                       leading: Icon(fluent.FluentIcons.account_management),
                     ),
                     ExpansionTile(
+                      onExpansionChanged: (value) {
+                        context.read<CustomerProvider>().setExpanded(value);
+                      },
+                      initiallyExpanded: context.watch<CustomerProvider>().isExpanded,
                       title: Text('Customer'),
                       children: [
                         fluent.ListTile.selectable(

@@ -1,6 +1,5 @@
 import 'package:admin_dashboard/src/feature/user/business/param/user_update_param.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -116,6 +115,14 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _isExpanded = false;
+  bool get isExpanded => _isExpanded;
+
+  void setExpanded(bool value) {
+    _isExpanded = value;
+    notifyListeners();
+  }
+
   /* String _addProductErrorMessage = '';
 
   String get addProductErrorMessage => _addProductErrorMessage;
@@ -178,8 +185,7 @@ class UserProvider with ChangeNotifier {
     return users;
   }
 
-  Future<bool> addUser(String email, String password, String fName,
-      String lName, String role, BuildContext context) async {
+  Future<bool> addUser(String email, String password, String fName, String lName, String role, BuildContext context) async {
     _isLoading = true;
     bool isSuccess = false;
     notifyListeners();
@@ -232,8 +238,7 @@ class UserProvider with ChangeNotifier {
         builder: (context, close) {
           return fluent.InfoBar(
             title: const Text('Success!'),
-            content: const Text(
-                'The user has been added successfully. You can add another user or close the form.'),
+            content: const Text('The user has been added successfully. You can add another user or close the form.'),
             action: IconButton(
               icon: const Icon(fluent.FluentIcons.clear),
               onPressed: close,
@@ -267,8 +272,7 @@ class UserProvider with ChangeNotifier {
     return user;
   }
 
-  Future<bool> updateUser({required String uid, required String email, required String password,
-    required String fName, required String lName, required String role, required bool isAvailable, required BuildContext context}) async {
+  Future<bool> updateUser({required String uid, required String email, required String password, required String fName, required String lName, required String role, required bool isAvailable, required BuildContext context}) async {
     print('updateUser from provier');
     print(uid);
     print(email);
@@ -330,8 +334,7 @@ class UserProvider with ChangeNotifier {
           builder: (context, close) {
             return fluent.InfoBar(
               title: const Text('Success!'),
-              content: const Text(
-                  'The user has been updated successfully. You can add another user or close the form.'),
+              content: const Text('The user has been updated successfully. You can add another user or close the form.'),
               action: IconButton(
                 icon: const Icon(fluent.FluentIcons.clear),
                 onPressed: close,

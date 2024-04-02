@@ -87,6 +87,14 @@ class ProductProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _isExpanded = false;
+  bool get isExpanded => _isExpanded;
+
+  void setExpanded(bool value) {
+    _isExpanded = value;
+    notifyListeners();
+  }
+
   Future<XFile?> pickImage() async {
     final ImagePicker picker = ImagePicker();
     ImageSource source = ImageSource.gallery;
@@ -167,8 +175,7 @@ class ProductProvider with ChangeNotifier {
     return url;
   }
 
-  Future<bool> addProduct(String name, String? description, String imageUrl,
-      double price, int categoryId, BuildContext context) async {
+  Future<bool> addProduct(String name, String? description, String imageUrl, double price, int categoryId, BuildContext context) async {
     _isLoading = true;
     bool isSuccess = false;
     notifyListeners();
@@ -218,8 +225,7 @@ class ProductProvider with ChangeNotifier {
         builder: (context, close) {
           return fluent.InfoBar(
             title: const Text('Success!'),
-            content: const Text(
-                'The product has been added successfully. You can add another product or close the form.'),
+            content: const Text('The product has been added successfully. You can add another product or close the form.'),
             action: IconButton(
               icon: const Icon(fluent.FluentIcons.clear),
               onPressed: close,
@@ -296,8 +302,7 @@ class ProductProvider with ChangeNotifier {
         builder: (context, close) {
           return fluent.InfoBar(
             title: const Text('Success!'),
-            content: const Text(
-                'The product has been updated successfully. You can add another product or close the form.'),
+            content: const Text('The product has been updated successfully. You can add another product or close the form.'),
             action: IconButton(
               icon: const Icon(fluent.FluentIcons.clear),
               onPressed: close,

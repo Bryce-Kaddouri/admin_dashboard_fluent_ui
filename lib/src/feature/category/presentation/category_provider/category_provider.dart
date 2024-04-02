@@ -163,6 +163,14 @@ class CategoryProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _isExpanded = false;
+  bool get isExpanded => _isExpanded;
+
+  void setExpanded(bool value) {
+    _isExpanded = value;
+    notifyListeners();
+  }
+
   Future<String?> uploadImage(Uint8List bytes) async {
     _isLoading = true;
     String? url;
@@ -201,8 +209,7 @@ class CategoryProvider with ChangeNotifier {
     return url;
   }
 
-  Future<bool> addCategory(String name, String? description, String imageUrl,
-      BuildContext context) async {
+  Future<bool> addCategory(String name, String? description, String imageUrl, BuildContext context) async {
     _isLoading = true;
     notifyListeners();
 
@@ -253,8 +260,7 @@ class CategoryProvider with ChangeNotifier {
         builder: (context, close) {
           return fluent.InfoBar(
             title: const Text('Success!'),
-            content: const Text(
-                'The category has been added successfully. You can add another category or close the form.'),
+            content: const Text('The category has been added successfully. You can add another category or close the form.'),
             action: IconButton(
               icon: const Icon(fluent.FluentIcons.clear),
               onPressed: close,
@@ -287,8 +293,7 @@ class CategoryProvider with ChangeNotifier {
     return categoryModel;
   }
 
-  Future<bool> updateCategory(
-      CategoryModel category, BuildContext context) async {
+  Future<bool> updateCategory(CategoryModel category, BuildContext context) async {
     _isLoading = true;
     notifyListeners();
     bool isSuccess = false;
@@ -333,8 +338,7 @@ class CategoryProvider with ChangeNotifier {
         builder: (context, close) {
           return fluent.InfoBar(
             title: const Text('Success!'),
-            content: const Text(
-                'The category has been added successfully. You can add another category or close the form.'),
+            content: const Text('The category has been added successfully. You can add another category or close the form.'),
             action: IconButton(
               icon: const Icon(fluent.FluentIcons.clear),
               onPressed: close,
