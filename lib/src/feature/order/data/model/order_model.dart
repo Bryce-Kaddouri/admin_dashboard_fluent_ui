@@ -6,7 +6,7 @@ import '../../../customer/data/model/customer_model.dart';
 import '../../../status/data/model/status_model.dart';
 
 class OrderModel {
-  final int? id;
+  final int id;
   final DateTime createdAt;
   final DateTime updatedAt;
   final DateTime? cookingAt;
@@ -25,7 +25,7 @@ class OrderModel {
   final String orderNote;
 
   OrderModel({
-    this.id,
+    required this.id,
     required this.createdAt,
     required this.updatedAt,
     required this.date,
@@ -68,7 +68,7 @@ class OrderModel {
         minute: int.parse(json['order_time'].split(':')[1]),
       ),
       /*json['order_is_paid'],*/
-      customer: CustomerModel.fromJson(json['customer']),
+      customer: CustomerModel.fromJson(json['customer'], isFromTable: false),
       status: StatusModel.fromJson(json['status']),
       user: UserModel.fromJson(json['user']),
       cart: List<CartModel>.from(json['cart'].map((x) => CartModel.fromJson(x))),

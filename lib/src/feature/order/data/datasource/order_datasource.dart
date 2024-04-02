@@ -9,12 +9,20 @@ class OrderDataSource {
 
   Future<Either<DatabaseFailure, List<OrderModel>>> getOrdersByDate(DateTime date) async {
     try {
-      var response = await _client.from('all_orders_view').select().eq('order_date', date.toIso8601String()).order('order_time', ascending: true);
+      List<Map<String, dynamic>> response = [];
+      List<OrderModel> orderList = [];
+      if (date.isBefore(DateTime.now().copyWith(hour: 0, minute: 0, second: 0, millisecond: 0, microsecond: 0))) {
+        response = await _client.from('order_history').select().eq('order_date', date.toIso8601String());
+      } else {
+        response = await _client.from('all_orders_view').select().eq('order_date', date.toIso8601String());
+      }
       print('response from getOrders');
       print(response);
 
       if (response.isNotEmpty) {
-        List<OrderModel> orderList = response.map((e) => OrderModel.fromJson(e)).toList();
+        for (var element in response) {
+          orderList.add(OrderModel.fromJson(element));
+        }
         print('order list');
         print(orderList);
         return Right(orderList);
