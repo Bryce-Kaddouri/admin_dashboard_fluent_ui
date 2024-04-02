@@ -2,6 +2,7 @@ import 'package:admin_dashboard/src/feature/category/presentation/screen/categor
 import 'package:admin_dashboard/src/feature/category/presentation/screen/category_list_screen.dart';
 import 'package:admin_dashboard/src/feature/customer/presentation/screen/customer_add_screen.dart';
 import 'package:admin_dashboard/src/feature/customer/presentation/screen/customer_list_screen.dart';
+import 'package:admin_dashboard/src/feature/order/presentation/screen/order_screen.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/product_add_screen.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/product_list_screen.dart';
 import 'package:admin_dashboard/src/feature/setting/presentation/screen/setting_screen.dart';
@@ -17,16 +18,14 @@ class NewHomeScreen extends StatefulWidget {
   Widget child;
   int index;
 
-  NewHomeScreen({Key? key, required this.child, required this.index})
-      : super(key: key);
+  NewHomeScreen({Key? key, required this.child, required this.index}) : super(key: key);
 
   @override
   State<NewHomeScreen> createState() => _NewHomeScreenState();
 }
 
 // keep alive
-class _NewHomeScreenState extends State<NewHomeScreen>
-    with AutomaticKeepAliveClientMixin {
+class _NewHomeScreenState extends State<NewHomeScreen> with AutomaticKeepAliveClientMixin {
   PaneDisplayMode displayMode = PaneDisplayMode.open;
 
   String getTitleScreen(int index) {
@@ -81,9 +80,7 @@ class _NewHomeScreenState extends State<NewHomeScreen>
         title: Container(
           alignment: Alignment.centerRight,
           child: Container(
-            width: displayMode == PaneDisplayMode.open
-                ? MediaQuery.of(context).size.width - 340
-                : MediaQuery.of(context).size.width - 60,
+            width: displayMode == PaneDisplayMode.open ? MediaQuery.of(context).size.width - 340 : MediaQuery.of(context).size.width - 60,
             alignment: Alignment.center,
             child: Text(
               getTitleScreen(widget.index),
@@ -95,11 +92,7 @@ class _NewHomeScreenState extends State<NewHomeScreen>
       pane: NavigationPane(
         selected: widget.index,
         onChanged: (index) {
-          if (index != 1 &&
-              index != 4 &&
-              index != 7 &&
-              index != 11 &&
-              index != 14) {
+          if (index != 1 && index != 4 && index != 7 && index != 11 && index != 14) {
             print('index: $index');
           }
         },
@@ -130,8 +123,7 @@ class _NewHomeScreenState extends State<NewHomeScreen>
                   context.go('/category');
                 },
                 icon: const Icon(FluentIcons.list),
-                title: const Text('Category List',
-                    overflow: TextOverflow.ellipsis),
+                title: const Text('Category List', overflow: TextOverflow.ellipsis),
                 body: CategoryListScreen(),
               ),
               PaneItem(
@@ -139,8 +131,7 @@ class _NewHomeScreenState extends State<NewHomeScreen>
                   context.go('/category/add');
                 },
                 icon: const Icon(FluentIcons.add),
-                title:
-                    const Text('Add Category', overflow: TextOverflow.ellipsis),
+                title: const Text('Add Category', overflow: TextOverflow.ellipsis),
                 body: CategoryAddScreen(),
               ),
             ],
@@ -161,8 +152,7 @@ class _NewHomeScreenState extends State<NewHomeScreen>
                   context.go('/product');
                 },
                 icon: const Icon(FluentIcons.list),
-                title:
-                    const Text('Product List', overflow: TextOverflow.ellipsis),
+                title: const Text('Product List', overflow: TextOverflow.ellipsis),
                 body: ProductListScreen(),
               ),
               PaneItem(
@@ -170,8 +160,7 @@ class _NewHomeScreenState extends State<NewHomeScreen>
                   context.go('/product/add');
                 },
                 icon: const Icon(FluentIcons.add),
-                title:
-                    const Text('Add Product', overflow: TextOverflow.ellipsis),
+                title: const Text('Add Product', overflow: TextOverflow.ellipsis),
                 body: ProductAddScreen(),
               ),
             ],
@@ -192,8 +181,7 @@ class _NewHomeScreenState extends State<NewHomeScreen>
                   context.go('/track-orders');
                 },
                 icon: const Icon(FluentIcons.trackers),
-                title:
-                    const Text('Track orders', overflow: TextOverflow.ellipsis),
+                title: const Text('Track orders', overflow: TextOverflow.ellipsis),
                 infoBadge: const InfoBadge(source: Text('8')),
                 body: Container(
                   padding: const EdgeInsets.all(16.0),
@@ -204,16 +192,12 @@ class _NewHomeScreenState extends State<NewHomeScreen>
                 ),
               ),
               PaneItem(
+                onTap: () {
+                  context.go('/orders');
+                },
                 icon: const Icon(FluentIcons.issue_tracking),
-                title:
-                    const Text('Order List', overflow: TextOverflow.ellipsis),
-                body: Container(
-                  padding: const EdgeInsets.all(16.0),
-                  child: const Text(
-                    'Manage your category here',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ),
+                title: const Text('Order List', overflow: TextOverflow.ellipsis),
+                body: OrderScreen(),
               ),
               PaneItem(
                 icon: const Icon(FluentIcons.chart),
@@ -244,8 +228,7 @@ class _NewHomeScreenState extends State<NewHomeScreen>
                     context.go('/user');
                   },
                   icon: const Icon(FluentIcons.list),
-                  title:
-                      const Text('user List', overflow: TextOverflow.ellipsis),
+                  title: const Text('user List', overflow: TextOverflow.ellipsis),
                   body: UserListScreen()),
               PaneItem(
                 onTap: () {
@@ -273,16 +256,14 @@ class _NewHomeScreenState extends State<NewHomeScreen>
                     context.go('/customer');
                   },
                   icon: const Icon(FluentIcons.list),
-                  title: const Text('Customer List',
-                      overflow: TextOverflow.ellipsis),
+                  title: const Text('Customer List', overflow: TextOverflow.ellipsis),
                   body: CustomerListScreen()),
               PaneItem(
                 onTap: () {
                   context.go('/customer/add');
                 },
                 icon: const Icon(FluentIcons.add),
-                title: const Text('Customer User',
-                    overflow: TextOverflow.ellipsis),
+                title: const Text('Customer User', overflow: TextOverflow.ellipsis),
                 body: CustomerAddScreen(),
               ),
             ],
@@ -338,9 +319,7 @@ class _NewHomeScreenState extends State<NewHomeScreen>
             icon: Icon(FluentIcons.collapse_menu, size: 20),
             onPressed: () {
               setState(() {
-                displayMode = displayMode == PaneDisplayMode.open
-                    ? PaneDisplayMode.compact
-                    : PaneDisplayMode.open;
+                displayMode = displayMode == PaneDisplayMode.open ? PaneDisplayMode.compact : PaneDisplayMode.open;
               });
             },
           ),

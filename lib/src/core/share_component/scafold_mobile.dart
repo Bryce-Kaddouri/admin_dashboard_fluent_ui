@@ -147,6 +147,10 @@ class _ScaffoldMobileState extends fluent.State<ScaffoldMobile> {
                           selected: widget.selectedIndex == 6,
                         ),
                         fluent.ListTile.selectable(
+                          onPressed: () {
+                            context.go('/orders');
+                            Navigator.of(context).pop();
+                          },
                           title: Text('Order List'),
                           leading: Icon(fluent.FluentIcons.issue_tracking),
                           selected: widget.selectedIndex == 7,

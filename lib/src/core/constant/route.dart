@@ -19,6 +19,7 @@ import 'package:provider/provider.dart';
 import '../../feature/auth/presentation/provider/auth_provider.dart';
 import '../../feature/auth/presentation/screen/signin_screen.dart';
 import '../../feature/category/presentation/screen/update_category_screen.dart';
+import '../../feature/order/presentation/screen/order_screen.dart';
 import '../../feature/setting/presentation/screen/setting_screen.dart';
 import '../../feature/user/presentation/screen/user_update_screen.dart';
 import '../helper/responsive_helper.dart';
@@ -50,7 +51,7 @@ class RouterHelper {
     return GoRouter(
       navigatorKey: Get.key,
       redirect: (context, state) {
-         // check if user is logged in
+        // check if user is logged in
         // if not, redirect to login page
 
         print('state: ${state.matchedLocation}');
@@ -59,15 +60,38 @@ class RouterHelper {
         bool isLoggedIn = context.read<AuthProvider>().checkIsLoggedIn();
         print('isLoggedIn: $isLoggedIn');
 
-
         if (!isLoggedIn && state.uri.path != '/login') {
           return '/login';
         } else {
           return state.uri.path;
         }
       },
-      initialLocation: context.read<AuthProvider>().checkIsLoggedIn() ? '/': '/login',
+      initialLocation: context.read<AuthProvider>().checkIsLoggedIn() ? '/' : '/login',
       routes: [
+        /*GoRoute(
+          path: '/orders',
+          builder: (context, state) {
+            return const OrderScreen();
+          },
+          routes: [
+            GoRoute(
+              path: ':date/:id',
+              builder: (context, state) {
+                print(state.pathParameters);
+                if (state.pathParameters.isEmpty || state.pathParameters['id'] == null || state.pathParameters['date'] == null) {
+                  return ScaffoldPage(
+                      content: Center(
+                    child: Text('Loading...'),
+                  ));
+                } else {
+                  int orderId = int.parse(state.pathParameters['id']!);
+                  DateTime orderDate = DateTime.parse(state.pathParameters['date']!);
+                  return OrderDetailScreen(orderId: orderId, orderDate: orderDate);
+                }
+              },
+            ),
+          ],
+        ),*/
         ShellRoute(
             builder: (BuildContext context, GoRouterState state, Widget child) {
               print('state: ${state.path}');
@@ -90,6 +114,9 @@ class RouterHelper {
               } else if (state.matchedLocation == '/product/add') {
                 index = 6;
                 title = 'Add Product';
+              } else if (state.matchedLocation == '/orders') {
+                index = 9;
+                title = 'Orders';
               } else if (state.matchedLocation == '/user') {
                 index = 12;
                 title = 'User';
@@ -149,6 +176,32 @@ class RouterHelper {
                           return ProductAddScreen();
                         }),
                   ]),
+              GoRoute(
+                path: '/orders',
+                builder: (context, state) {
+                  return OrderScreen();
+                },
+                routes: [
+                  GoRoute(
+                    path: ':date/:id',
+                    builder: (context, state) {
+                      print(state.pathParameters);
+                      if (state.pathParameters.isEmpty || state.pathParameters['id'] == null || state.pathParameters['date'] == null) {
+                        return ScaffoldPage(
+                            content: Center(
+                          child: Text('Loading...'),
+                        ));
+                      } else {
+                        int orderId = int.parse(state.pathParameters['id']!);
+                        DateTime orderDate = DateTime.parse(state.pathParameters['date']!);
+                        return Container(
+                          child: Text('Order Detail: $orderId - $orderDate'),
+                        );
+                      }
+                    },
+                  ),
+                ],
+              ),
               GoRoute(
                   path: '/user',
                   builder: (context, state) {
@@ -257,8 +310,7 @@ class CustomRoute<T> extends material.MaterialPageRoute<T> {
         );
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation) {
+  Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
     return FadeTransition(
       opacity: animation,
       child: builder(context),
@@ -268,9 +320,7 @@ class CustomRoute<T> extends material.MaterialPageRoute<T> {
 
 // class to create a navigator class that with a fonction that take the destination root and a bool to know if we want to slide on the left or on the right
 class CustomNavigator {
-  static Future<T?> push<T extends Object?>(
-      BuildContext context, Widget destination,
-      {bool replace = false}) {
+  static Future<T?> push<T extends Object?>(BuildContext context, Widget destination, {bool replace = false}) {
     if (replace) {
       return Navigator.pushReplacement(
         context,
@@ -288,9 +338,7 @@ class CustomNavigator {
     }
   }
 
-  static Future<T?> pushAndRemoveUntil<T extends Object?>(
-      BuildContext context, Widget destination,
-      {required String destinationRoute}) {
+  static Future<T?> pushAndRemoveUntil<T extends Object?>(BuildContext context, Widget destination, {required String destinationRoute}) {
     return Navigator.pushAndRemoveUntil(
       context,
       CustomRoute(
@@ -300,9 +348,7 @@ class CustomNavigator {
     );
   }
 
-  static Future<T?> pushNamed<T extends Object?>(
-      BuildContext context, String destination,
-      {bool replace = false}) {
+  static Future<T?> pushNamed<T extends Object?>(BuildContext context, String destination, {bool replace = false}) {
     if (replace) {
       return Navigator.pushReplacementNamed(
         context,
@@ -316,9 +362,7 @@ class CustomNavigator {
     }
   }
 
-  static Future<T?> pushNamedAndRemoveUntil<T extends Object?>(
-      BuildContext context, String destination,
-      {required String destinationRoute}) {
+  static Future<T?> pushNamedAndRemoveUntil<T extends Object?>(BuildContext context, String destination, {required String destinationRoute}) {
     return Navigator.pushNamedAndRemoveUntil(
       context,
       destination,
