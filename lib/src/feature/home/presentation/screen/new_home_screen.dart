@@ -179,18 +179,13 @@ class _NewHomeScreenState extends State<NewHomeScreen> with AutomaticKeepAliveCl
             items: [
               PaneItem(
                 onTap: () {
-                  context.go('/track-orders');
+                  print('Track Orders');
+                  context.go('/orders/track');
                 },
-                icon: const Icon(FluentIcons.trackers),
-                title: const Text('Track orders', overflow: TextOverflow.ellipsis),
+                icon: const Icon(FluentIcons.report_alert),
+                title: const Text('Track Errors', overflow: TextOverflow.ellipsis),
                 infoBadge: const InfoBadge(source: Text('8')),
-                body: Container(
-                  padding: const EdgeInsets.all(16.0),
-                  child: const Text(
-                    'Track your orders here',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ),
+                body: Container(),
               ),
               PaneItem(
                 onTap: () {

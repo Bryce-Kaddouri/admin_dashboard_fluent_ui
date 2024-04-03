@@ -7,11 +7,18 @@ import 'package:flutter/material.dart' as material;
 import '../../data/model/stat_order_by_categ_model.dart';
 import '../widget/simple_char_bar_widget.dart';
 
-class StatScreen extends StatelessWidget {
+class StatScreen extends StatefulWidget {
   StatScreen({super.key});
 
+  @override
+  State<StatScreen> createState() => _StatScreenState();
+}
+
+class _StatScreenState extends State<StatScreen> {
   DateTime fromDate = DateTime.now().subtract(Duration(days: 30));
+
   DateTime toDate = DateTime.now();
+  String selectedFilter = 'count';
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +26,7 @@ class StatScreen extends StatelessWidget {
       child: Container(
         child: FutureBuilder(
           future: Future.wait([
-            StatDataSource().getOrdersStatByCustomer(),
+            StatDataSource().getOrdersStatByCustomer(selectedFilter),
             StatDataSource().getOrdersStatByCategory(fromDate, toDate),
           ]),
           builder: (context, snapshot) {
@@ -43,13 +50,49 @@ class StatScreen extends StatelessWidget {
                         child: Container(
                           padding: const EdgeInsets.all(16.0),
                           width: MediaQuery.of(context).orientation == Orientation.landscape ? MediaQuery.of(context).size.height - 100 : MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).orientation == Orientation.landscape ? MediaQuery.of(context).size.height - 100 : MediaQuery.of(context).size.width,
-                          child: SimpleBarChartWidget(
-                            statOrderByCustomerList: statOrderByCustomerList,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  children: [
+                                    Text('Top 10 customers'),
+                                  ],
+                                ),
+                              ),
+                              ComboBox<String>(
+                                value: selectedFilter,
+                                items: [
+                                  ComboBoxItem(
+                                    child: Text('Total orders'),
+                                    value: 'count',
+                                  ),
+                                  ComboBoxItem(
+                                    child: Text('Total amount'),
+                                    value: 'total_amount',
+                                  ),
+                                ],
+                                onChanged: (value) => setState(() {
+                                  selectedFilter = value!;
+                                }),
+                              ),
+                            ],
                           ),
                         ),
                       ),
                       SizedBox(height: 16.0),
+                      Acrylic(
+                        elevation: 4.0,
+                        child: Container(
+                          padding: const EdgeInsets.all(16.0),
+                          width: MediaQuery.of(context).orientation == Orientation.landscape ? MediaQuery.of(context).size.height - 100 : MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).orientation == Orientation.landscape ? MediaQuery.of(context).size.height - 100 : MediaQuery.of(context).size.width,
+                          child: SimpleBarChartWidget(
+                            isTotalAmount: selectedFilter == 'total_amount',
+                            statOrderByCustomerList: statOrderByCustomerList,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 100.0),
                       Acrylic(
                         elevation: 4.0,
                         child: Container(
@@ -69,10 +112,12 @@ class StatScreen extends StatelessWidget {
                                 icon: const Icon(FluentIcons.calendar),
                                 onPressed: () async {
                                   // range picker
-                                  material.showDateRangePicker(context: context, firstDate: fromDate, lastDate: toDate, initialDateRange: DateTimeRange(start: fromDate, end: toDate)).then((value) {
+                                  material.showDateRangePicker(context: context, firstDate: DateTime.now().subtract(Duration(days: 365)), lastDate: DateTime.now(), initialDateRange: DateTimeRange(start: fromDate, end: toDate)).then((value) {
                                     if (value != null) {
-                                      fromDate = value.start;
-                                      toDate = value.end;
+                                      setState(() {
+                                        fromDate = value.start;
+                                        toDate = value.end;
+                                      });
                                       print('fromDate: $fromDate');
                                       print('toDate: $toDate');
                                     }
@@ -83,6 +128,7 @@ class StatScreen extends StatelessWidget {
                           ),
                         ),
                       ),
+                      SizedBox(height: 16.0),
                       Acrylic(
                         elevation: 4.0,
                         child: Container(

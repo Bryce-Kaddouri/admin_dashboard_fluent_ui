@@ -118,6 +118,9 @@ class RouterHelper {
               } else if (state.matchedLocation == '/orders') {
                 index = 9;
                 title = 'Orders';
+              } else if (state.matchedLocation == '/orders/track') {
+                index = 8;
+                title = 'Track Error';
               } else if (state.matchedLocation == '/orders/chart') {
                 index = 10;
                 title = 'Orders Chart';
@@ -188,6 +191,12 @@ class RouterHelper {
                 routes: [
                   GoRoute(
                     path: 'chart',
+                    builder: (context, state) {
+                      return Container();
+                    },
+                  ),
+                  GoRoute(
+                    path: 'track',
                     builder: (context, state) {
                       return Container();
                     },

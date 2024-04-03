@@ -3,6 +3,7 @@ class StatOrderByCustomer {
   final int idCustomer;
   final String fNameCustomer;
   final String lNameCustomer;
+  final double amountTotal;
 
   final String phoneCustomer;
 
@@ -11,6 +12,7 @@ class StatOrderByCustomer {
     required this.idCustomer,
     required this.fNameCustomer,
     required this.lNameCustomer,
+    required this.amountTotal,
     required this.phoneCustomer,
   });
 
@@ -20,6 +22,7 @@ class StatOrderByCustomer {
       idCustomer: json['customer_id'],
       fNameCustomer: json['customer_f_name'],
       lNameCustomer: json['customer_l_name'],
+      amountTotal: json['total_amount'],
       phoneCustomer: json['customer_phone_number'],
     );
   }

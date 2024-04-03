@@ -36,7 +36,7 @@ class StatDataSource {
     }
   }
 
-  Future<List<StatOrderByCustomer>?> getOrdersStatByCustomer() async {
+  Future<List<StatOrderByCustomer>?> getOrdersStatByCustomer(String orderBy) async {
     /*dynamic response =
     await _client.from('orders_stat_by_customer').select().order('count', ascending: false);
     List<StatOrderByCustomer> statOrderByCustomerList = [];
@@ -49,7 +49,8 @@ class StatDataSource {
     return statOrderByCustomerList;*/
 
     try {
-      final response = await _client.from('orders_stat_by_customer').select().order('count', ascending: false);
+      final response = await _client.from('orders_stat_by_customer').select().order(orderBy, ascending: false).limit(10);
+      print(response);
 
       List<StatOrderByCustomer> statOrderByCustomerList = [];
       if (response.isNotEmpty) {
