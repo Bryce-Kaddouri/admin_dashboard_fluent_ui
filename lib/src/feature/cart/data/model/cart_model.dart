@@ -13,11 +13,11 @@ class CartModel {
     required this.product,
   });
 
-  factory CartModel.fromJson(Map<String, dynamic> json) => CartModel(
+  factory CartModel.fromJson(Map<String, dynamic> json, {bool isFromTable = true}) => CartModel(
         id: json['cart_id'],
         quantity: json['quantity'],
         isDone: json['is_done'],
-        product: ProductModel.fromJson(json['product_info']),
+        product: ProductModel.fromJson(json['product_info'], isFromTable: isFromTable),
       );
 
   Map<String, dynamic> toJson() => {

@@ -57,28 +57,40 @@ class OrderModel {
         json['cart']['cart_items'].cast<Map<String, dynamic>>();
 
 */
-
-    return OrderModel(
-      id: json['order_id'],
-      createdAt: DateTime.parse(json['order_created_at']),
-      updatedAt: DateTime.parse(json['order_updated_at']),
-      date: DateTime.parse(json['order_date']),
-      time: TimeOfDay(
-        hour: int.parse(json['order_time'].split(':')[0]),
-        minute: int.parse(json['order_time'].split(':')[1]),
-      ),
-      /*json['order_is_paid'],*/
-      customer: CustomerModel.fromJson(json['customer'], isFromTable: false),
-      status: StatusModel.fromJson(json['status']),
-      user: UserModel.fromJson(json['user']),
-      cart: List<CartModel>.from(json['cart'].map((x) => CartModel.fromJson(x))),
-      totalAmount: double.parse(json['total_amount'].toString()),
-      paidAmount: double.parse(json['order_amount_paid'].toString()),
-      orderNote: json['order_note'] ?? '',
-      cookingAt: json['order_cooking_date'] != null ? DateTime.parse(json['order_cooking_date']) : null,
-      readyAt: json['order_ready_date'] != null ? DateTime.parse(json['order_ready_date']) : null,
-      collectedAt: json['order_collected_date'] != null ? DateTime.parse(json['order_collected_date']) : null,
-    );
+    try {
+      CustomerModel customer = CustomerModel.fromJson(json['customer'], isFromTable: false);
+      StatusModel status = StatusModel.fromJson(json['status']);
+      UserModel user = UserModel.fromJson(json['user']);
+      List<CartModel> lstCart = [];
+      List<Map<String, dynamic>> jsonCart = json['cart'].cast<Map<String, dynamic>>();
+      for (var item in jsonCart) {
+        lstCart.add(CartModel.fromJson(item, isFromTable: false));
+      }
+      return OrderModel(
+        id: json['order_id'],
+        createdAt: DateTime.parse(json['order_created_at']),
+        updatedAt: DateTime.parse(json['order_updated_at']),
+        date: DateTime.parse(json['order_date']),
+        time: TimeOfDay(
+          hour: int.parse(json['order_time'].split(':')[0]),
+          minute: int.parse(json['order_time'].split(':')[1]),
+        ),
+        /*json['order_is_paid'],*/
+        customer: customer,
+        status: status,
+        user: user,
+        cart: [],
+        totalAmount: double.parse(json['total_amount'].toString()),
+        paidAmount: double.parse(json['order_amount_paid'].toString()),
+        orderNote: json['order_note'] ?? '',
+        cookingAt: json['order_cooking_date'] != null ? DateTime.parse(json['order_cooking_date']) : null,
+        readyAt: json['order_ready_date'] != null ? DateTime.parse(json['order_ready_date']) : null,
+        collectedAt: json['order_collected_date'] != null ? DateTime.parse(json['order_collected_date']) : null,
+      );
+    } catch (e) {
+      print(e);
+      throw Exception('Error parsing order model');
+    }
   }
 
   Map<String, dynamic> toJson() => {

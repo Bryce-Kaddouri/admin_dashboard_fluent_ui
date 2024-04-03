@@ -326,7 +326,6 @@ class _ProductUpdateFormState extends State<ProductUpdateForm> {
                       imageUrl: oldProduct.imageUrl != imageUrl ? imageUrl ?? oldProduct.imageUrl : oldProduct.imageUrl,
                       createdAt: oldProduct.createdAt,
                       updatedAt: DateTime.now(),
-                      isVisible: oldProduct.isVisible,
                       price: oldProduct.price != price ? price : oldProduct.price,
                       categoryId: oldProduct.categoryId != categoryId ? categoryId : oldProduct.categoryId,
                     );
@@ -340,7 +339,6 @@ class _ProductUpdateFormState extends State<ProductUpdateForm> {
                       imageUrl: oldProduct.imageUrl != imageUrl ? imageUrl ?? oldProduct.imageUrl : oldProduct.imageUrl,
                       createdAt: oldProduct.createdAt,
                       updatedAt: DateTime.now(),
-                      isVisible: oldProduct.isVisible,
                       price: oldProduct.price != price ? price : oldProduct.price,
                       categoryId: oldProduct.categoryId != categoryId ? categoryId : oldProduct.categoryId,
                     );

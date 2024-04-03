@@ -3,9 +3,8 @@ class ProductModel {
   final String name;
   final String? description;
   final String imageUrl;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final bool isVisible;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
   final double price;
   final int categoryId;
 
@@ -14,25 +13,34 @@ class ProductModel {
     required this.name,
     this.description,
     required this.imageUrl,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.isVisible,
+    this.createdAt,
+    this.updatedAt,
     required this.price,
     required this.categoryId,
   });
 
-  factory ProductModel.fromJson(Map<String, dynamic> json) {
-    return ProductModel(
-      id: json['id'],
-      name: json['name'],
-      description: json['description'],
-      imageUrl: json['photo_url'],
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
-      isVisible: json['is_visible'],
-      price: json['price'],
-      categoryId: json['category_id'],
-    );
+  factory ProductModel.fromJson(Map<String, dynamic> json, {bool isFromTable = true}) {
+    if (isFromTable) {
+      return ProductModel(
+        id: json['id'],
+        name: json['name'],
+        description: json['description'],
+        imageUrl: json['photo_url'],
+        createdAt: DateTime.parse(json['created_at']),
+        updatedAt: DateTime.parse(json['updated_at']),
+        price: json['price'],
+        categoryId: json['category_id'],
+      );
+    } else {
+      return ProductModel(
+        id: json['product_id'],
+        name: json['product_name'],
+        description: json['product_description'],
+        imageUrl: json['product_photo_url'],
+        price: json['product_price'],
+        categoryId: json['category_info']['category_id'],
+      );
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -41,9 +49,8 @@ class ProductModel {
       'name': name,
       'description': description,
       'photo_url': imageUrl,
-      'created_at': createdAt.toIso8601String(),
-      'updated_at': updatedAt.toIso8601String(),
-      'is_visible': isVisible,
+      'created_at': createdAt?.toIso8601String(),
+      'updated_at': updatedAt?.toIso8601String(),
       'price': price,
       'category_id': categoryId,
     };
@@ -67,7 +74,6 @@ class ProductModel {
       imageUrl: imageUrl ?? this.imageUrl,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
-      isVisible: isVisible ?? this.isVisible,
       price: price ?? this.price,
       categoryId: categoryId ?? this.categoryId,
     );

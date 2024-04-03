@@ -5,6 +5,7 @@ import 'package:admin_dashboard/src/feature/customer/presentation/screen/custome
 import 'package:admin_dashboard/src/feature/customer/presentation/screen/customer_list_screen.dart';
 import 'package:admin_dashboard/src/feature/customer/presentation/screen/update_customer_screen.dart';
 import 'package:admin_dashboard/src/feature/home/presentation/screen/new_home_screen.dart';
+import 'package:admin_dashboard/src/feature/order/presentation/screen/order_detail_screen.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/product_add_screen.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/product_list_screen.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/update_product_screen.dart';
@@ -117,6 +118,9 @@ class RouterHelper {
               } else if (state.matchedLocation == '/orders') {
                 index = 9;
                 title = 'Orders';
+              } else if (state.matchedLocation == '/orders/chart') {
+                index = 10;
+                title = 'Orders Chart';
               } else if (state.matchedLocation == '/user') {
                 index = 12;
                 title = 'User';
@@ -183,21 +187,9 @@ class RouterHelper {
                 },
                 routes: [
                   GoRoute(
-                    path: ':date/:id',
+                    path: 'chart',
                     builder: (context, state) {
-                      print(state.pathParameters);
-                      if (state.pathParameters.isEmpty || state.pathParameters['id'] == null || state.pathParameters['date'] == null) {
-                        return ScaffoldPage(
-                            content: Center(
-                          child: Text('Loading...'),
-                        ));
-                      } else {
-                        int orderId = int.parse(state.pathParameters['id']!);
-                        DateTime orderDate = DateTime.parse(state.pathParameters['date']!);
-                        return Container(
-                          child: Text('Order Detail: $orderId - $orderDate'),
-                        );
-                      }
+                      return Container();
                     },
                   ),
                 ],
@@ -261,6 +253,22 @@ class RouterHelper {
                 return UpdateProductScreen(productId: idInt);
               }
             }),
+        GoRoute(
+          path: '/orders/:date/:id',
+          builder: (context, state) {
+            print(state.pathParameters);
+            if (state.pathParameters.isEmpty || state.pathParameters['id'] == null || state.pathParameters['date'] == null) {
+              return ScaffoldPage(
+                  content: Center(
+                child: Text('Loading...'),
+              ));
+            } else {
+              int orderId = int.parse(state.pathParameters['id']!);
+              DateTime orderDate = DateTime.parse(state.pathParameters['date']!);
+              return OrderDetailScreen(orderId: orderId, orderDate: orderDate);
+            }
+          },
+        ),
         GoRoute(
             path: '/user/update/:id',
             builder: (context, state) {

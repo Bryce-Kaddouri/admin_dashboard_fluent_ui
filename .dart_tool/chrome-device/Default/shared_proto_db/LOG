@@ -1,8 +1,20 @@
-2024/04/02-16:59:19.564 f803 Reusing MANIFEST /private/var/folders/fm/gc1qxgp56b5f29_xml5kvbhr0000gp/T/flutter_tools.kuKo7l/flutter_tools_chrome_device.B9h2kK/Default/shared_proto_db/MANIFEST-000001
-2024/04/02-16:59:19.565 f803 Recovering log #16
-2024/04/02-16:59:19.566 f803 Reusing old log /private/var/folders/fm/gc1qxgp56b5f29_xml5kvbhr0000gp/T/flutter_tools.kuKo7l/flutter_tools_chrome_device.B9h2kK/Default/shared_proto_db/000016.log 
-2024/04/02-16:59:19.566 f803 Delete type=0 #13
-2024/04/02-16:59:19.566 f803 Delete type=0 #7
-2024/04/02-16:59:19.566 f803 Delete type=0 #4
-2024/04/02-16:59:19.566 f803 Delete type=0 #10
-2024/04/02-16:59:19.566 f803 Delete type=0 #3
+2024/04/03-12:21:45.541 f703 Reusing MANIFEST /private/var/folders/fm/gc1qxgp56b5f29_xml5kvbhr0000gp/T/flutter_tools.m9TOby/flutter_tools_chrome_device.HCPhf5/Default/shared_proto_db/MANIFEST-000001
+2024/04/03-12:21:45.543 f703 Recovering log #16
+2024/04/03-12:21:45.544 f703 Reusing old log /private/var/folders/fm/gc1qxgp56b5f29_xml5kvbhr0000gp/T/flutter_tools.m9TOby/flutter_tools_chrome_device.HCPhf5/Default/shared_proto_db/000016.log 
+2024/04/03-12:21:45.544 f703 Delete type=0 #13
+2024/04/03-12:21:45.544 f703 Delete type=0 #7
+2024/04/03-12:21:45.544 f703 Delete type=0 #4
+2024/04/03-12:21:45.544 f703 Delete type=0 #10
+2024/04/03-12:21:45.544 f703 Delete type=0 #3
+2024/04/03-12:21:56.362 a603 Level-0 table #20: started
+2024/04/03-12:21:56.371 a603 Level-0 table #20: 127046 bytes OK
+2024/04/03-12:21:56.377 a603 Delete type=0 #16
+2024/04/03-12:21:56.378 a603 Compacting 4@0 + 1@1 files
+2024/04/03-12:21:56.383 a603 Generated table #21@0: 1305 keys, 58900 bytes
+2024/04/03-12:21:56.383 a603 Compacted 4@0 + 1@1 files => 58900 bytes
+2024/04/03-12:21:56.387 a603 compacted to: files[ 0 1 1 0 0 0 0 ]
+2024/04/03-12:21:56.387 a603 Delete type=2 #14
+2024/04/03-12:21:56.387 a603 Delete type=2 #17
+2024/04/03-12:21:56.387 a603 Delete type=2 #11
+2024/04/03-12:21:56.387 a603 Delete type=2 #8
+2024/04/03-12:21:56.387 a603 Delete type=2 #20

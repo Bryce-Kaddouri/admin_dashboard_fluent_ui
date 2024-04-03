@@ -1,19 +1,19 @@
-class StatOrderByCategoryModel {
-  final int idCategory;
-  String nameCategory;
-  final double total_quantity;
+class StatOrderByDayModel {
+  final String day;
+  final int orderCount;
+  final double amountTotal;
 
-  StatOrderByCategoryModel({
-    required this.idCategory,
-    required this.nameCategory,
-    required this.total_quantity,
+  StatOrderByDayModel({
+    required this.day,
+    required this.orderCount,
+    required this.amountTotal,
   });
 
-  factory StatOrderByCategoryModel.fromJson(Map<String, dynamic> json) {
-    return StatOrderByCategoryModel(
-      idCategory: json['id'],
-      nameCategory: json['name'],
-      total_quantity: json['total_quantity'],
+  factory StatOrderByDayModel.fromJson(Map<String, dynamic> json) {
+    return StatOrderByDayModel(
+      day: json['week_day'],
+      orderCount: json['order_count'],
+      amountTotal: json['amount_total'],
     );
   }
 }

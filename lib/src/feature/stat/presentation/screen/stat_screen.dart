@@ -1,7 +1,8 @@
 import 'package:admin_dashboard/src/feature/stat/data/datasource/stat_datasource.dart';
 import 'package:admin_dashboard/src/feature/stat/data/model/stat_order_by_customer.dart';
 import 'package:admin_dashboard/src/feature/stat/presentation/widget/pie_chart_widget.dart';
-import 'package:flutter/material.dart';
+import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/material.dart' as material;
 
 import '../../data/model/stat_order_by_categ_model.dart';
 import '../widget/simple_char_bar_widget.dart';
@@ -14,52 +15,96 @@ class StatScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(child: Container(
-      child: FutureBuilder(
-        future: Future.wait([
-          StatDataSource().getOrdersStatByCustomer(),
-          StatDataSource().getOrdersStatByCategory(fromDate, toDate),
-        ]),
-        builder: (context, snapshot){
-          print('snapshot: $snapshot');
-          print(snapshot.data);
-          if(snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }else{
-            if(snapshot.hasData){
-              List<StatOrderByCustomer> statOrderByCustomerList = snapshot.data![0] as List<StatOrderByCustomer>;
-              List<StatOrderByCategoryModel> statOrderByCategoryModelList = snapshot.data![1] as List<StatOrderByCategoryModel>;
+    return SingleChildScrollView(
+      child: Container(
+        child: FutureBuilder(
+          future: Future.wait([
+            StatDataSource().getOrdersStatByCustomer(),
+            StatDataSource().getOrdersStatByCategory(fromDate, toDate),
+          ]),
+          builder: (context, snapshot) {
+            print('snapshot: $snapshot');
+            print(snapshot.data);
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: ProgressRing());
+            } else {
+              if (snapshot.hasData) {
+                List<StatOrderByCustomer> statOrderByCustomerList = snapshot.data![0] as List<StatOrderByCustomer>;
+                List<StatOrderByDayModel> statOrderByCategoryModelList = snapshot.data![1] as List<StatOrderByDayModel>;
 
-              print('statOrderByCustomerList: $statOrderByCustomerList');
-              print('statOrderByCategoryModelList: $statOrderByCategoryModelList');
-              return Container(
-                child:Column(
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      height: MediaQuery.of(context).size.height,
-                      child:SimpleBarChartWidget(
-                        statOrderByCustomerList: statOrderByCustomerList,
+                print('statOrderByCustomerList: $statOrderByCustomerList');
+                print('statOrderByCategoryModelList: $statOrderByCategoryModelList');
+                return Container(
+                  child: Column(
+                    children: [
+                      SizedBox(height: 16.0),
+                      Acrylic(
+                        elevation: 4.0,
+                        child: Container(
+                          padding: const EdgeInsets.all(16.0),
+                          width: MediaQuery.of(context).orientation == Orientation.landscape ? MediaQuery.of(context).size.height - 100 : MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).orientation == Orientation.landscape ? MediaQuery.of(context).size.height - 100 : MediaQuery.of(context).size.width,
+                          child: SimpleBarChartWidget(
+                            statOrderByCustomerList: statOrderByCustomerList,
+                          ),
+                        ),
                       ),
-                    ),
-                    Container(
-
-                      child:PieChartWidget(
-                        lstData: statOrderByCategoryModelList,
+                      SizedBox(height: 16.0),
+                      Acrylic(
+                        elevation: 4.0,
+                        child: Container(
+                          padding: const EdgeInsets.all(16.0),
+                          width: MediaQuery.of(context).orientation == Orientation.landscape ? MediaQuery.of(context).size.height - 100 : MediaQuery.of(context).size.width,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  children: [
+                                    Text('From: ${fromDate.toIso8601String()}'),
+                                    Text('To: ${toDate.toIso8601String()}'),
+                                  ],
+                                ),
+                              ),
+                              IconButton(
+                                icon: const Icon(FluentIcons.calendar),
+                                onPressed: () async {
+                                  // range picker
+                                  material.showDateRangePicker(context: context, firstDate: fromDate, lastDate: toDate, initialDateRange: DateTimeRange(start: fromDate, end: toDate)).then((value) {
+                                    if (value != null) {
+                                      fromDate = value.start;
+                                      toDate = value.end;
+                                      print('fromDate: $fromDate');
+                                      print('toDate: $toDate');
+                                    }
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            }else{
-              return const Center(child: Text('No data'));
+                      Acrylic(
+                        elevation: 4.0,
+                        child: Container(
+                          padding: const EdgeInsets.all(16.0),
+                          width: MediaQuery.of(context).orientation == Orientation.landscape ? MediaQuery.of(context).size.height - 100 : MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).orientation == Orientation.landscape ? MediaQuery.of(context).size.height - 100 : MediaQuery.of(context).size.width,
+                          child: PieChartWidget(
+                            lstData: statOrderByCategoryModelList,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 16.0),
+                    ],
+                  ),
+                );
+              } else {
+                return const Center(child: Text('No data'));
+              }
             }
-          }
-
-        },
+          },
+        ),
       ),
-    ),
     );
   }
 }
-

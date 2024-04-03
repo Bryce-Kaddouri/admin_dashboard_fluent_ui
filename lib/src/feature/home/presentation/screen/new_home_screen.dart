@@ -6,6 +6,7 @@ import 'package:admin_dashboard/src/feature/order/presentation/screen/order_scre
 import 'package:admin_dashboard/src/feature/product/presentation/screen/product_add_screen.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/product_list_screen.dart';
 import 'package:admin_dashboard/src/feature/setting/presentation/screen/setting_screen.dart';
+import 'package:admin_dashboard/src/feature/stat/presentation/screen/stat_screen.dart';
 import 'package:admin_dashboard/src/feature/user/presentation/screen/user_add_screen.dart';
 import 'package:admin_dashboard/src/feature/user/presentation/screen/user_list_screen.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -200,15 +201,12 @@ class _NewHomeScreenState extends State<NewHomeScreen> with AutomaticKeepAliveCl
                 body: OrderScreen(),
               ),
               PaneItem(
+                onTap: () {
+                  context.go('/orders/chart');
+                },
                 icon: const Icon(FluentIcons.chart),
                 title: const Text('Chart', overflow: TextOverflow.ellipsis),
-                body: Container(
-                  padding: const EdgeInsets.all(16.0),
-                  child: const Text(
-                    'Check your add here',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ),
+                body: StatScreen(),
               ),
             ],
           ),
