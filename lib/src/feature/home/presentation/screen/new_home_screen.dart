@@ -14,6 +14,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../auth/presentation/provider/auth_provider.dart';
+import '../../../track_issue/presentation/screen/track_issue_screen.dart';
 
 class NewHomeScreen extends StatefulWidget {
   Widget child;
@@ -185,7 +186,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> with AutomaticKeepAliveCl
                 icon: const Icon(FluentIcons.report_alert),
                 title: const Text('Track Errors', overflow: TextOverflow.ellipsis),
                 infoBadge: const InfoBadge(source: Text('8')),
-                body: Container(),
+                body: TrackIssueScreen(),
               ),
               PaneItem(
                 onTap: () {

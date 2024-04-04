@@ -46,6 +46,10 @@ import 'package:admin_dashboard/src/feature/product/data/datasource/product_data
 import 'package:admin_dashboard/src/feature/product/data/repository/product_repository_impl.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/provider/product_provider.dart';
 import 'package:admin_dashboard/src/feature/theme/presentation/provider/theme_provider.dart';
+import 'package:admin_dashboard/src/feature/track_issue/business/usecase/track_issue_get_all_track_issues_usecase.dart';
+import 'package:admin_dashboard/src/feature/track_issue/data/datasource/track_issue_datasource.dart';
+import 'package:admin_dashboard/src/feature/track_issue/data/repository/track_issue_repository_impl.dart';
+import 'package:admin_dashboard/src/feature/track_issue/presentation/provider/track_issue_provider.dart';
 import 'package:admin_dashboard/src/feature/user/business/repository/user_repository.dart';
 import 'package:admin_dashboard/src/feature/user/business/usecase/user_add_usecase.dart';
 import 'package:admin_dashboard/src/feature/user/business/usecase/user_delete_usecase.dart';
@@ -75,6 +79,7 @@ Future<void> main() async {
   ProductRepository productRepository = ProductRepositoryImpl(dataSource: ProductDataSource());
   UserRepository userRepository = UserRepositoryImpl(dataSource: UserDataSource());
   CustomerRepositoryImpl customerRepository = CustomerRepositoryImpl(dataSource: CustomerDataSource());
+  TrackIssueRepositoryImpl trackIssueRepository = TrackIssueRepositoryImpl(dataSource: TrackIssueDataSource());
 
   OrderRepositoryImpl orderRepository = OrderRepositoryImpl(
     orderDataSource: OrderDataSource(),
@@ -145,6 +150,11 @@ Future<void> main() async {
             orderGetOrdersByDateUseCase: OrderGetOrdersByDateUseCase(orderRepository: orderRepository),
             orderGetOrdersByCustomerIdUseCase: OrderGetOrdersByCustomerIdUseCase(orderRepository: orderRepository),
             orderGetOrdersByIdUseCase: OrderGetOrdersByIdUseCase(orderRepository: orderRepository),
+          ),
+        ),
+        ChangeNotifierProvider<TrackIssueProvider>(
+          create: (context) => TrackIssueProvider(
+            getAllTrackIssuesUsecase: TrackIssueGetAllTrackIssuesUsecase(repository: trackIssueRepository),
           ),
         ),
       ],
