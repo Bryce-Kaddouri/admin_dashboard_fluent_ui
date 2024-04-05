@@ -34,4 +34,13 @@ class TrackIssueModel {
         'resolution_status': resolutionStatus,
         'resolved_at': resolvedAt?.toIso8601String(),
       };
+
+  List<String> get props => [
+        'order_id',
+        'order_date',
+        'issue_type',
+        'reported_at',
+        'resolution_status',
+        'resolved_at',
+      ];
 }
