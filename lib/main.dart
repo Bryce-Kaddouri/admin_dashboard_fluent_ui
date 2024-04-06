@@ -47,6 +47,7 @@ import 'package:admin_dashboard/src/feature/product/data/repository/product_repo
 import 'package:admin_dashboard/src/feature/product/presentation/provider/product_provider.dart';
 import 'package:admin_dashboard/src/feature/theme/presentation/provider/theme_provider.dart';
 import 'package:admin_dashboard/src/feature/track_issue/business/usecase/track_issue_get_all_track_issues_usecase.dart';
+import 'package:admin_dashboard/src/feature/track_issue/business/usecase/track_issue_update_track_issue_usecase.dart';
 import 'package:admin_dashboard/src/feature/track_issue/data/datasource/track_issue_datasource.dart';
 import 'package:admin_dashboard/src/feature/track_issue/data/repository/track_issue_repository_impl.dart';
 import 'package:admin_dashboard/src/feature/track_issue/presentation/provider/track_issue_provider.dart';
@@ -61,25 +62,38 @@ import 'package:admin_dashboard/src/feature/user/data/repository/user_repository
 import 'package:admin_dashboard/src/feature/user/presentation/provider/user_provider.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
+/*
+import 'package:paged_datatable/l10n/generated/l10n.dart';
+*/
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
   await Supabase.initialize(
     url: 'https://qlhzemdpzbonyqdecfxn.supabase.co',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFsaHplbWRwemJvbnlxZGVjZnhuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDQ4ODY4MDYsImV4cCI6MjAyMDQ2MjgwNn0.lcUJMI3dvMDT7LaO7MiudIkdxAZOZwF_hNtkQtF3OC8',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFsaHplbWRwemJvbnlxZGVjZnhuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDQ4ODY4MDYsImV4cCI6MjAyMDQ2MjgwNn0.lcUJMI3dvMDT7LaO7MiudIkdxAZOZwF_hNtkQtF3OC8',
   );
 
-  final supabaseAdmin = SupabaseClient('https://qlhzemdpzbonyqdecfxn.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFsaHplbWRwemJvbnlxZGVjZnhuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDQ4ODY4MDYsImV4cCI6MjAyMDQ2MjgwNn0.lcUJMI3dvMDT7LaO7MiudIkdxAZOZwF_hNtkQtF3OC8');
+  final supabaseAdmin = SupabaseClient(
+      'https://qlhzemdpzbonyqdecfxn.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFsaHplbWRwemJvbnlxZGVjZnhuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDQ4ODY4MDYsImV4cCI6MjAyMDQ2MjgwNn0.lcUJMI3dvMDT7LaO7MiudIkdxAZOZwF_hNtkQtF3OC8');
   final supabaseClient = Supabase.instance;
-  AuthRepository authRepository = AuthRepositoryImpl(dataSource: AuthDataSource());
-  CategoryRepository categoryRepository = CategoryRepositoryImpl(dataSource: CategoryDataSource());
-  ProductRepository productRepository = ProductRepositoryImpl(dataSource: ProductDataSource());
-  UserRepository userRepository = UserRepositoryImpl(dataSource: UserDataSource());
-  CustomerRepositoryImpl customerRepository = CustomerRepositoryImpl(dataSource: CustomerDataSource());
-  TrackIssueRepositoryImpl trackIssueRepository = TrackIssueRepositoryImpl(dataSource: TrackIssueDataSource());
+  AuthRepository authRepository =
+      AuthRepositoryImpl(dataSource: AuthDataSource());
+  CategoryRepository categoryRepository =
+      CategoryRepositoryImpl(dataSource: CategoryDataSource());
+  ProductRepository productRepository =
+      ProductRepositoryImpl(dataSource: ProductDataSource());
+  UserRepository userRepository =
+      UserRepositoryImpl(dataSource: UserDataSource());
+  CustomerRepositoryImpl customerRepository =
+      CustomerRepositoryImpl(dataSource: CustomerDataSource());
+  TrackIssueRepositoryImpl trackIssueRepository =
+      TrackIssueRepositoryImpl(dataSource: TrackIssueDataSource());
 
   OrderRepositoryImpl orderRepository = OrderRepositoryImpl(
     orderDataSource: OrderDataSource(),
@@ -93,50 +107,77 @@ Future<void> main() async {
         ChangeNotifierProvider<AuthProvider>(
           create: (context) => AuthProvider(
             authLoginUseCase: AuthLoginUseCase(authRepository: authRepository),
-            authLogoutUseCase: AuthLogoutUseCase(authRepository: authRepository),
-            authGetUserUseCase: AuthGetUserUseCase(authRepository: authRepository),
-            authIsLoggedInUseCase: AuthIsLoggedInUseCase(authRepository: authRepository),
-            authOnAuthChangeUseCase: AuthOnAuthOnAuthChangeUseCase(authRepository: authRepository),
+            authLogoutUseCase:
+                AuthLogoutUseCase(authRepository: authRepository),
+            authGetUserUseCase:
+                AuthGetUserUseCase(authRepository: authRepository),
+            authIsLoggedInUseCase:
+                AuthIsLoggedInUseCase(authRepository: authRepository),
+            authOnAuthChangeUseCase:
+                AuthOnAuthOnAuthChangeUseCase(authRepository: authRepository),
           ),
         ),
         ChangeNotifierProvider<CategoryProvider>(
           create: (context) => CategoryProvider(
-            categoryAddUseCase: CategoryAddUseCase(categoryRepository: categoryRepository),
-            categoryGetCategoriesUseCase: CategoryGetCategoriesUseCase(categoryRepository: categoryRepository),
-            categoryGetCategoryByIdUseCase: CategoryGetCategoryByIdUseCase(categoryRepository: categoryRepository),
-            categoryUpdateCategoryUseCase: CategoryUpdateUseCase(categoryRepository: categoryRepository),
-            categoryUploadImageUseCase: CategoryUploadImageUseCase(categoryRepository: categoryRepository),
-            categoryGetSignedUrlUseCase: CategoryGetSignedUrlUseCase(categoryRepository: categoryRepository),
-            categoryDeleteUseCase: CategoryDeleteUseCase(categoryRepository: categoryRepository),
+            categoryAddUseCase:
+                CategoryAddUseCase(categoryRepository: categoryRepository),
+            categoryGetCategoriesUseCase: CategoryGetCategoriesUseCase(
+                categoryRepository: categoryRepository),
+            categoryGetCategoryByIdUseCase: CategoryGetCategoryByIdUseCase(
+                categoryRepository: categoryRepository),
+            categoryUpdateCategoryUseCase:
+                CategoryUpdateUseCase(categoryRepository: categoryRepository),
+            categoryUploadImageUseCase: CategoryUploadImageUseCase(
+                categoryRepository: categoryRepository),
+            categoryGetSignedUrlUseCase: CategoryGetSignedUrlUseCase(
+                categoryRepository: categoryRepository),
+            categoryDeleteUseCase:
+                CategoryDeleteUseCase(categoryRepository: categoryRepository),
           ),
         ),
         ChangeNotifierProvider<ProductProvider>(
           create: (context) => ProductProvider(
-            productAddUseCase: ProductAddUseCase(productRepository: productRepository),
-            productGetProductsUseCase: ProductGetProductsUseCase(productRepository: productRepository),
-            productGetProductByIdUseCase: ProductGetProductByIdUseCase(productRepository: productRepository),
-            productUpdateProductUseCase: ProductUpdateUseCase(productRepository: productRepository),
-            productUploadImageUseCase: ProductUploadImageUseCase(productRepository: productRepository),
-            productGetSignedUrlUseCase: ProductGetSignedUrlUseCase(productRepository: productRepository),
-            productDeleteUseCase: ProductDeleteUseCase(productRepository: productRepository),
+            productAddUseCase:
+                ProductAddUseCase(productRepository: productRepository),
+            productGetProductsUseCase:
+                ProductGetProductsUseCase(productRepository: productRepository),
+            productGetProductByIdUseCase: ProductGetProductByIdUseCase(
+                productRepository: productRepository),
+            productUpdateProductUseCase:
+                ProductUpdateUseCase(productRepository: productRepository),
+            productUploadImageUseCase:
+                ProductUploadImageUseCase(productRepository: productRepository),
+            productGetSignedUrlUseCase: ProductGetSignedUrlUseCase(
+                productRepository: productRepository),
+            productDeleteUseCase:
+                ProductDeleteUseCase(productRepository: productRepository),
           ),
         ),
         ChangeNotifierProvider<UserProvider>(
           create: (context) => UserProvider(
             userAddUseCase: UserAddUseCase(userRepository: userRepository),
-            userGetUsersUseCase: UserGetUsersUseCase(userRepository: userRepository),
-            userGetUserByIdUseCase: UserGetUserByIdUseCase(userRepository: userRepository),
-            userUpdateUserUseCase: UserUpdateUseCase(userRepository: userRepository),
-            userDeleteUseCase: UserDeleteUseCase(userRepository: userRepository),
+            userGetUsersUseCase:
+                UserGetUsersUseCase(userRepository: userRepository),
+            userGetUserByIdUseCase:
+                UserGetUserByIdUseCase(userRepository: userRepository),
+            userUpdateUserUseCase:
+                UserUpdateUseCase(userRepository: userRepository),
+            userDeleteUseCase:
+                UserDeleteUseCase(userRepository: userRepository),
           ),
         ),
         ChangeNotifierProvider<CustomerProvider>(
           create: (context) => CustomerProvider(
-            customerAddUseCase: CustomerAddUseCase(customerRepository: customerRepository),
-            customerUpdateUseCase: CustomerUpdateUseCase(customerRepository: customerRepository),
-            customerDeleteUseCase: CustomerDeleteUseCase(customerRepository: customerRepository),
-            customerGetCustomerByIdUseCase: CustomerGetCustomerByIdUseCase(customerRepository: customerRepository),
-            customerGetCustomersUseCase: CustomerGetCustomersUseCase(customerRepository: customerRepository),
+            customerAddUseCase:
+                CustomerAddUseCase(customerRepository: customerRepository),
+            customerUpdateUseCase:
+                CustomerUpdateUseCase(customerRepository: customerRepository),
+            customerDeleteUseCase:
+                CustomerDeleteUseCase(customerRepository: customerRepository),
+            customerGetCustomerByIdUseCase: CustomerGetCustomerByIdUseCase(
+                customerRepository: customerRepository),
+            customerGetCustomersUseCase: CustomerGetCustomersUseCase(
+                customerRepository: customerRepository),
           ),
         ),
         ChangeNotifierProvider<HomeProvider>(
@@ -147,14 +188,21 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider<OrderProvider>(
           create: (context) => OrderProvider(
-            orderGetOrdersByDateUseCase: OrderGetOrdersByDateUseCase(orderRepository: orderRepository),
-            orderGetOrdersByCustomerIdUseCase: OrderGetOrdersByCustomerIdUseCase(orderRepository: orderRepository),
-            orderGetOrdersByIdUseCase: OrderGetOrdersByIdUseCase(orderRepository: orderRepository),
+            orderGetOrdersByDateUseCase:
+                OrderGetOrdersByDateUseCase(orderRepository: orderRepository),
+            orderGetOrdersByCustomerIdUseCase:
+                OrderGetOrdersByCustomerIdUseCase(
+                    orderRepository: orderRepository),
+            orderGetOrdersByIdUseCase:
+                OrderGetOrdersByIdUseCase(orderRepository: orderRepository),
           ),
         ),
         ChangeNotifierProvider<TrackIssueProvider>(
           create: (context) => TrackIssueProvider(
-            getAllTrackIssuesUsecase: TrackIssueGetAllTrackIssuesUsecase(repository: trackIssueRepository),
+            getAllTrackIssuesUsecase: TrackIssueGetAllTrackIssuesUsecase(
+                repository: trackIssueRepository),
+            updateTrackIssueUsecase: TrackIssueUpdateTrackIssueUsecase(
+                repository: trackIssueRepository),
           ),
         ),
       ],
@@ -174,7 +222,8 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   GoRouter? router;
 
-  GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+  GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+      GlobalKey<ScaffoldMessengerState>();
 
   @override
   void initState() {
@@ -186,6 +235,16 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return FluentApp.router(
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+/*
+        PagedDataTableLocalization.delegate
+*/
+      ],
+      supportedLocales: const [Locale("es"), Locale("en")],
+      locale: const Locale("en"),
       theme: FluentThemeData.light(),
       darkTheme: FluentThemeData.dark(),
       themeMode: context.watch<ThemeProvider>().themeMode == 'system'

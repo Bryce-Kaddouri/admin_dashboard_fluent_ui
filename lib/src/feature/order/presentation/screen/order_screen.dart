@@ -1,6 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as material;
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/helper/date_helper.dart';
@@ -17,7 +16,8 @@ class OrderScreen extends StatefulWidget {
 }
 
 // keep alive mixin
-class _OrderScreenState extends State<OrderScreen> with AutomaticKeepAliveClientMixin {
+class _OrderScreenState extends State<OrderScreen>
+    with AutomaticKeepAliveClientMixin {
   ScrollController _mainScrollController = ScrollController();
   ScrollController _testController = ScrollController();
   List<DateTime> lstWeedDays = [];
@@ -26,7 +26,8 @@ class _OrderScreenState extends State<OrderScreen> with AutomaticKeepAliveClient
   void initState() {
     super.initState();
     setState(() {
-      lstWeedDays = DateHelper.getDaysInWeek(context.read<OrderProvider>().selectedDate);
+      lstWeedDays =
+          DateHelper.getDaysInWeek(context.read<OrderProvider>().selectedDate);
     });
   }
 
@@ -44,21 +45,25 @@ class _OrderScreenState extends State<OrderScreen> with AutomaticKeepAliveClient
   @override
   Widget build(BuildContext context) {
     return material.Scaffold(
-      backgroundColor: FluentTheme.of(context).navigationPaneTheme.backgroundColor,
+      backgroundColor:
+          FluentTheme.of(context).navigationPaneTheme.backgroundColor,
       appBar: material.AppBar(
         shadowColor: FluentTheme.of(context).shadowColor,
-        surfaceTintColor: FluentTheme.of(context).navigationPaneTheme.backgroundColor,
-        backgroundColor: FluentTheme.of(context).navigationPaneTheme.backgroundColor,
+        surfaceTintColor:
+            FluentTheme.of(context).navigationPaneTheme.backgroundColor,
+        backgroundColor:
+            FluentTheme.of(context).navigationPaneTheme.backgroundColor,
         elevation: 0,
-        leading: material.BackButton(
+        /* leading: material.BackButton(
           onPressed: () {
             context.go('/');
           },
-        ),
+        ),*/
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(DateHelper.getMonthNameAndYear(context.watch<OrderProvider>().selectedDate)),
+            Text(DateHelper.getMonthNameAndYear(
+                context.watch<OrderProvider>().selectedDate)),
           ],
         ),
         actions: [
@@ -120,7 +125,9 @@ class _OrderScreenState extends State<OrderScreen> with AutomaticKeepAliveClient
                     ),
                     elevation: 2,
                     child: Container(
-                      color: FluentTheme.of(context).navigationPaneTheme.backgroundColor,
+                      color: FluentTheme.of(context)
+                          .navigationPaneTheme
+                          .backgroundColor,
                       height: 70,
                       width: double.infinity,
                     ),
@@ -155,19 +162,24 @@ class _OrderScreenState extends State<OrderScreen> with AutomaticKeepAliveClient
           ),
         ),
         FutureBuilder(
-          future: context.read<OrderProvider>().getOrdersByDate(context.watch<OrderProvider>().selectedDate),
+          future: context
+              .read<OrderProvider>()
+              .getOrdersByDate(context.watch<OrderProvider>().selectedDate),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasData) {
                 List<Map<String, dynamic>> lstHourMap = [];
 
                 List<OrderModel> orderList = snapshot.data as List<OrderModel>;
-                List<int> lstHourDistinct = orderList.map((e) => e.time.hour).toSet().toList();
+                List<int> lstHourDistinct =
+                    orderList.map((e) => e.time.hour).toSet().toList();
                 print('order list length');
                 print(orderList.length);
 
                 for (var hour in lstHourDistinct) {
-                  List<OrderModel> orderListOfTheHour = orderList.where((element) => element.time.hour == hour).toList();
+                  List<OrderModel> orderListOfTheHour = orderList
+                      .where((element) => element.time.hour == hour)
+                      .toList();
 
                   Map<String, dynamic> map = {
                     'hour': hour,
@@ -296,7 +308,8 @@ class HorizontalSliverList extends StatelessWidget {
     );
   }
 
-  Widget addDivider() => divider ?? Padding(padding: const EdgeInsets.symmetric(horizontal: 8));
+  Widget addDivider() =>
+      divider ?? Padding(padding: const EdgeInsets.symmetric(horizontal: 8));
 }
 
 class HeaderDelegate extends SliverPersistentHeaderDelegate {
@@ -309,7 +322,8 @@ class HeaderDelegate extends SliverPersistentHeaderDelegate {
   });
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     return SizedBox.expand(child: child);
   }
 
@@ -349,7 +363,8 @@ class DateListWidget extends StatelessWidget {
             child: DateItemWidget(
               selectedDate: context.watch<OrderProvider>().selectedDate,
               dateItem: dateItem,
-              isToday: dateItem.day == context.watch<OrderProvider>().selectedDate.day,
+              isToday: dateItem.day ==
+                  context.watch<OrderProvider>().selectedDate.day,
             ),
           );
         },

@@ -1,9 +1,27 @@
+/*import 'package:darq/darq.dart';
+import 'package:faker/faker.dart';*/
+import 'dart:math';
+
+// import services for short cut
+
 import 'package:admin_dashboard/src/feature/track_issue/data/model/track_issue_model.dart';
 import 'package:admin_dashboard/src/feature/track_issue/presentation/provider/track_issue_provider.dart';
+/*
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/material.dart' as material;
+*/
+import 'package:flutter/material.dart' /*as material*/;
+import 'package:pluto_grid_plus/pluto_grid_plus.dart';
 import 'package:provider/provider.dart';
 
+/*
+import '../../dummy_data/development.dart';
+import '../../widget/pluto_example_button.dart';
+import '../../widget/pluto_example_screen.dart';
+*/
+
+/*
+import 'package:paged_datatable_example/post.dart';
+*/
 class TrackIssueScreen extends StatefulWidget {
   const TrackIssueScreen({super.key});
 
@@ -88,7 +106,7 @@ class _TrackIssueScreenState extends State<TrackIssueScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(
+        child: /*Column(
         children: [
           Card(
             padding: EdgeInsets.all(8),
@@ -99,10 +117,14 @@ class _TrackIssueScreenState extends State<TrackIssueScreen> {
             ),
           ),
           Expanded(
-              child: material.Card(
+              child:
+
+                  */ /*material.Card(
                   child: material.DataTable(
+                    
+                    
                       headingRowColor: material.MaterialStateProperty.resolveWith((states) => Color(0xFFE0E0E0)),
-                      /*onSelectAll: (b) {
+                      */ /* */ /*onSelectAll: (b) {
                         setState(() {
                           if (b!) {
                             currentIndex = lstIssue.map((e) => lstIssue.indexOf(e)).toList();
@@ -110,7 +132,7 @@ class _TrackIssueScreenState extends State<TrackIssueScreen> {
                             currentIndex = [];
                           }
                         });
-                      },*/
+                      },*/ /* */ /*
                       sortAscending: isAscending,
                       sortColumnIndex: sortColumnIndex,
                       showCheckboxColumn: true,
@@ -196,9 +218,11 @@ class _TrackIssueScreenState extends State<TrackIssueScreen> {
                               ],
                             ),
                           )
-                          .toList()))),
+                          .toList()))),*/ /*
 
-          /*CustomScrollView(
+                  
+
+          */ /*CustomScrollView(
               slivers: [
                 ...lstIssue
                     .map((e) {
@@ -237,9 +261,9 @@ class _TrackIssueScreenState extends State<TrackIssueScreen> {
                     .expand((element) => element)
                     .toList(),
               ],
-            ),*/
+            ),*/ /*
 
-          /*ListView.builder(
+          */ /*ListView.builder(
             itemCount: lstIssue.length,
             itemBuilder: (context, index) {
               List<TrackIssueModel> lstIssueTemp1 = lstIssue[index].lstIssues;
@@ -265,10 +289,12 @@ class _TrackIssueScreenState extends State<TrackIssueScreen> {
                 ],
               );
             },
-          )*/
+          )*/ /*
         ],
-      ),
-    );
+      ),*/
+            lstIssue.isNotEmpty
+                ? RowLazyPaginationScreen(lstIssue: lstIssue)
+                : Center(child: CircularProgressIndicator()));
   }
 }
 
@@ -277,4 +303,348 @@ class TrackIssueByDateModel {
   final List<TrackIssueModel> lstIssues;
 
   TrackIssueByDateModel({required this.date, required this.lstIssues});
+}
+
+/*Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // await initializeDateFormatting("en");
+
+  PostsRepository.generate(200);
+
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        PagedDataTableLocalization.delegate
+      ],
+      supportedLocales: const [Locale("es"), Locale("en")],
+      locale: const Locale("en"),
+      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+          colorScheme: const ColorScheme.light(
+              primary: Colors.deepPurple, secondary: Colors.teal),
+          textTheme: GoogleFonts.robotoTextTheme(),
+          cardTheme: CardTheme(
+            shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          ),
+          popupMenuTheme: PopupMenuThemeData(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30)))),
+      home: const MainView(),
+    );
+  }
+}*/
+
+class RowLazyPaginationScreen extends StatefulWidget {
+  static const routeName = 'feature/row-lazy-pagination';
+
+  final List<TrackIssueModel> lstIssue;
+
+  const RowLazyPaginationScreen({Key? key, required this.lstIssue})
+      : super(key: key);
+
+  @override
+  State<RowLazyPaginationScreen> createState() =>
+      _RowLazyPaginationScreenState();
+}
+
+class _RowLazyPaginationScreenState extends State<RowLazyPaginationScreen> {
+  late final PlutoGridStateManager stateManager;
+
+  final List<PlutoColumn> columns = [];
+
+  // Pass an empty row to the grid initially.
+  final List<PlutoRow> rows = [];
+
+  final List<PlutoRow> fakeFetchedRows = [];
+  DateTime? startDate;
+  DateTime? endDate;
+
+  @override
+  void initState() {
+    super.initState();
+
+    DateTime start = DateTime.now();
+    DateTime end = DateTime.now().add(Duration(days: 30));
+
+    widget.lstIssue.forEach((element) {
+      if (startDate == null || startDate!.isAfter(element.orderDate)) {
+        startDate = element.orderDate;
+      }
+      if (endDate == null || endDate!.isBefore(element.orderDate)) {
+        endDate = element.orderDate;
+      }
+    });
+
+    setState(() {
+      startDate = start;
+      endDate = end;
+    });
+
+    columns.addAll([
+      PlutoColumn(
+        enableEditingMode: false,
+        readOnly: true,
+        title: 'Order Id',
+        field: 'order_id',
+        type: PlutoColumnType.number(negative: false, format: '#'),
+        width: 100,
+        enableRowDrag: false,
+        enableRowChecked: false,
+      ),
+      PlutoColumn(
+        enableEditingMode: false,
+        readOnly: true,
+        title: 'Order Date',
+        field: 'order_date',
+        type: PlutoColumnType.date(
+          startDate: startDate,
+          endDate: endDate,
+        ),
+        width: 150,
+      ),
+      PlutoColumn(
+        enableEditingMode: false,
+        readOnly: true,
+        title: 'Issue Type',
+        field: 'issue_type',
+        type: PlutoColumnType.text(),
+        width: 150,
+      ),
+      PlutoColumn(
+        enableEditingMode: false,
+        readOnly: true,
+        title: 'Reported At',
+        field: 'reported_at',
+        type: PlutoColumnType.date(),
+        width: 150,
+      ),
+      PlutoColumn(
+        enableAutoEditing: true,
+        title: 'Status',
+        field: 'status',
+        type: PlutoColumnType.select(
+            ['Unresolved', 'In Progress', 'Resolved', 'Ignored']),
+        width: 150,
+      ),
+      PlutoColumn(
+/*
+        enableAutoEditing: false,
+*/
+        enableEditingMode: false,
+        readOnly: true,
+        title: 'Resolved At',
+        field: 'resolved_at',
+        // format :
+        type: PlutoColumnType.date(),
+        width: 150,
+      ),
+    ]);
+
+    // Instead of fetching data from the server,
+    // Create a fake row in advance.
+    fakeFetchedRows.addAll(
+      List.generate(
+        widget.lstIssue.length,
+        (index) => PlutoRow(
+          cells: {
+            'order_id': PlutoCell(value: widget.lstIssue[index].orderId),
+            'order_date': PlutoCell(value: widget.lstIssue[index].orderDate),
+            'issue_type': PlutoCell(
+                value: TrackIssueModel.getTypeString(
+                    widget.lstIssue[index].issueType)),
+            'reported_at': PlutoCell(value: widget.lstIssue[index].reportedAt),
+            'status': PlutoCell(
+                value: TrackIssueModel.getStatusString(
+                    widget.lstIssue[index].resolutionStatus)),
+            'resolved_at':
+                PlutoCell(value: widget.lstIssue[index].resolvedAt ?? '-'),
+          },
+        ),
+      ),
+    );
+  }
+
+  Future<PlutoLazyPaginationResponse> fetch(
+    PlutoLazyPaginationRequest request,
+  ) async {
+    List<PlutoRow> tempList = fakeFetchedRows;
+
+    // If you have a filtering state,
+    // you need to implement it so that the user gets data from the server
+    // according to the filtering state.
+    //
+    // request.page is 1 when the filtering state changes.
+    // This is because, when the filtering state is changed,
+    // the first page must be loaded with the new filtering applied.
+    //
+    // request.filterRows is a List<PlutoRow> type containing filtering information.
+    // To convert to Map type, you can do as follows.
+    //
+    // FilterHelper.convertRowsToMap(request.filterRows);
+    //
+    // When the filter of abc is applied as Contains type to column2
+    // and 123 as Contains type to column3, for example
+    // It is returned as below.
+    // {column2: [{Contains: 123}], column3: [{Contains: abc}]}
+    //
+    // If multiple filtering conditions are set in one column,
+    // multiple conditions are included as shown below.
+    // {column2: [{Contains: abc}, {Contains: 123}]}
+    //
+    // The filter type in FilterHelper.defaultFilters is the default,
+    // If there is user-defined filtering,
+    // the title set by the user is returned as the filtering type.
+    // All filtering can change the value returned as a filtering type by changing the name property.
+    // In case of PlutoFilterTypeContains filter, if you change the static type name to include
+    // PlutoFilterTypeContains.name = 'include';
+    // {column2: [{include: abc}, {include: 123}]} will be returned.
+    if (request.filterRows.isNotEmpty) {
+      final filter = FilterHelper.convertRowsToFilter(
+        request.filterRows,
+        stateManager.refColumns,
+      );
+
+      tempList = fakeFetchedRows.where(filter!).toList();
+    }
+
+    // If there is a sort state,
+    // you need to implement it so that the user gets data from the server
+    // according to the sort state.
+    //
+    // request.page is 1 when the sort state changes.
+    // This is because when the sort state changes,
+    // new data to which the sort state is applied must be loaded.
+    if (request.sortColumn != null && !request.sortColumn!.sort.isNone) {
+      tempList = [...tempList];
+
+      tempList.sort((a, b) {
+        final sortA = request.sortColumn!.sort.isAscending ? a : b;
+        final sortB = request.sortColumn!.sort.isAscending ? b : a;
+
+        return request.sortColumn!.type.compare(
+          sortA.cells[request.sortColumn!.field]!.valueForSorting,
+          sortB.cells[request.sortColumn!.field]!.valueForSorting,
+        );
+      });
+    }
+
+    final page = request.page;
+    const pageSize = 100;
+    final totalPage = (tempList.length / pageSize).ceil();
+    final start = (page - 1) * pageSize;
+    final end = start + pageSize;
+
+    Iterable<PlutoRow> fetchedRows = tempList.getRange(
+      max(0, start),
+      min(tempList.length, end),
+    );
+
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    return Future.value(PlutoLazyPaginationResponse(
+      totalPage: totalPage,
+      rows: fetchedRows.toList(),
+    ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: PlutoGrid(
+        rowColorCallback: (row) {
+          print(row.row.cells['status']!.value);
+          /*if (row.row.cells['status']!.value == 'Resolved') {
+            return Colors.green.shade100;
+          } else if (row.row.cells['status']!.value == 'In Progress') {
+            return Colors.yellow.shade100;
+          } else if (row.row.cells['status']!.value == 'Ignored') {
+            return Colors.grey.shade100;
+          }
+          return Colors.red.shade300;*/
+          switch (row.row.cells['status']!.value) {
+            case 'Resolved':
+              return Colors.green.shade100;
+            case 'In Progress':
+              return Colors.yellow.shade100;
+            case 'Ignored':
+              return Colors.grey.shade100;
+            case 'Unresolved':
+              return Colors.red.shade300;
+            default:
+              return Colors.transparent;
+          }
+        },
+        noRowsWidget: Center(
+          child: Text('No rows'),
+        ),
+        mode: PlutoGridMode.normal,
+        columns: columns,
+        rows: rows,
+        onLoaded: (PlutoGridOnLoadedEvent event) {
+          stateManager = event.stateManager;
+          stateManager.setShowColumnFilter(true);
+        },
+        onChanged: (PlutoGridOnChangedEvent event) async {
+          int orderId = event.row.cells['order_id']!.value;
+          print(orderId);
+          DateTime orderDate =
+              DateTime.parse(event.row.cells['order_date']!.value);
+          print(orderDate);
+
+          print(event.row.cells);
+
+          bool res = await context.read<TrackIssueProvider>().updateTrackIssue(
+              orderId,
+              orderDate,
+              TrackIssueModel.getStatusFromString(
+                  event.row.cells['status']!.value));
+
+          print(res);
+        },
+        configuration: PlutoGridConfiguration(
+          enableMoveDownAfterSelecting: true,
+        ),
+        createFooter: (stateManager) {
+          return PlutoLazyPagination(
+            // Determine the first page.
+            // Default is 1.
+            initialPage: 1,
+
+            // First call the fetch function to determine whether to load the page.
+            // Default is true.
+            initialFetch: true,
+
+            // Decide whether sorting will be handled by the server.
+            // If false, handle sorting on the client side.
+            // Default is true.
+            fetchWithSorting: true,
+
+            // Decide whether filtering is handled by the server.
+            // If false, handle filtering on the client side.
+            // Default is true.
+            fetchWithFiltering: true,
+
+            // Determines the page size to move to the previous and next page buttons.
+            // Default value is null. In this case,
+            // it moves as many as the number of page buttons visible on the screen.
+            pageSizeToMove: null,
+            fetch: fetch,
+            stateManager: stateManager,
+          );
+        },
+      ),
+    );
+  }
 }

@@ -9,6 +9,8 @@ import 'package:admin_dashboard/src/feature/order/presentation/screen/order_deta
 import 'package:admin_dashboard/src/feature/product/presentation/screen/product_add_screen.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/product_list_screen.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/update_product_screen.dart';
+import 'package:admin_dashboard/src/feature/stat/presentation/screen/stat_screen.dart';
+import 'package:admin_dashboard/src/feature/track_issue/presentation/screen/track_issue_screen.dart';
 import 'package:admin_dashboard/src/feature/user/presentation/screen/user_add_screen.dart';
 import 'package:admin_dashboard/src/feature/user/presentation/screen/user_list_screen.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -67,7 +69,8 @@ class RouterHelper {
           return state.uri.path;
         }
       },
-      initialLocation: context.read<AuthProvider>().checkIsLoggedIn() ? '/' : '/login',
+      initialLocation:
+          context.read<AuthProvider>().checkIsLoggedIn() ? '/' : '/login',
       routes: [
         /*GoRoute(
           path: '/orders',
@@ -192,13 +195,13 @@ class RouterHelper {
                   GoRoute(
                     path: 'chart',
                     builder: (context, state) {
-                      return Container();
+                      return StatScreen();
                     },
                   ),
                   GoRoute(
                     path: 'track',
                     builder: (context, state) {
-                      return Container();
+                      return TrackIssueScreen();
                     },
                   ),
                 ],
@@ -266,14 +269,17 @@ class RouterHelper {
           path: '/orders/:date/:id',
           builder: (context, state) {
             print(state.pathParameters);
-            if (state.pathParameters.isEmpty || state.pathParameters['id'] == null || state.pathParameters['date'] == null) {
+            if (state.pathParameters.isEmpty ||
+                state.pathParameters['id'] == null ||
+                state.pathParameters['date'] == null) {
               return ScaffoldPage(
                   content: Center(
                 child: Text('Loading...'),
               ));
             } else {
               int orderId = int.parse(state.pathParameters['id']!);
-              DateTime orderDate = DateTime.parse(state.pathParameters['date']!);
+              DateTime orderDate =
+                  DateTime.parse(state.pathParameters['date']!);
               return OrderDetailScreen(orderId: orderId, orderDate: orderDate);
             }
           },
@@ -327,7 +333,8 @@ class CustomRoute<T> extends material.MaterialPageRoute<T> {
         );
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+  Widget buildPage(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation) {
     return FadeTransition(
       opacity: animation,
       child: builder(context),
@@ -337,7 +344,9 @@ class CustomRoute<T> extends material.MaterialPageRoute<T> {
 
 // class to create a navigator class that with a fonction that take the destination root and a bool to know if we want to slide on the left or on the right
 class CustomNavigator {
-  static Future<T?> push<T extends Object?>(BuildContext context, Widget destination, {bool replace = false}) {
+  static Future<T?> push<T extends Object?>(
+      BuildContext context, Widget destination,
+      {bool replace = false}) {
     if (replace) {
       return Navigator.pushReplacement(
         context,
@@ -355,7 +364,9 @@ class CustomNavigator {
     }
   }
 
-  static Future<T?> pushAndRemoveUntil<T extends Object?>(BuildContext context, Widget destination, {required String destinationRoute}) {
+  static Future<T?> pushAndRemoveUntil<T extends Object?>(
+      BuildContext context, Widget destination,
+      {required String destinationRoute}) {
     return Navigator.pushAndRemoveUntil(
       context,
       CustomRoute(
@@ -365,7 +376,9 @@ class CustomNavigator {
     );
   }
 
-  static Future<T?> pushNamed<T extends Object?>(BuildContext context, String destination, {bool replace = false}) {
+  static Future<T?> pushNamed<T extends Object?>(
+      BuildContext context, String destination,
+      {bool replace = false}) {
     if (replace) {
       return Navigator.pushReplacementNamed(
         context,
@@ -379,7 +392,9 @@ class CustomNavigator {
     }
   }
 
-  static Future<T?> pushNamedAndRemoveUntil<T extends Object?>(BuildContext context, String destination, {required String destinationRoute}) {
+  static Future<T?> pushNamedAndRemoveUntil<T extends Object?>(
+      BuildContext context, String destination,
+      {required String destinationRoute}) {
     return Navigator.pushNamedAndRemoveUntil(
       context,
       destination,
