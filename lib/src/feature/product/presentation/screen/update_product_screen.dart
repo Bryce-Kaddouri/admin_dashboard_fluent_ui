@@ -316,6 +316,39 @@ class _ProductUpdateFormState extends State<ProductUpdateForm> {
                   double price = double.parse(priceController.text);
                   int categoryId = selectedObjectCategory!.id;
 
+                  bool? saveToHistory = false;
+
+                  // check if price have changed
+                  ProductModel? oldProduct = await context.read<ProductProvider>().getProductById(widget.id);
+                  if (oldProduct!.price != price) {
+                    saveToHistory = await showDialog<bool>(
+                        dismissWithEsc: false,
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (context) => ContentDialog(
+                              title: Text('Save Product'),
+                              content: Text('Do you want to save this product to history?'),
+                              actions: [
+                                FilledButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(true);
+                                  },
+                                  child: Text('Yes'),
+                                ),
+                                Button(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(false);
+                                  },
+                                  child: Text('No'),
+                                ),
+                              ],
+                            ));
+
+                    if (saveToHistory != true) {
+                      saveToHistory = false;
+                    }
+                  }
+
                   if (imageUrl != null) {
                     String? imageUrl = await context.read<ProductProvider>().uploadImage(image!);
                     ProductModel? oldProduct = await context.read<ProductProvider>().getProductById(widget.id);
@@ -329,7 +362,7 @@ class _ProductUpdateFormState extends State<ProductUpdateForm> {
                       price: oldProduct.price != price ? price : oldProduct.price,
                       categoryId: oldProduct.categoryId != categoryId ? categoryId : oldProduct.categoryId,
                     );
-                    bool res = await context.read<ProductProvider>().updateProduct(newProduct, context);
+                    bool res = await context.read<ProductProvider>().updateProduct(newProduct, saveToHistory!, context);
                   } else {
                     ProductModel? oldProduct = await context.read<ProductProvider>().getProductById(widget.id);
                     ProductModel newProduct = ProductModel(
@@ -342,7 +375,7 @@ class _ProductUpdateFormState extends State<ProductUpdateForm> {
                       price: oldProduct.price != price ? price : oldProduct.price,
                       categoryId: oldProduct.categoryId != categoryId ? categoryId : oldProduct.categoryId,
                     );
-                    bool res = await context.read<ProductProvider>().updateProduct(newProduct, context);
+                    bool res = await context.read<ProductProvider>().updateProduct(newProduct, saveToHistory!, context);
                   }
                   // reset form
                   /*  nameController.clear();

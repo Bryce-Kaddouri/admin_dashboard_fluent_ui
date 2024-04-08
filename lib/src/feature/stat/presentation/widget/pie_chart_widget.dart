@@ -1,6 +1,5 @@
 import 'package:admin_dashboard/src/feature/stat/data/model/stat_order_by_categ_model.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/material.dart';
 
 class AppColors {
@@ -141,7 +140,7 @@ class _PieChartWidgetState extends State<PieChartWidget> {
         child: Container(
           child: PieChart(
             PieChartData(
-              pieTouchData: PieTouchData(
+              /*pieTouchData: PieTouchData(
                 touchCallback: (FlTouchEvent event, pieTouchResponse) {
                   if (!event.isInterestedForInteractions || pieTouchResponse == null || pieTouchResponse.touchedSection == null) {
                     touchedIndex = -1;
@@ -198,7 +197,7 @@ class _PieChartWidgetState extends State<PieChartWidget> {
                     );
                   }
                 },
-              ),
+              ),*/
               borderData: FlBorderData(show: false),
               startDegreeOffset: 180,
               centerSpaceRadius: 0,

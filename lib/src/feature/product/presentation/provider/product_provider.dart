@@ -1,3 +1,4 @@
+import 'package:admin_dashboard/src/feature/product/business/param/update_product_param.dart';
 import 'package:admin_dashboard/src/feature/product/data/model/product_model.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/foundation.dart';
@@ -259,11 +260,15 @@ class ProductProvider with ChangeNotifier {
     return productModel;
   }
 
-  Future<bool> updateProduct(ProductModel product, BuildContext context) async {
+  Future<bool> updateProduct(ProductModel product, bool saveToHistory, BuildContext context) async {
     _isLoading = true;
     bool isSuccess = false;
     notifyListeners();
-    final result = await productUpdateProductUseCase.call(product);
+    UpdateProductParam param = UpdateProductParam(
+      productModel: product,
+      savePriceHistory: saveToHistory,
+    );
+    final result = await productUpdateProductUseCase.call(param);
 
     await result.fold((l) async {
       _addProductErrorMessage = l.errorMessage;
