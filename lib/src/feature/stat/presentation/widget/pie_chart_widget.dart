@@ -1,6 +1,6 @@
-import 'package:admin_dashboard/src/core/helper/price_helper.dart';
 import 'package:admin_dashboard/src/feature/stat/data/model/stat_order_by_categ_model.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/material.dart';
 
 class AppColors {
@@ -81,10 +81,14 @@ class PieChartWidget extends StatefulWidget {
 
 class _PieChartWidgetState extends State<PieChartWidget> {
   int touchedIndex = -1;
+  double total = 0;
 
   @override
   void initState() {
     super.initState();
+    setState(() {
+      total = widget.lstData.fold(0, (previousValue, element) => previousValue + element.amountTotal);
+    });
     print('lstData: ${this.widget.lstData}');
   }
 
@@ -111,70 +115,109 @@ class _PieChartWidgetState extends State<PieChartWidget> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    double squareSize = size.width - 100;
-    // check if the device is in landscape mode
-    if (MediaQuery.of(context).orientation == Orientation.landscape) {
-      // do something
-      print('landscape');
-      print('size: $size');
-      squareSize = size.height - 100;
-    }
-
-    return AspectRatio(
-      aspectRatio: 1.3,
-      child: Column(children: [
-        const SizedBox(
-          height: 28,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: List.generate(
-            widget.lstData.length,
-            (index) => Indicator(
-              color: getColor(widget.lstData[index].day),
-              text: '${widget.lstData[index].day} - ${widget.lstData[index].orderCount} Orders',
-              isSquare: true,
-              size: 16,
-              textColor: touchedIndex == index ? AppColors.contentColorWhite : AppColors.contentColorBlack,
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 18,
-        ),
-        Expanded(
-          child: AspectRatio(
-            aspectRatio: 1,
-            child: PieChart(
-              PieChartData(
-                pieTouchData: PieTouchData(
-                  touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                    setState(() {
-                      if (!event.isInterestedForInteractions || pieTouchResponse == null || pieTouchResponse.touchedSection == null) {
-                        touchedIndex = -1;
-                        return;
-                      }
-                      touchedIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
-                    });
-                  },
+    return Column(children: [
+      Container(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: List.generate(
+              widget.lstData.length,
+              (index) => Container(
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                child: Indicator(
+                  color: getColor(widget.lstData[index].day),
+                  text: '${widget.lstData[index].day} - ${widget.lstData[index].orderCount} Orders',
+                  isSquare: true,
+                  size: 16,
+                  textColor: touchedIndex == index ? AppColors.contentColorWhite : AppColors.contentColorBlack,
                 ),
-                startDegreeOffset: 180,
-                centerSpaceRadius: 0,
-                sections: List.generate(
-                    widget.lstData.length,
-                    (index) => PieChartSectionData(
-                          color: getColor(widget.lstData[index].day),
-                          value: widget.lstData[index].amountTotal.toDouble(),
-                          title: '${PriceHelper.getFormattedPrice(widget.lstData[index].amountTotal)}',
-                          radius: squareSize / 2.5,
-                          borderSide: touchedIndex == index ? const BorderSide(color: AppColors.contentColorWhite, width: 6) : BorderSide(width: 1, color: AppColors.contentColorWhite.withOpacity(0)),
-                        )),
               ),
             ),
           ),
         ),
-      ]),
-    );
+      ),
+      Expanded(
+        child: Container(
+          child: PieChart(
+            PieChartData(
+              pieTouchData: PieTouchData(
+                touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                  if (!event.isInterestedForInteractions || pieTouchResponse == null || pieTouchResponse.touchedSection == null) {
+                    touchedIndex = -1;
+                    return;
+                  } else {
+                    print('touchedIndex: ${pieTouchResponse.touchedSection!.touchedSectionIndex}');
+                    int index = pieTouchResponse.touchedSection!.touchedSectionIndex;
+                    StatOrderByDayModel data = widget.lstData[index];
+                    String day = data.day;
+
+                    fluent.showDialog<String>(
+                      context: context,
+                      barrierDismissible: true,
+                      builder: (context) => fluent.ContentDialog(
+                        style: const fluent.ContentDialogThemeData(
+                          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                          bodyPadding: EdgeInsets.all(16),
+                        ),
+                        constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width * 0.8,
+                          minWidth: 300,
+                        ),
+                        title: Container(
+                          child: Row(mainAxisSize: MainAxisSize.min, children: [
+                            fluent.Expanded(
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: Text(day),
+                              ),
+                            ),
+                            fluent.Button(
+                              style: fluent.ButtonStyle(
+                                padding: fluent.ButtonState.all(EdgeInsets.zero),
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Container(
+                                height: 30,
+                                width: 30,
+                                child: Icon(fluent.FluentIcons.chrome_close),
+                              ),
+                            ),
+                          ]),
+                        ),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text('Total Orders: ${data.orderCount}'),
+                            Text('Total Amount: ${data.amountTotal}'),
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+                },
+              ),
+              borderData: FlBorderData(show: false),
+              startDegreeOffset: 180,
+              centerSpaceRadius: 0,
+              sections: List.generate(widget.lstData.length, (index) {
+                double percentage = (widget.lstData[index].amountTotal / total) * 100;
+
+                print('percentage: $percentage');
+                return PieChartSectionData(
+                  color: getColor(widget.lstData[index].day),
+                  value: widget.lstData[index].amountTotal.toDouble(),
+                  title: '${percentage > 5 ? '${percentage.toStringAsFixed(0)}%' : ''}',
+                  radius: MediaQuery.of(context).size.width / 2.5,
+                  borderSide: touchedIndex == index ? const BorderSide(color: AppColors.contentColorWhite, width: 1) : BorderSide(width: 1, color: AppColors.contentColorWhite.withOpacity(0)),
+                );
+              }),
+            ),
+          ),
+        ),
+      )
+    ]);
   }
 }

@@ -52,6 +52,7 @@ class _TrackIssueScreenState extends State<TrackIssueScreen> {
   @override
   void initState() {
     super.initState();
+    print('initState');
     context.read<TrackIssueProvider>().getAllTrackIssues().then((value) {
       print('value');
       print(value);
@@ -292,9 +293,7 @@ class _TrackIssueScreenState extends State<TrackIssueScreen> {
           )*/ /*
         ],
       ),*/
-            lstIssue.isNotEmpty
-                ? RowLazyPaginationScreen(lstIssue: lstIssue)
-                : Center(child: CircularProgressIndicator()));
+            lstIssue.isNotEmpty ? RowLazyPaginationScreen(lstIssue: lstIssue) : Center(child: CircularProgressIndicator()));
   }
 }
 
@@ -351,12 +350,10 @@ class RowLazyPaginationScreen extends StatefulWidget {
 
   final List<TrackIssueModel> lstIssue;
 
-  const RowLazyPaginationScreen({Key? key, required this.lstIssue})
-      : super(key: key);
+  const RowLazyPaginationScreen({Key? key, required this.lstIssue}) : super(key: key);
 
   @override
-  State<RowLazyPaginationScreen> createState() =>
-      _RowLazyPaginationScreenState();
+  State<RowLazyPaginationScreen> createState() => _RowLazyPaginationScreenState();
 }
 
 class _RowLazyPaginationScreenState extends State<RowLazyPaginationScreen> {
@@ -434,8 +431,7 @@ class _RowLazyPaginationScreenState extends State<RowLazyPaginationScreen> {
         enableAutoEditing: true,
         title: 'Status',
         field: 'status',
-        type: PlutoColumnType.select(
-            ['Unresolved', 'In Progress', 'Resolved', 'Ignored']),
+        type: PlutoColumnType.select(['Unresolved', 'In Progress', 'Resolved', 'Ignored']),
         width: 150,
       ),
       PlutoColumn(
@@ -461,15 +457,10 @@ class _RowLazyPaginationScreenState extends State<RowLazyPaginationScreen> {
           cells: {
             'order_id': PlutoCell(value: widget.lstIssue[index].orderId),
             'order_date': PlutoCell(value: widget.lstIssue[index].orderDate),
-            'issue_type': PlutoCell(
-                value: TrackIssueModel.getTypeString(
-                    widget.lstIssue[index].issueType)),
+            'issue_type': PlutoCell(value: TrackIssueModel.getTypeString(widget.lstIssue[index].issueType)),
             'reported_at': PlutoCell(value: widget.lstIssue[index].reportedAt),
-            'status': PlutoCell(
-                value: TrackIssueModel.getStatusString(
-                    widget.lstIssue[index].resolutionStatus)),
-            'resolved_at':
-                PlutoCell(value: widget.lstIssue[index].resolvedAt ?? '-'),
+            'status': PlutoCell(value: TrackIssueModel.getStatusString(widget.lstIssue[index].resolutionStatus)),
+            'resolved_at': PlutoCell(value: widget.lstIssue[index].resolvedAt ?? '-'),
           },
         ),
       ),
@@ -599,17 +590,12 @@ class _RowLazyPaginationScreenState extends State<RowLazyPaginationScreen> {
         onChanged: (PlutoGridOnChangedEvent event) async {
           int orderId = event.row.cells['order_id']!.value;
           print(orderId);
-          DateTime orderDate =
-              DateTime.parse(event.row.cells['order_date']!.value);
+          DateTime orderDate = DateTime.parse(event.row.cells['order_date']!.value);
           print(orderDate);
 
           print(event.row.cells);
 
-          bool res = await context.read<TrackIssueProvider>().updateTrackIssue(
-              orderId,
-              orderDate,
-              TrackIssueModel.getStatusFromString(
-                  event.row.cells['status']!.value));
+          bool res = await context.read<TrackIssueProvider>().updateTrackIssue(orderId, orderDate, TrackIssueModel.getStatusFromString(event.row.cells['status']!.value));
 
           print(res);
         },

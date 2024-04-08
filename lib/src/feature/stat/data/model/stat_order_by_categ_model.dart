@@ -13,7 +13,7 @@ class StatOrderByDayModel {
     return StatOrderByDayModel(
       day: json['week_day'],
       orderCount: json['order_count'],
-      amountTotal: json['amount_total'],
+      amountTotal: double.parse(json['amount_total'].toString()),
     );
   }
 }

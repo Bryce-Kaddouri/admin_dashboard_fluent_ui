@@ -22,7 +22,7 @@ class StatOrderByCustomer {
       idCustomer: json['customer_id'],
       fNameCustomer: json['customer_f_name'],
       lNameCustomer: json['customer_l_name'],
-      amountTotal: json['total_amount'],
+      amountTotal: double.parse(json['total_amount'].toString()),
       phoneCustomer: json['customer_phone_number'],
     );
   }
