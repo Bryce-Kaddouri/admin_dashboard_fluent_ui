@@ -1,11 +1,14 @@
 /*import 'package:darq/darq.dart';
 import 'package:faker/faker.dart';*/
 import 'dart:math';
+import 'dart:ui';
 
 // import services for short cut
 
+import 'package:admin_dashboard/src/feature/theme/presentation/provider/theme_provider.dart';
 import 'package:admin_dashboard/src/feature/track_issue/data/model/track_issue_model.dart';
 import 'package:admin_dashboard/src/feature/track_issue/presentation/provider/track_issue_provider.dart';
+import 'package:fluent_ui/fluent_ui.dart' as fluent;
 /*
 import 'package:fluent_ui/fluent_ui.dart';
 */
@@ -293,7 +296,9 @@ class _TrackIssueScreenState extends State<TrackIssueScreen> {
           )*/ /*
         ],
       ),*/
-            lstIssue.isNotEmpty ? RowLazyPaginationScreen(lstIssue: lstIssue) : Center(child: CircularProgressIndicator()));
+            lstIssue.isNotEmpty
+                ? RowLazyPaginationScreen(lstIssue: lstIssue)
+                : Center(child: CircularProgressIndicator()));
   }
 }
 
@@ -350,10 +355,12 @@ class RowLazyPaginationScreen extends StatefulWidget {
 
   final List<TrackIssueModel> lstIssue;
 
-  const RowLazyPaginationScreen({Key? key, required this.lstIssue}) : super(key: key);
+  const RowLazyPaginationScreen({Key? key, required this.lstIssue})
+      : super(key: key);
 
   @override
-  State<RowLazyPaginationScreen> createState() => _RowLazyPaginationScreenState();
+  State<RowLazyPaginationScreen> createState() =>
+      _RowLazyPaginationScreenState();
 }
 
 class _RowLazyPaginationScreenState extends State<RowLazyPaginationScreen> {
@@ -389,65 +396,6 @@ class _RowLazyPaginationScreenState extends State<RowLazyPaginationScreen> {
       endDate = end;
     });
 
-    columns.addAll([
-      PlutoColumn(
-        enableEditingMode: false,
-        readOnly: true,
-        title: 'Order Id',
-        field: 'order_id',
-        type: PlutoColumnType.number(negative: false, format: '#'),
-        width: 100,
-        enableRowDrag: false,
-        enableRowChecked: false,
-      ),
-      PlutoColumn(
-        enableEditingMode: false,
-        readOnly: true,
-        title: 'Order Date',
-        field: 'order_date',
-        type: PlutoColumnType.date(
-          startDate: startDate,
-          endDate: endDate,
-        ),
-        width: 150,
-      ),
-      PlutoColumn(
-        enableEditingMode: false,
-        readOnly: true,
-        title: 'Issue Type',
-        field: 'issue_type',
-        type: PlutoColumnType.text(),
-        width: 150,
-      ),
-      PlutoColumn(
-        enableEditingMode: false,
-        readOnly: true,
-        title: 'Reported At',
-        field: 'reported_at',
-        type: PlutoColumnType.date(),
-        width: 150,
-      ),
-      PlutoColumn(
-        enableAutoEditing: true,
-        title: 'Status',
-        field: 'status',
-        type: PlutoColumnType.select(['Unresolved', 'In Progress', 'Resolved', 'Ignored']),
-        width: 150,
-      ),
-      PlutoColumn(
-/*
-        enableAutoEditing: false,
-*/
-        enableEditingMode: false,
-        readOnly: true,
-        title: 'Resolved At',
-        field: 'resolved_at',
-        // format :
-        type: PlutoColumnType.date(),
-        width: 150,
-      ),
-    ]);
-
     // Instead of fetching data from the server,
     // Create a fake row in advance.
     fakeFetchedRows.addAll(
@@ -457,10 +405,15 @@ class _RowLazyPaginationScreenState extends State<RowLazyPaginationScreen> {
           cells: {
             'order_id': PlutoCell(value: widget.lstIssue[index].orderId),
             'order_date': PlutoCell(value: widget.lstIssue[index].orderDate),
-            'issue_type': PlutoCell(value: TrackIssueModel.getTypeString(widget.lstIssue[index].issueType)),
+            'issue_type': PlutoCell(
+                value: TrackIssueModel.getTypeString(
+                    widget.lstIssue[index].issueType)),
             'reported_at': PlutoCell(value: widget.lstIssue[index].reportedAt),
-            'status': PlutoCell(value: TrackIssueModel.getStatusString(widget.lstIssue[index].resolutionStatus)),
-            'resolved_at': PlutoCell(value: widget.lstIssue[index].resolvedAt ?? '-'),
+            'status': PlutoCell(
+                value: TrackIssueModel.getStatusString(
+                    widget.lstIssue[index].resolutionStatus)),
+            'resolved_at':
+                PlutoCell(value: widget.lstIssue[index].resolvedAt ?? '-'),
           },
         ),
       ),
@@ -553,17 +506,18 @@ class _RowLazyPaginationScreenState extends State<RowLazyPaginationScreen> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: EdgeInsets.all(8),
       child: PlutoGrid(
-        rowColorCallback: (row) {
+        /*rowColorCallback: (row) {
           print(row.row.cells['status']!.value);
-          /*if (row.row.cells['status']!.value == 'Resolved') {
+          */ /*if (row.row.cells['status']!.value == 'Resolved') {
             return Colors.green.shade100;
           } else if (row.row.cells['status']!.value == 'In Progress') {
             return Colors.yellow.shade100;
           } else if (row.row.cells['status']!.value == 'Ignored') {
             return Colors.grey.shade100;
           }
-          return Colors.red.shade300;*/
+          return Colors.red.shade300;*/ /*
           switch (row.row.cells['status']!.value) {
             case 'Resolved':
               return Colors.green.shade100;
@@ -576,12 +530,137 @@ class _RowLazyPaginationScreenState extends State<RowLazyPaginationScreen> {
             default:
               return Colors.transparent;
           }
-        },
+        },*/
         noRowsWidget: Center(
           child: Text('No rows'),
         ),
         mode: PlutoGridMode.normal,
-        columns: columns,
+        columns: [
+          PlutoColumn(
+            enableEditingMode: false,
+            readOnly: true,
+            title: 'Order Id',
+            field: 'order_id',
+            type: PlutoColumnType.number(negative: false, format: '#'),
+            width: 100,
+            enableRowDrag: false,
+            enableRowChecked: false,
+          ),
+          PlutoColumn(
+            enableEditingMode: false,
+            readOnly: true,
+            title: 'Order Date',
+            field: 'order_date',
+            type: PlutoColumnType.date(
+              startDate: startDate,
+              endDate: endDate,
+            ),
+            width: 150,
+          ),
+          PlutoColumn(
+            enableEditingMode: false,
+            readOnly: true,
+            title: 'Issue Type',
+            field: 'issue_type',
+            type: PlutoColumnType.text(),
+            width: 150,
+          ),
+          PlutoColumn(
+            enableEditingMode: false,
+            readOnly: true,
+            title: 'Reported At',
+            field: 'reported_at',
+            type: PlutoColumnType.date(),
+            width: 150,
+          ),
+          PlutoColumn(
+            enableAutoEditing: true,
+            title: 'Status',
+            field: 'status',
+            renderer: (rendererContext) {
+              final value = rendererContext.row.cells['status']!.value;
+              return fluent.ComboBox<String>(
+                elevation: 0,
+                popupColor: fluent.FluentTheme.of(context)
+                    .navigationPaneTheme
+                    .backgroundColor!,
+                value: value,
+                onChanged: (value) {
+                  print(value);
+                },
+                style: fluent.FluentTheme.of(context).typography.body!,
+                focusColor: Colors.transparent,
+                items: [
+                  fluent.ComboBoxItem<String>(
+                    child: fluent.ListTile.selectable(
+                      title: Text('Unresolved'),
+                      selected: value == 'Unresolved',
+                    ),
+                    value: 'Unresolved',
+                  ),
+                  fluent.ComboBoxItem<String>(
+                    child: fluent.ListTile.selectable(
+                      title: Text('In Progress'),
+                      selected: value == 'In Progress',
+                    ),
+                    value: 'In Progress',
+                  ),
+                  fluent.ComboBoxItem<String>(
+                    child: fluent.ListTile.selectable(
+                      title: Text('Resolved'),
+                      selected: value == 'Resolved',
+                    ),
+                    value: 'Resolved',
+                  ),
+                  fluent.ComboBoxItem<String>(
+                    child: fluent.ListTile.selectable(
+                      title: Text('Ignored'),
+                      selected: value == 'Ignored',
+                    ),
+                    value: 'Ignored',
+                  ),
+                ],
+              );
+              /* switch (value) {
+                case 'Unresolved':
+                  return */ /*Text(value, style: TextStyle(color: Colors.red));*/ /*
+                      
+                case 'In Progress':
+                  return Text(value, style: TextStyle(color: Colors.yellow));
+                case 'Resolved':
+                  return Text(value, style: TextStyle(color: Colors.green));
+                case 'Ignored':
+                  return Text(value, style: TextStyle(color: Colors.grey));
+                default:
+                  return Text(value);
+              }*/
+            },
+            type: PlutoColumnType.text(),
+
+            /*PlutoColumnType.select(
+                ['Unresolved', 'In Progress', 'Resolved', 'Ignored'],
+                builder: (context) {
+              return Container(
+                height: 200,
+                width: 150,
+                color: Colors.white,
+              );
+            }),*/
+            width: 150,
+          ),
+          PlutoColumn(
+/*
+        enableAutoEditing: false,
+*/
+            enableEditingMode: false,
+            readOnly: true,
+            title: 'Resolved At',
+            field: 'resolved_at',
+            // format :
+            type: PlutoColumnType.date(),
+            width: 150,
+          ),
+        ],
         rows: rows,
         onLoaded: (PlutoGridOnLoadedEvent event) {
           stateManager = event.stateManager;
@@ -590,18 +669,76 @@ class _RowLazyPaginationScreenState extends State<RowLazyPaginationScreen> {
         onChanged: (PlutoGridOnChangedEvent event) async {
           int orderId = event.row.cells['order_id']!.value;
           print(orderId);
-          DateTime orderDate = DateTime.parse(event.row.cells['order_date']!.value);
+          DateTime orderDate =
+              DateTime.parse(event.row.cells['order_date']!.value);
           print(orderDate);
 
           print(event.row.cells);
 
-          bool res = await context.read<TrackIssueProvider>().updateTrackIssue(orderId, orderDate, TrackIssueModel.getStatusFromString(event.row.cells['status']!.value));
+          bool res = await context.read<TrackIssueProvider>().updateTrackIssue(
+              orderId,
+              orderDate,
+              TrackIssueModel.getStatusFromString(
+                  event.row.cells['status']!.value));
 
           print(res);
         },
-        configuration: PlutoGridConfiguration(
-          enableMoveDownAfterSelecting: true,
-        ),
+        configuration: context.watch<ThemeProvider>().themeMode == 'dark'
+            ? PlutoGridConfiguration.dark(
+                enableMoveHorizontalInEditing: true,
+                scrollbar: PlutoGridScrollbarConfig(
+                  isAlwaysShown: false,
+                  dragDevices: PointerDeviceKind.values.toSet(),
+                ),
+                enableMoveDownAfterSelecting: true,
+                style: PlutoGridStyleConfig.dark(
+                  oddRowColor: fluent.FluentTheme.of(context)
+                      .navigationPaneTheme
+                      .backgroundColor!,
+                  evenRowColor: fluent.FluentTheme.of(context)
+                      .navigationPaneTheme
+                      .overlayBackgroundColor!,
+                ),
+              )
+            : PlutoGridConfiguration(
+                enableMoveHorizontalInEditing: true,
+                scrollbar: PlutoGridScrollbarConfig(
+                  isAlwaysShown: false,
+                  dragDevices: PointerDeviceKind.values.toSet(),
+                ),
+                enableMoveDownAfterSelecting: true,
+                style: PlutoGridStyleConfig(
+                  oddRowColor: fluent.FluentTheme.of(context)
+                      .navigationPaneTheme
+                      .backgroundColor!,
+                  evenRowColor: fluent.FluentTheme.of(context)
+                      .navigationPaneTheme
+                      .overlayBackgroundColor!,
+                  iconColor: Colors.black,
+                  enableColumnBorderVertical: false,
+                  enableCellBorderVertical: false,
+                  enableRowColorAnimation: true,
+                  gridBackgroundColor: fluent.FluentTheme.of(context)
+                      .navigationPaneTheme
+                      .backgroundColor!,
+                  activatedColor: fluent.FluentTheme.of(context)
+                      .navigationPaneTheme
+                      .overlayBackgroundColor!,
+                  cellColorInEditState: fluent.FluentTheme.of(context)
+                      .navigationPaneTheme
+                      .overlayBackgroundColor!,
+                  menuBackgroundColor: fluent.FluentTheme.of(context)
+                      .navigationPaneTheme
+                      .backgroundColor!,
+                  gridBorderColor: Colors.transparent,
+                  columnTextStyle:
+                      fluent.FluentTheme.of(context).typography.body!,
+                  cellTextStyle:
+                      fluent.FluentTheme.of(context).typography.body!,
+                  filterHeaderColor:
+                      fluent.FluentTheme.of(context).typography.body!.color,
+                ),
+              ),
         createFooter: (stateManager) {
           return PlutoLazyPagination(
             // Determine the first page.

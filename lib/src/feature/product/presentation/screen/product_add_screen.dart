@@ -28,6 +28,10 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
   );
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController categoryController = TextEditingController();
+  final autoKey = GlobalKey<AutoSuggestBoxState>(
+    debugLabel: 'Manually controlled AutoSuggestBox',
+  );
+  final FocusNode focusNode = FocusNode();
 
   List<CategoryModel> lstCategory = [];
   CategoryModel? selectedObjectCategory;
@@ -39,6 +43,11 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
       setState(() {
         lstCategory = value ?? [];
       });
+    });
+    focusNode.addListener(() {
+      if (focusNode.hasFocus) {
+        autoKey.currentState?.showOverlay();
+      }
     });
   }
 
@@ -53,6 +62,52 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
           key: _formKey,
           child: Column(
             children: [
+              // auto suggest category
+              SizedBox(height: 50),
+
+              InfoLabel(
+                label: 'Select category:',
+                child: Container(
+                  alignment: Alignment.center,
+                  constraints: BoxConstraints(maxWidth: 500, minHeight: 50),
+                  child: AutoSuggestBox.form(
+                    focusNode: focusNode,
+                    key: autoKey,
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(
+                          errorText: 'Please select category'),
+                      // check if category is selected
+                      (value) {
+                        if (selectedObjectCategory == null) {
+                          return 'Please select category from the list';
+                        }
+                        return null;
+                      },
+                    ]),
+                    controller: categoryController,
+                    placeholder: 'Select Category',
+                    items: lstCategory
+                        .map<AutoSuggestBoxItem<CategoryModel>>(
+                          (cat) => AutoSuggestBoxItem<CategoryModel>(
+                            value: cat,
+                            label: cat.name,
+                            onFocusChange: (focused) {
+                              if (focused) {
+                                debugPrint('Focused #${cat.id} - ${cat.name}');
+                              }
+                            },
+                          ),
+                        )
+                        .toList(),
+                    onSelected: (item) {
+                      setState(() {
+                        selectedObjectCategory = item.value;
+                        categoryController.text = item.value!.id.toString();
+                      });
+                    },
+                  ),
+                ),
+              ),
               SizedBox(height: 50),
 
               InfoLabel(
@@ -114,7 +169,7 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
                 label: 'Enter product name:',
                 child: Container(
                   alignment: Alignment.center,
-                  constraints: BoxConstraints(maxWidth: 500, maxHeight: 50),
+                  constraints: BoxConstraints(maxWidth: 500, minHeight: 50),
                   child: TextFormBox(
                     controller: nameController,
                     placeholder: 'Name',
@@ -133,7 +188,7 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
                 label: 'Enter product price:',
                 child: Container(
                   alignment: Alignment.center,
-                  constraints: BoxConstraints(maxWidth: 500, maxHeight: 50),
+                  constraints: BoxConstraints(maxWidth: 500, minHeight: 50),
                   child: NumberFormBox<double>(
                     precision: 2,
                     value: double.parse(priceController.text),
@@ -163,7 +218,7 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
                 label: 'Enter product description:',
                 child: Container(
                   alignment: Alignment.center,
-                  constraints: BoxConstraints(maxWidth: 500, maxHeight: 50),
+                  constraints: BoxConstraints(maxWidth: 500, minHeight: 50),
                   child: TextFormBox(
                     controller: descriptionController,
                     placeholder: 'Description',
@@ -171,43 +226,6 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
                 ),
               ),
 
-              // auto suggest category
-              SizedBox(height: 50),
-
-              InfoLabel(
-                label: 'Select category:',
-                child: Container(
-                  alignment: Alignment.center,
-                  constraints: BoxConstraints(maxWidth: 500, maxHeight: 50),
-                  child: AutoSuggestBox.form(
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(
-                          errorText: 'Please select category'),
-                    ]),
-                    controller: categoryController,
-                    placeholder: 'Select Category',
-                    items: lstCategory
-                        .map<AutoSuggestBoxItem<CategoryModel>>(
-                          (cat) => AutoSuggestBoxItem<CategoryModel>(
-                            value: cat,
-                            label: cat.name,
-                            onFocusChange: (focused) {
-                              if (focused) {
-                                debugPrint('Focused #${cat.id} - ${cat.name}');
-                              }
-                            },
-                          ),
-                        )
-                        .toList(),
-                    onSelected: (item) {
-                      setState(() {
-                        selectedObjectCategory = item.value;
-                        categoryController.text = item.value!.id.toString();
-                      });
-                    },
-                  ),
-                ),
-              ),
               SizedBox(height: 100),
 
               FilledButton(
@@ -219,50 +237,52 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
                           height: 30,
                           child: Text('Add Product'),
                         ),
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      print('Form is valid');
-                      String name = nameController.text;
-                      String description = descriptionController.text;
-                      String? imageUrl;
-                      double price = double.parse(priceController.text);
-                      int categoryId = selectedObjectCategory!.id;
-                      if (image != null) {
-                        imageUrl = await context
-                            .read<ProductProvider>()
-                            .uploadImage(image!);
-                      }
-                      bool res = await context
-                          .read<ProductProvider>()
-                          .addProduct(name, description, imageUrl ?? '', price,
-                              categoryId, context);
-                      if (res) {
-                        // reset form
-                        nameController.clear();
-                        descriptionController.clear();
-                        priceController.text = '1.00';
-                        categoryController.clear();
-                        setState(() {
-                          image = null;
-                        });
-                      } else {
-                        await displayInfoBar(context,
-                            builder: (context, close) {
-                          return InfoBar(
-                            title: const Text('Title'),
-                            content: const Text(
-                              'Essential app message for your users to be informed of, '
-                              'acknowledge, or take action on.',
-                            ),
-                            severity: InfoBarSeverity.error,
-                            isLong: true,
-                          );
-                        });
-                      }
-                    } else {
-                      print('Form is invalid');
-                    }
-                  }),
+                  onPressed: context.watch<ProductProvider>().isLoading
+                      ? null
+                      : () async {
+                          if (_formKey.currentState!.validate()) {
+                            print('Form is valid');
+                            String name = nameController.text;
+                            String description = descriptionController.text;
+                            String? imageUrl;
+                            double price = double.parse(priceController.text);
+                            int categoryId = selectedObjectCategory!.id;
+                            if (image != null) {
+                              imageUrl = await context
+                                  .read<ProductProvider>()
+                                  .uploadImage(image!);
+                            }
+                            bool res = await context
+                                .read<ProductProvider>()
+                                .addProduct(name, description, imageUrl ?? '',
+                                    price, categoryId, context);
+                            if (res) {
+                              // reset form
+                              nameController.clear();
+                              descriptionController.clear();
+                              priceController.text = '1.00';
+                              categoryController.clear();
+                              setState(() {
+                                image = null;
+                              });
+                            } else {
+                              await displayInfoBar(context,
+                                  builder: (context, close) {
+                                return InfoBar(
+                                  title: const Text('Title'),
+                                  content: const Text(
+                                    'Essential app message for your users to be informed of, '
+                                    'acknowledge, or take action on.',
+                                  ),
+                                  severity: InfoBarSeverity.error,
+                                  isLong: true,
+                                );
+                              });
+                            }
+                          } else {
+                            print('Form is invalid');
+                          }
+                        }),
               SizedBox(height: 100),
             ],
           ),

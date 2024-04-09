@@ -1,5 +1,4 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -19,7 +18,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
     initialPage: 0,
   );
   int currentPage = 0;
-  int nbPages = 0;
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -31,118 +30,20 @@ class _ProductListScreenState extends State<ProductListScreen> {
         currentPage = pageController.page!.toInt();
       });
     });
+    searchController.addListener(() {
+      context.read<ProductProvider>().setSearchText(searchController.text);
+      Future.delayed(Duration(milliseconds: 300), () {
+        setState(() {
+          currentPage = pageController.page!.toInt();
+        });
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        /* Container(
-          height: 60,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Colors.grey[900],
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10),
-              topRight: Radius.circular(10),
-            ),
-            border: Border.all(
-              color: Colors.blueAccent,
-              width: 4,
-            ),
-          ),
-          child: Row(
-            children: [
-              SizedBox(width: 10),
-              Expanded(
-                child: FormBuilderTextField(
-                  name: 'sarch',
-                  controller: context.watch<ProductProvider>().searchController,
-                  onChanged: (value) {
-                    print('value: $value');
-                    context.read<ProductProvider>().setSearchText(value!);
-                  },
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.search),
-                    suffixIcon: InkWell(
-                      child: Icon(Icons.clear),
-                      onTap: () {
-                        context.read<ProductProvider>().setSearchText('');
-                        context.read<ProductProvider>().setTextController('');
-                      },
-                    ),
-                    contentPadding: EdgeInsets.all(10),
-                    constraints: BoxConstraints(
-                      maxHeight: 40,
-                    ),
-                    hintText: 'Search a product ...',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                ),
-              ),
-              SizedBox(width: 10),
-              Container(
-                width: 80,
-                height: 40,
-                child: FormBuilderDropdown(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      contentPadding: EdgeInsets.all(10),
-                      filled: true,
-                      fillColor: Colors.white,
-                    ),
-                    onChanged: (value) {
-                      print('value: $value');
-                      context.read<ProductProvider>().setNbItemPerPage(value!);
-                    },
-                    initialValue:
-                        context.watch<ProductProvider>().nbItemPerPage,
-                    name: 'item_per_page',
-                    items: [
-                      DropdownMenuItem(
-                        child: Text('10'),
-                        value: 10,
-                      ),
-                      DropdownMenuItem(
-                        child: Text('25'),
-                        value: 25,
-                      ),
-                      DropdownMenuItem(
-                        child: Text('50'),
-                        value: 50,
-                      ),
-                    ]),
-              ),
-              SizedBox(width: 10),
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.blueAccent,
-                ),
-                child: InkWell(
-                  child: Icon(Icons.add, color: Colors.white),
-                  onTap: () {
-                    */ /*print('add');
-                    context.read<ProductProvider>().setProductModel(null);
-
-                    widget.mainPageController.jumpToPage(7);*/ /*
-
-                    context.go('/product-add');
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),*/
-
         Card(
           padding: const EdgeInsets.all(5),
           child: Row(
@@ -153,60 +54,172 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   alignment: Alignment.center,
                   duration: const Duration(milliseconds: 300),
                   child: TextBox(
+                    controller: searchController,
                     onChanged: (value) {
                       context.read<ProductProvider>().setSearchText(value);
                     },
+                    suffixMode: OverlayVisibilityMode.editing,
+                    suffix: Button(
+                      style: ButtonStyle(
+                        elevation: ButtonState.all(0),
+                        padding: ButtonState.all(const EdgeInsets.all(4)),
+                      ),
+                      onPressed: () {
+                        context.read<ProductProvider>().setSearchText('');
+                        searchController.clear();
+                      },
+                      child: Container(
+                        height: 16,
+                        width: 16,
+                        child: Icon(FluentIcons.clear,
+                            color: FluentTheme.of(context)
+                                .typography
+                                .caption!
+                                .color),
+                      ),
+                    ),
                     prefixMode: OverlayVisibilityMode.always,
                     prefix: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: const Icon(
-                          FluentIcons.search,
-                          size: 20,
-                          color: Colors.black,
-                        )),
+                        child: Icon(FluentIcons.search,
+                            size: 20,
+                            color: FluentTheme.of(context)
+                                .typography
+                                .caption!
+                                .color)),
                     textAlignVertical: TextAlignVertical.center,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: FluentTheme.of(context)
+                          .navigationPaneTheme
+                          .backgroundColor,
                       borderRadius: const BorderRadius.all(Radius.circular(5)),
-                      border: Border.all(color: Colors.grey),
                     ),
                   ),
                 ),
               ),
-              // select between 10, 25, 50, 100 and 250
               DropDownButton(
                 title: Text(
                   context.watch<ProductProvider>().nbItemPerPage.toString(),
                 ),
                 items: [
                   MenuFlyoutItem(
+                      selected:
+                          context.watch<ProductProvider>().nbItemPerPage == 10,
+                      leading:
+                          context.watch<ProductProvider>().nbItemPerPage == 10
+                              ? Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Colors.blue,
+                                  ),
+                                  width: 4,
+                                  height: 16,
+                                )
+                              : null,
                       text: const Text('10'),
                       onPressed: () {
                         context.read<ProductProvider>().setNbItemPerPage(10);
+                        Future.delayed(Duration(milliseconds: 300), () {
+                          setState(() {
+                            currentPage = pageController.page!.toInt();
+                          });
+                        });
                       }),
                   MenuFlyoutSeparator(),
                   MenuFlyoutItem(
+                      selected:
+                          context.watch<ProductProvider>().nbItemPerPage == 25,
+                      leading:
+                          context.watch<ProductProvider>().nbItemPerPage == 25
+                              ? Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Colors.blue,
+                                  ),
+                                  width: 4,
+                                  height: 16,
+                                )
+                              : null,
                       text: const Text('25'),
                       onPressed: () {
                         context.read<ProductProvider>().setNbItemPerPage(25);
+                        Future.delayed(Duration(milliseconds: 300), () {
+                          setState(() {
+                            currentPage = pageController.page!.toInt();
+                          });
+                        });
                       }),
                   MenuFlyoutSeparator(),
                   MenuFlyoutItem(
+                      selected:
+                          context.watch<ProductProvider>().nbItemPerPage == 50,
+                      leading:
+                          context.watch<ProductProvider>().nbItemPerPage == 50
+                              ? Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Colors.blue,
+                                  ),
+                                  width: 4,
+                                  height: 16,
+                                )
+                              : null,
                       text: const Text('50'),
                       onPressed: () {
                         context.read<ProductProvider>().setNbItemPerPage(50);
+                        Future.delayed(Duration(milliseconds: 300), () {
+                          setState(() {
+                            currentPage = pageController.page!.toInt();
+                          });
+                        });
                       }),
                   MenuFlyoutSeparator(),
                   MenuFlyoutItem(
+                      selected:
+                          context.watch<ProductProvider>().nbItemPerPage == 100,
+                      leading:
+                          context.watch<ProductProvider>().nbItemPerPage == 100
+                              ? Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Colors.blue,
+                                  ),
+                                  width: 4,
+                                  height: 16,
+                                )
+                              : null,
                       text: const Text('100'),
                       onPressed: () {
                         context.read<ProductProvider>().setNbItemPerPage(100);
+                        Future.delayed(Duration(milliseconds: 300), () {
+                          setState(() {
+                            currentPage = pageController.page!.toInt();
+                          });
+                        });
                       }),
                   MenuFlyoutSeparator(),
                   MenuFlyoutItem(
+                      selected:
+                          context.watch<ProductProvider>().nbItemPerPage == 250,
+                      leading:
+                          context.watch<ProductProvider>().nbItemPerPage == 250
+                              ? Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Colors.blue,
+                                  ),
+                                  width: 4,
+                                  height: 16,
+                                )
+                              : null,
                       text: const Text('250'),
                       onPressed: () {
                         context.read<ProductProvider>().setNbItemPerPage(250);
+                        Future.delayed(Duration(milliseconds: 300), () {
+                          setState(() {
+                            currentPage = pageController.page!.toInt();
+                          });
+                        });
                       }),
                 ],
               ),
@@ -222,8 +235,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   foregroundColor: ButtonState.all(Colors.white),
                 ),
                 onPressed: () {
-                  // Your Logic to Add New `NavigationPaneItem`
-                  print('Search');
+                  context.go('/product/add');
                 },
                 child: const Icon(FluentIcons.add),
               ),
@@ -231,20 +243,21 @@ class _ProductListScreenState extends State<ProductListScreen> {
           ),
         ),
         Expanded(
-          child: StreamBuilder<List<Map<String, dynamic>>>(
+          child: StreamBuilder<List<ProductModel>>(
             stream: ProductDataSource().getProductByIdStream(),
             builder: (context, snapshot) {
               print('snapshot: ${snapshot.connectionState}');
               print('snapshot: ${snapshot.data}');
               if (snapshot.hasData) {
-                var categories = snapshot.data;
-                if (categories == null || categories.isEmpty) {
+                List<ProductModel> products =
+                    snapshot.data as List<ProductModel>;
+                if (products == null || products.isEmpty) {
                   return const Center(
                     child: Text('No data'),
                   );
                 }
-                categories = categories
-                    .where((element) => element['name']
+                products = products
+                    .where((element) => element.name
                         .toString()
                         .toLowerCase()
                         .contains(context
@@ -252,61 +265,63 @@ class _ProductListScreenState extends State<ProductListScreen> {
                             .searchText
                             .toLowerCase()))
                     .toList();
-                print('categories: ${categories.length}');
 
-                if (categories.isEmpty &&
+                if (products.isEmpty &&
                     context.watch<ProductProvider>().searchText.isNotEmpty) {
-                  return const Center(
-                    child: Text(
-                      'No data, try another search',
-                      style: TextStyle(color: Colors.white),
-                    ),
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(FluentIcons.search,
+                          size: 60,
+                          color: FluentTheme.of(context)
+                              .typography
+                              .caption!
+                              .color),
+                      SizedBox(height: 10),
+                      Text(
+                        'No data, try another search',
+                        style:
+                            FluentTheme.of(context).typography.body!.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                      ),
+                    ],
                   );
                 }
 
-                int nbPages = categories.length ~/
-                    context.watch<ProductProvider>().nbItemPerPage;
-                print('nbPages: $nbPages');
-                if (categories.length %
-                        context.watch<ProductProvider>().nbItemPerPage !=
-                    0) {
-                  nbPages++;
+                List<List<ProductModel>> productList = [];
+                for (int i = 0; i < products.length; i++) {
+                  if (productList.isEmpty) {
+                    productList.add([products[i]]);
+                  } else if (productList.last.length <
+                      context.watch<ProductProvider>().nbItemPerPage) {
+                    productList[
+                            (productList.length > 0 ? productList.length : 1) -
+                                1]
+                        .add(products[i]);
+                  } else {
+                    productList.add([products[i]]);
+                  }
                 }
-                // add post frame callback to avoid calling setState during build
 
                 return Column(
                   children: [
                     Expanded(
                       child: PageView.builder(
-                        itemCount: nbPages,
+                        itemCount: productList.length,
                         itemBuilder: (context, indexPage) {
                           return ListView.builder(
                             padding: const EdgeInsets.all(10),
                             shrinkWrap: true,
-                            itemCount:
-                                context.watch<ProductProvider>().nbItemPerPage,
+                            itemCount: productList[indexPage]
+                                .length, //products.length,
                             itemBuilder: (context, index) {
-                              int correctIndex = indexPage == 0
-                                  ? index
-                                  : (indexPage *
-                                          context
-                                              .watch<ProductProvider>()
-                                              .nbItemPerPage) +
-                                      index;
-                              if (correctIndex > categories!.length - 1) {
-                                return Container();
-                              }
-                              final product = ProductModel.fromJson(
-                                  categories![correctIndex]);
-                              print('index: $index');
-                              print('indexPage: $indexPage');
-                              print(
-                                  'correct index: ${indexPage == 0 ? index : (indexPage * context.watch<ProductProvider>().nbItemPerPage) + index}');
-                              print('-' * 50);
+                              ProductModel product =
+                                  productList[indexPage][index];
 
                               return Card(
                                 margin: const EdgeInsets.all(10),
-                                padding: const EdgeInsets.all(10),
+                                padding: const EdgeInsets.all(0),
                                 child: ListTile(
                                   leading: Container(
                                     height: 50,
@@ -318,11 +333,13 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                             alignment: Alignment.center,
                                             child: Text(
                                               '${product.id}',
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 20,
-                                              ),
+                                              style: FluentTheme.of(context)
+                                                  .typography
+                                                  .body!
+                                                  .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16),
                                             ),
                                           ),
                                         ),
@@ -387,9 +404,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                           foregroundColor:
                                               ButtonState.all(Colors.white),
                                         ),
-                                        onPressed: () {
+                                        onPressed: () async {
                                           print('delete');
-                                          Get.defaultDialog(
+                                          /*Get.defaultDialog(
                                             contentPadding: EdgeInsets.all(20),
                                             content: Column(
                                               children: [
@@ -427,105 +444,163 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                                 );
                                               }
                                             },
-                                          );
+                                          );*/
+                                          bool? confirmed = await showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return ContentDialog(
+                                                  title: Container(
+                                                    alignment: Alignment.center,
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        vertical: 10),
+                                                    child: Text(
+                                                      'Delete Product',
+                                                      style: FluentTheme.of(
+                                                              context)
+                                                          .typography
+                                                          .title!
+                                                          .copyWith(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                    ),
+                                                  ),
+                                                  content: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Icon(
+                                                        FluentIcons.delete,
+                                                        color: Colors.red,
+                                                        size: 60,
+                                                      ),
+                                                      SizedBox(height: 20),
+                                                      Text(
+                                                        'Are you sure to delete this Product?\n\nThe deletion of this category will delete all order associated with it.',
+                                                        style: FluentTheme.of(
+                                                                context)
+                                                            .typography
+                                                            .body!
+                                                            .copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal,
+                                                            ),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  actions: [
+                                                    FilledButton(
+                                                      onPressed: () async {
+                                                        bool res = await context
+                                                            .read<
+                                                                ProductProvider>()
+                                                            .deleteProduct(
+                                                                product.id);
+                                                        Navigator.of(context)
+                                                            .pop(true);
+                                                      },
+                                                      child: Text('Yes'),
+                                                    ),
+                                                    Button(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop(false);
+                                                      },
+                                                      child: Text('No'),
+                                                    ),
+                                                  ],
+                                                );
+                                              });
+                                          if (confirmed != null && confirmed) {
+                                            bool res = await context
+                                                .read<ProductProvider>()
+                                                .deleteProduct(product.id);
+                                            if (res) {
+                                              await displayInfoBar(
+                                                context,
+                                                builder: (context, close) {
+                                                  return InfoBar(
+                                                    title:
+                                                        const Text('Success'),
+                                                    content: Text(
+                                                        "Product deleted successfully"),
+                                                    severity:
+                                                        InfoBarSeverity.success,
+                                                    isLong: false,
+                                                    action: Button(
+                                                      style: ButtonStyle(
+                                                        padding:
+                                                            ButtonState.all(
+                                                                const EdgeInsets
+                                                                    .all(4.0)),
+                                                      ),
+                                                      onPressed: close,
+                                                      child: Container(
+                                                        height: 16,
+                                                        width: 16,
+                                                        child: Icon(
+                                                            FluentIcons.clear,
+                                                            color:
+                                                                FluentTheme.of(
+                                                                        context)
+                                                                    .typography
+                                                                    .caption!
+                                                                    .color),
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                alignment: Alignment.topRight,
+                                              );
+                                            } else {
+                                              await displayInfoBar(
+                                                context,
+                                                builder: (context, close) {
+                                                  return InfoBar(
+                                                    title: const Text('Error'),
+                                                    content: Container(
+                                                      child: Text(
+                                                          "Something went wrong"),
+                                                    ),
+                                                    severity:
+                                                        InfoBarSeverity.error,
+                                                    isLong: false,
+                                                    action: Button(
+                                                      style: ButtonStyle(
+                                                        padding:
+                                                            ButtonState.all(
+                                                                const EdgeInsets
+                                                                    .all(4.0)),
+                                                      ),
+                                                      onPressed: close,
+                                                      child: Container(
+                                                        height: 16,
+                                                        width: 16,
+                                                        child: Icon(
+                                                            FluentIcons.clear,
+                                                            color:
+                                                                FluentTheme.of(
+                                                                        context)
+                                                                    .typography
+                                                                    .caption!
+                                                                    .color),
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                alignment: Alignment.topRight,
+                                              );
+                                            }
+                                          }
                                         },
                                         child: const Icon(FluentIcons.delete),
                                       ),
                                     ],
                                   ),
-                                  /* trailing: Container(
-                                    height: 50,
-                                    width: 120,
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          width: 50,
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            color: Colors.blue,
-                                          ),
-                                          child: InkWell(
-                                            child: Icon(Icons.edit,
-                                                color: Colors.white),
-                                            onTap: () {
-                                              print('edit');
-                                              context.go('/product-update/${product.id}');
-                                              */ /*widget.mainPageController
-                                                  .jumpToPage(8);
-                                              context
-                                                  .read<ProductProvider>()
-                                                  .setProductModel(product);*/ /*
-                                            },
-                                          ),
-                                        ),
-                                        SizedBox(width: 10),
-                                        Container(
-                                          width: 50,
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            color: Colors.redAccent,
-                                          ),
-                                          child: InkWell(
-                                            child: Icon(Icons.delete,
-                                                color: Colors.white),
-                                            onTap: () {
-                                              print('delete');
-                                              print(
-                                                  'category id: ${product.id}');
-                                              Get.defaultDialog(
-                                                contentPadding:
-                                                    EdgeInsets.all(20),
-                                                content: Column(
-                                                  children: [
-                                                    Icon(
-                                                      Icons
-                                                          .delete_forever_rounded,
-                                                      color: Colors.redAccent,
-                                                      size: 100,
-                                                    ),
-                                                    Text(
-                                                        'Are you sure to delete this category? The deletion of this category will delete all products associated with it.'),
-                                                  ],
-                                                ),
-                                                title: 'Delete category',
-                                                textConfirm: 'Yes',
-                                                textCancel: 'No',
-                                                confirmTextColor: Colors.white,
-                                                onConfirm: () async {
-                                                  bool res = await context
-                                                      .read<ProductProvider>()
-                                                      .deleteProduct(
-                                                          product.id);
-                                                  Get.back();
-                                                  if (res) {
-                                                    Get.snackbar(
-                                                      'Success',
-                                                      'Category deleted successfully',
-                                                      backgroundColor:
-                                                          Colors.green,
-                                                      colorText: Colors.white,
-                                                    );
-                                                  } else {
-                                                    Get.snackbar(
-                                                      'Error',
-                                                      'An error occured while deleting category',
-                                                      backgroundColor:
-                                                          Colors.red,
-                                                      colorText: Colors.white,
-                                                    );
-                                                  }
-                                                },
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),*/
                                 ),
                               );
                             },
@@ -539,7 +614,11 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           IconButton(
-                            icon: Icon(FluentIcons.back, color: Colors.black),
+                            icon: Icon(FluentIcons.back,
+                                color: FluentTheme.of(context)
+                                    .typography
+                                    .subtitle!
+                                    .color),
                             onPressed: () {
                               pageController.previousPage(
                                   duration: Duration(milliseconds: 300),
@@ -549,26 +628,31 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           RichText(
                             text: TextSpan(
                               text: '${currentPage + 1}',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
+                              style: FluentTheme.of(context)
+                                  .typography
+                                  .subtitle!
+                                  .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                               children: [
                                 TextSpan(
-                                  text: '/$nbPages',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 20,
-                                  ),
+                                  text: '/${productList.length}',
+                                  style: FluentTheme.of(context)
+                                      .typography
+                                      .subtitle!
+                                      .copyWith(
+                                        fontWeight: FontWeight.normal,
+                                      ),
                                 ),
                               ],
                             ),
                           ),
                           IconButton(
-                            icon:
-                                Icon(FluentIcons.forward, color: Colors.black),
+                            icon: Icon(FluentIcons.forward,
+                                color: FluentTheme.of(context)
+                                    .typography
+                                    .subtitle!
+                                    .color),
                             onPressed: () {
                               pageController.nextPage(
                                   duration: Duration(milliseconds: 300),
@@ -578,64 +662,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         ],
                       ),
                     ),
-                    /* Container(
-                      height: 60,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[900],
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10),
-                        ),
-                        border: Border.all(
-                          color: Colors.blueAccent,
-                          width: 4,
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            icon:
-                                Icon(Icons.arrow_back_ios, color: Colors.white),
-                            onPressed: () {
-                              pageController.previousPage(
-                                  duration: Duration(milliseconds: 300),
-                                  curve: Curves.easeIn);
-                            },
-                          ),
-                          RichText(
-                            text: TextSpan(
-                              text: '${currentPage + 1}',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
-                              children: [
-                                TextSpan(
-                                  text: '/$nbPages',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.arrow_forward_ios,
-                                color: Colors.white),
-                            onPressed: () {
-                              pageController.nextPage(
-                                  duration: Duration(milliseconds: 300),
-                                  curve: Curves.easeIn);
-                            },
-                          ),
-                        ],
-                      ),
-                    ),*/
                   ],
                 );
               }
