@@ -1,7 +1,6 @@
 import 'package:admin_dashboard/src/feature/category/presentation/category_provider/category_provider.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 // add catgeory screen
@@ -34,7 +33,7 @@ class _CategoryAddScreenState extends State<CategoryAddScreen> {
             key: _formKey,
             child: Column(
               children: [
-                FormField<Uint8List>(
+                /*FormField<Uint8List>(
                     initialValue: image,
                     validator: (value) {
                       if (value == null) {
@@ -76,9 +75,7 @@ class _CategoryAddScreenState extends State<CategoryAddScreen> {
                           SizedBox(height: 10),
                           FilledButton(
                             onPressed: () async {
-                              XFile? result = await context
-                                  .read<CategoryProvider>()
-                                  .pickImage();
+                              XFile? result = await context.read<CategoryProvider>().pickImage();
                               if (result != null) {
                                 Uint8List bytes = await result.readAsBytes();
                                 setState(() {
@@ -90,14 +87,12 @@ class _CategoryAddScreenState extends State<CategoryAddScreen> {
                               alignment: Alignment.center,
                               width: 200,
                               height: 30,
-                              child: Text(image != null
-                                  ? 'Change Image'
-                                  : 'Pick Image'),
+                              child: Text(image != null ? 'Change Image' : 'Pick Image'),
                             ),
                           ),
                         ],
                       );
-                    }),
+                    }),*/
                 SizedBox(height: 50),
                 InfoLabel(
                   label: 'Enter category name:',
@@ -132,13 +127,7 @@ class _CategoryAddScreenState extends State<CategoryAddScreen> {
                 ),
                 const SizedBox(height: 100),
                 FilledButton(
-                    child: context.watch<CategoryProvider>().isLoading
-                        ? const ProgressRing()
-                        : Container(
-                            alignment: Alignment.center,
-                            width: 200,
-                            height: 30,
-                            child: const Text('Add Category')),
+                    child: context.watch<CategoryProvider>().isLoading ? const ProgressRing() : Container(alignment: Alignment.center, width: 200, height: 30, child: const Text('Add Category')),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         print('add category');
@@ -146,14 +135,9 @@ class _CategoryAddScreenState extends State<CategoryAddScreen> {
                         String description = descriptionController.text;
                         // upload image
                         if (image != null) {
-                          String? imageUrl = await context
-                              .read<CategoryProvider>()
-                              .uploadImage(image!);
+                          String? imageUrl = await context.read<CategoryProvider>().uploadImage(image!);
                           if (imageUrl != null) {
-                            bool res = await context
-                                .read<CategoryProvider>()
-                                .addCategory(
-                                    name, description, imageUrl, context);
+                            bool res = await context.read<CategoryProvider>().addCategory(name, description, imageUrl, context);
                             if (res) {
                               nameController.clear();
                               descriptionController.clear();
@@ -163,9 +147,7 @@ class _CategoryAddScreenState extends State<CategoryAddScreen> {
                             }
                           }
                         } else {
-                          bool res = await context
-                              .read<CategoryProvider>()
-                              .addCategory(name, description, '', context);
+                          bool res = await context.read<CategoryProvider>().addCategory(name, description, '', context);
                           if (res) {
                             nameController.clear();
                             descriptionController.clear();
