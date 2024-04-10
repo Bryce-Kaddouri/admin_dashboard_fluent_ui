@@ -79,6 +79,7 @@ class OrdersItemViewByStatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      padding: EdgeInsets.zero,
       margin: const EdgeInsets.symmetric(vertical: 5),
 /*
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
@@ -96,39 +97,41 @@ class OrdersItemViewByStatus extends StatelessWidget {
             context.push('/orders/$date/$orderId');
           }
         },
-        child: Row(
-          children: [
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: Text(
-                        '#${order.id}',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+          child: Row(
+            children: [
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Text(
+                          '#${order.id}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: Text('${order.customer.lName} ${order.customer.fName}'),
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Text('${order.customer.lName} ${order.customer.fName}'),
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: StatusWidget(status: status),
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: StatusWidget(status: status),
+                      ),
                     ),
-                  ),
-                  /* Expanded(
+                    /* Expanded(
                               flex: 1,
                               child: Container(
                                 alignment: Alignment.center,
@@ -146,32 +149,30 @@ class OrdersItemViewByStatus extends StatelessWidget {
                                 )}'),
                               ),
                             ),*/
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: Text(
-                        DateHelper.get24HourTime(order.time),
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Text(
+                          DateHelper.get24HourTime(order.time),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              width: 40,
-              child: Container(
-                alignment: Alignment.center,
-                child: IconButton(
-                  icon: Icon(FluentIcons.forward),
-                  onPressed: () {},
+                  ],
                 ),
               ),
-            ),
-          ],
+              SizedBox(
+                width: 40,
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Icon(FluentIcons.chevron_right),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

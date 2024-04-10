@@ -11,11 +11,9 @@ import '../../business/param/update_product_param.dart';
 class ProductDataSource {
   final _client = Supabase.instance.client;
 
-  Future<Either<DatabaseFailure, ProductModel>> addProduct(
-      ProductAddParam params) async {
+  Future<Either<DatabaseFailure, ProductModel>> addProduct(ProductAddParam params) async {
     try {
-      List<Map<String, dynamic>> response =
-          await _client.from('products').insert(params.toJson()).select();
+      List<Map<String, dynamic>> response = await _client.from('products').insert(params.toJson()).select();
       print(response);
       if (response.isNotEmpty) {
         print('response is not empty');
@@ -37,28 +35,32 @@ class ProductDataSource {
 
   Future<Either<DatabaseFailure, List<ProductModel>>> getProducts() async {
     try {
-      List<Map<String, dynamic>> response =
-          await _client.from('products').select().order('id', ascending: true);
-      if (response.isNotEmpty) {
-        List<ProductModel> productList =
-            response.map((e) => ProductModel.fromJson(e)).toList();
-        return Right(productList);
-      } else {
-        return Left(DatabaseFailure(errorMessage: 'Error getting products'));
+      List<Map<String, dynamic>> response = await _client.from('products').select().order('id', ascending: true);
+
+      print('response getProducts');
+
+      List<ProductModel> productList = [];
+      for (Map<String, dynamic> json in response) {
+        print('json');
+        ProductModel product = ProductModel.fromJson(json);
+        productList.add(product);
       }
+      print('productList');
+      print(productList.length);
+      return Right(productList);
+    } on PostgrestException catch (error) {
+      print('postgrest error');
+      print(error);
+      return Left(DatabaseFailure(errorMessage: error.message));
     } catch (e) {
+      print(e);
       return Left(DatabaseFailure(errorMessage: 'Error getting products'));
     }
   }
 
   Future<Either<DatabaseFailure, ProductModel>> getProductById(int id) async {
     try {
-      List<Map<String, dynamic>> response = await _client
-          .from('products')
-          .select()
-          .eq('id', id)
-          .limit(1)
-          .order('id', ascending: true);
+      List<Map<String, dynamic>> response = await _client.from('products').select().eq('id', id).limit(1).order('id', ascending: true);
       if (response.isNotEmpty) {
         ProductModel productModel = ProductModel.fromJson(response[0]);
         return Right(productModel);
@@ -75,13 +77,8 @@ class ProductDataSource {
         .from('products')
         .stream(primaryKey: ['id']).order('id', ascending: true);*/
     try {
-      return _client
-          .from('products')
-          .stream(primaryKey: ['id'])
-          .order('id', ascending: true)
-          .map((event) {
-            List<ProductModel> productList =
-                event.map((e) => ProductModel.fromJson(e)).toList();
+      return _client.from('products').stream(primaryKey: ['id']).order('id', ascending: true).map((event) {
+            List<ProductModel> productList = event.map((e) => ProductModel.fromJson(e)).toList();
             return productList;
           });
     } on PostgrestException catch (error) {
@@ -94,27 +91,20 @@ class ProductDataSource {
     }
   }
 
-  Future<Either<DatabaseFailure, ProductModel>> updateProduct(
-      UpdateProductParam param) async {
+  Future<Either<DatabaseFailure, ProductModel>> updateProduct(UpdateProductParam param) async {
     try {
-      ProductModel productModel =
-          param.productModel.copyWith(updatedAt: DateTime.now());
+      ProductModel productModel = param.productModel.copyWith(updatedAt: DateTime.now());
       print('productModel from update datasource');
       print(productModel.toJson());
       print(param.savePriceHistory);
       if (param.savePriceHistory) {
         print('save price history');
-        await _client.rpc('save_previous_price',
-            params: {'product_id_param': productModel.id});
+        await _client.rpc('save_previous_price', params: {'product_id_param': productModel.id});
         print('resPrice');
       }
       Map<String, dynamic> productMap = productModel.toJson();
       productMap.removeWhere((key, value) => key == 'id');
-      List<Map<String, dynamic>> response = await _client
-          .from('products')
-          .update(productMap)
-          .eq('id', productModel.id)
-          .select();
+      List<Map<String, dynamic>> response = await _client.from('products').update(productMap).eq('id', productModel.id).select();
       print('response update');
       print(response);
       if (response.isNotEmpty) {
@@ -193,13 +183,7 @@ class ProductDataSource {
     try {
       print('delete product');
       print(id);
-      Map<String, dynamic> response = await _client
-          .from('products')
-          .delete()
-          .eq('id', id)
-          .order('id', ascending: true)
-          .select()
-          .single();
+      Map<String, dynamic> response = await _client.from('products').delete().eq('id', id).order('id', ascending: true).select().single();
 
       print('response delete');
       print(response);

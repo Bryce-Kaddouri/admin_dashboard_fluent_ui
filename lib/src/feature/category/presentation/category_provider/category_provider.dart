@@ -4,7 +4,6 @@ import 'package:admin_dashboard/src/feature/category/business/usecase/category_u
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/data/usecase/usecase.dart';
@@ -121,36 +120,50 @@ class CategoryProvider with ChangeNotifier {
     return categoryList;
   }
 
-  Future<XFile?> pickImage() async {
+  Future<XFile?> pickImage(fluent.BuildContext context) async {
     final ImagePicker picker = ImagePicker();
     ImageSource source = ImageSource.gallery;
     if (!kIsWeb) {
-      Get.dialog(
-        AlertDialog(
-          title: Text('Select Image Source'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                title: Text('Camera'),
-                onTap: () {
-                  source = ImageSource.camera;
-                  Get.back();
-                },
-              ),
-              ListTile(
-                title: Text('Gallery'),
-                onTap: () {
-                  source = ImageSource.gallery;
-                  Get.back();
-                },
-              ),
-            ],
-          ),
-        ),
+      ImageSource? sourceTemp = await fluent.showDialog(
+        context: context,
+        builder: (context) {
+          return fluent.ContentDialog(
+            title: const Text('Select Image Source'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                fluent.ListTile(
+                  title: const Text('Camera'),
+                  onPressed: () {
+                    Navigator.pop(context, ImageSource.camera);
+                  },
+                ),
+                fluent.ListTile(
+                  title: const Text('Gallery'),
+                  onPressed: () {
+                    Navigator.pop(context, ImageSource.gallery);
+                  },
+                ),
+              ],
+            ),
+          );
+        },
       );
+
+      if (sourceTemp == null) {
+        return null;
+      } else {
+        source = sourceTemp;
+      }
     }
-    final XFile? image = await picker.pickImage(source: source);
+
+    final XFile? image = await picker.pickImage(
+      preferredCameraDevice: CameraDevice.front,
+      source: source,
+      imageQuality: 50,
+      maxHeight: 300,
+      maxWidth: 300,
+    );
     return image;
   }
 

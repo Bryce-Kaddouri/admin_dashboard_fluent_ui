@@ -2,7 +2,6 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../data/datasource/product_datasource.dart';
 import '../../data/model/product_model.dart';
 import '../provider/product_provider.dart';
 
@@ -71,27 +70,14 @@ class _ProductListScreenState extends State<ProductListScreen> {
                       child: Container(
                         height: 16,
                         width: 16,
-                        child: Icon(FluentIcons.clear,
-                            color: FluentTheme.of(context)
-                                .typography
-                                .caption!
-                                .color),
+                        child: Icon(FluentIcons.clear, color: FluentTheme.of(context).typography.caption!.color),
                       ),
                     ),
                     prefixMode: OverlayVisibilityMode.always,
-                    prefix: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Icon(FluentIcons.search,
-                            size: 20,
-                            color: FluentTheme.of(context)
-                                .typography
-                                .caption!
-                                .color)),
+                    prefix: Container(padding: const EdgeInsets.symmetric(horizontal: 10.0), child: Icon(FluentIcons.search, size: 20, color: FluentTheme.of(context).typography.caption!.color)),
                     textAlignVertical: TextAlignVertical.center,
                     decoration: BoxDecoration(
-                      color: FluentTheme.of(context)
-                          .navigationPaneTheme
-                          .backgroundColor,
+                      color: FluentTheme.of(context).navigationPaneTheme.backgroundColor,
                       borderRadius: const BorderRadius.all(Radius.circular(5)),
                     ),
                   ),
@@ -103,19 +89,17 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 ),
                 items: [
                   MenuFlyoutItem(
-                      selected:
-                          context.watch<ProductProvider>().nbItemPerPage == 10,
-                      leading:
-                          context.watch<ProductProvider>().nbItemPerPage == 10
-                              ? Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: Colors.blue,
-                                  ),
-                                  width: 4,
-                                  height: 16,
-                                )
-                              : null,
+                      selected: context.watch<ProductProvider>().nbItemPerPage == 10,
+                      leading: context.watch<ProductProvider>().nbItemPerPage == 10
+                          ? Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Colors.blue,
+                              ),
+                              width: 4,
+                              height: 16,
+                            )
+                          : null,
                       text: const Text('10'),
                       onPressed: () {
                         context.read<ProductProvider>().setNbItemPerPage(10);
@@ -127,19 +111,17 @@ class _ProductListScreenState extends State<ProductListScreen> {
                       }),
                   MenuFlyoutSeparator(),
                   MenuFlyoutItem(
-                      selected:
-                          context.watch<ProductProvider>().nbItemPerPage == 25,
-                      leading:
-                          context.watch<ProductProvider>().nbItemPerPage == 25
-                              ? Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: Colors.blue,
-                                  ),
-                                  width: 4,
-                                  height: 16,
-                                )
-                              : null,
+                      selected: context.watch<ProductProvider>().nbItemPerPage == 25,
+                      leading: context.watch<ProductProvider>().nbItemPerPage == 25
+                          ? Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Colors.blue,
+                              ),
+                              width: 4,
+                              height: 16,
+                            )
+                          : null,
                       text: const Text('25'),
                       onPressed: () {
                         context.read<ProductProvider>().setNbItemPerPage(25);
@@ -151,19 +133,17 @@ class _ProductListScreenState extends State<ProductListScreen> {
                       }),
                   MenuFlyoutSeparator(),
                   MenuFlyoutItem(
-                      selected:
-                          context.watch<ProductProvider>().nbItemPerPage == 50,
-                      leading:
-                          context.watch<ProductProvider>().nbItemPerPage == 50
-                              ? Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: Colors.blue,
-                                  ),
-                                  width: 4,
-                                  height: 16,
-                                )
-                              : null,
+                      selected: context.watch<ProductProvider>().nbItemPerPage == 50,
+                      leading: context.watch<ProductProvider>().nbItemPerPage == 50
+                          ? Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Colors.blue,
+                              ),
+                              width: 4,
+                              height: 16,
+                            )
+                          : null,
                       text: const Text('50'),
                       onPressed: () {
                         context.read<ProductProvider>().setNbItemPerPage(50);
@@ -175,19 +155,17 @@ class _ProductListScreenState extends State<ProductListScreen> {
                       }),
                   MenuFlyoutSeparator(),
                   MenuFlyoutItem(
-                      selected:
-                          context.watch<ProductProvider>().nbItemPerPage == 100,
-                      leading:
-                          context.watch<ProductProvider>().nbItemPerPage == 100
-                              ? Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: Colors.blue,
-                                  ),
-                                  width: 4,
-                                  height: 16,
-                                )
-                              : null,
+                      selected: context.watch<ProductProvider>().nbItemPerPage == 100,
+                      leading: context.watch<ProductProvider>().nbItemPerPage == 100
+                          ? Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Colors.blue,
+                              ),
+                              width: 4,
+                              height: 16,
+                            )
+                          : null,
                       text: const Text('100'),
                       onPressed: () {
                         context.read<ProductProvider>().setNbItemPerPage(100);
@@ -199,19 +177,17 @@ class _ProductListScreenState extends State<ProductListScreen> {
                       }),
                   MenuFlyoutSeparator(),
                   MenuFlyoutItem(
-                      selected:
-                          context.watch<ProductProvider>().nbItemPerPage == 250,
-                      leading:
-                          context.watch<ProductProvider>().nbItemPerPage == 250
-                              ? Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: Colors.blue,
-                                  ),
-                                  width: 4,
-                                  height: 16,
-                                )
-                              : null,
+                      selected: context.watch<ProductProvider>().nbItemPerPage == 250,
+                      leading: context.watch<ProductProvider>().nbItemPerPage == 250
+                          ? Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Colors.blue,
+                              ),
+                              width: 4,
+                              height: 16,
+                            )
+                          : null,
                       text: const Text('250'),
                       onPressed: () {
                         context.read<ProductProvider>().setNbItemPerPage(250);
@@ -227,8 +203,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
               FilledButton(
                 style: ButtonStyle(
                   shape: ButtonState.all(
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)),
+                    RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                   ),
                   padding: ButtonState.all(const EdgeInsets.all(8.0)),
                   backgroundColor: ButtonState.all(Colors.blue),
@@ -243,47 +218,31 @@ class _ProductListScreenState extends State<ProductListScreen> {
           ),
         ),
         Expanded(
-          child: StreamBuilder<List<ProductModel>>(
-            stream: ProductDataSource().getProductByIdStream(),
+          child: FutureBuilder<List<ProductModel>>(
+            future: context.read<ProductProvider>().getProducts(),
             builder: (context, snapshot) {
               print('snapshot: ${snapshot.connectionState}');
               print('snapshot: ${snapshot.data}');
               if (snapshot.hasData) {
-                List<ProductModel> products =
-                    snapshot.data as List<ProductModel>;
+                List<ProductModel> products = snapshot.data as List<ProductModel>;
                 if (products == null || products.isEmpty) {
                   return const Center(
                     child: Text('No data'),
                   );
                 }
-                products = products
-                    .where((element) => element.name
-                        .toString()
-                        .toLowerCase()
-                        .contains(context
-                            .watch<ProductProvider>()
-                            .searchText
-                            .toLowerCase()))
-                    .toList();
+                products = products.where((element) => element.name.toString().toLowerCase().contains(context.watch<ProductProvider>().searchText.toLowerCase())).toList();
 
-                if (products.isEmpty &&
-                    context.watch<ProductProvider>().searchText.isNotEmpty) {
+                if (products.isEmpty && context.watch<ProductProvider>().searchText.isNotEmpty) {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(FluentIcons.search,
-                          size: 60,
-                          color: FluentTheme.of(context)
-                              .typography
-                              .caption!
-                              .color),
+                      Icon(FluentIcons.search, size: 60, color: FluentTheme.of(context).typography.caption!.color),
                       SizedBox(height: 10),
                       Text(
                         'No data, try another search',
-                        style:
-                            FluentTheme.of(context).typography.body!.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                        style: FluentTheme.of(context).typography.body!.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ],
                   );
@@ -293,12 +252,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 for (int i = 0; i < products.length; i++) {
                   if (productList.isEmpty) {
                     productList.add([products[i]]);
-                  } else if (productList.last.length <
-                      context.watch<ProductProvider>().nbItemPerPage) {
-                    productList[
-                            (productList.length > 0 ? productList.length : 1) -
-                                1]
-                        .add(products[i]);
+                  } else if (productList.last.length < context.watch<ProductProvider>().nbItemPerPage) {
+                    productList[(productList.length > 0 ? productList.length : 1) - 1].add(products[i]);
                   } else {
                     productList.add([products[i]]);
                   }
@@ -313,11 +268,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           return ListView.builder(
                             padding: const EdgeInsets.all(10),
                             shrinkWrap: true,
-                            itemCount: productList[indexPage]
-                                .length, //products.length,
+                            itemCount: productList[indexPage].length, //products.length,
                             itemBuilder: (context, index) {
-                              ProductModel product =
-                                  productList[indexPage][index];
+                              ProductModel product = productList[indexPage][index];
 
                               return Card(
                                 margin: const EdgeInsets.all(10),
@@ -333,13 +286,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                             alignment: Alignment.center,
                                             child: Text(
                                               '${product.id}',
-                                              style: FluentTheme.of(context)
-                                                  .typography
-                                                  .body!
-                                                  .copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 16),
+                                              style: FluentTheme.of(context).typography.body!.copyWith(fontWeight: FontWeight.bold, fontSize: 16),
                                             ),
                                           ),
                                         ),
@@ -347,18 +294,14 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                           width: 50,
                                           height: 50,
                                           decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                                            borderRadius: BorderRadius.circular(10),
                                             color: Colors.blue,
                                           ),
                                           child: Image.network(
-                                            product.imageUrl,
+                                            product.imageUrl ?? '',
                                             fit: BoxFit.cover,
-                                            errorBuilder:
-                                                (context, error, stackTrace) {
-                                              return const Icon(
-                                                  FluentIcons.photo_error,
-                                                  color: Colors.white);
+                                            errorBuilder: (context, error, stackTrace) {
+                                              return const Icon(FluentIcons.photo_error, color: Colors.white);
                                             },
                                           ),
                                         ),
@@ -372,20 +315,14 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                       FilledButton(
                                         style: ButtonStyle(
                                           shape: ButtonState.all(
-                                            RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(5)),
+                                            RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                                           ),
-                                          padding: ButtonState.all(
-                                              const EdgeInsets.all(8.0)),
-                                          backgroundColor:
-                                              ButtonState.all(Colors.blue),
-                                          foregroundColor:
-                                              ButtonState.all(Colors.white),
+                                          padding: ButtonState.all(const EdgeInsets.all(8.0)),
+                                          backgroundColor: ButtonState.all(Colors.blue),
+                                          foregroundColor: ButtonState.all(Colors.white),
                                         ),
                                         onPressed: () {
-                                          context.go(
-                                              '/product/update/${product.id}');
+                                          context.go('/product/update/${product.id}');
                                         },
                                         child: const Icon(FluentIcons.edit),
                                       ),
@@ -393,16 +330,11 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                       FilledButton(
                                         style: ButtonStyle(
                                           shape: ButtonState.all(
-                                            RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(5)),
+                                            RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                                           ),
-                                          padding: ButtonState.all(
-                                              const EdgeInsets.all(8.0)),
-                                          backgroundColor:
-                                              ButtonState.all(Colors.red),
-                                          foregroundColor:
-                                              ButtonState.all(Colors.white),
+                                          padding: ButtonState.all(const EdgeInsets.all(8.0)),
+                                          backgroundColor: ButtonState.all(Colors.red),
+                                          foregroundColor: ButtonState.all(Colors.white),
                                         ),
                                         onPressed: () async {
                                           print('delete');
@@ -451,24 +383,16 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                                 return ContentDialog(
                                                   title: Container(
                                                     alignment: Alignment.center,
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        vertical: 10),
+                                                    padding: const EdgeInsets.symmetric(vertical: 10),
                                                     child: Text(
                                                       'Delete Product',
-                                                      style: FluentTheme.of(
-                                                              context)
-                                                          .typography
-                                                          .title!
-                                                          .copyWith(
-                                                            fontWeight:
-                                                                FontWeight.bold,
+                                                      style: FluentTheme.of(context).typography.title!.copyWith(
+                                                            fontWeight: FontWeight.bold,
                                                           ),
                                                     ),
                                                   ),
                                                   content: Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
+                                                    mainAxisSize: MainAxisSize.min,
                                                     children: [
                                                       Icon(
                                                         FluentIcons.delete,
@@ -478,37 +402,24 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                                       SizedBox(height: 20),
                                                       Text(
                                                         'Are you sure to delete this Product?\n\nThe deletion of this category will delete all order associated with it.',
-                                                        style: FluentTheme.of(
-                                                                context)
-                                                            .typography
-                                                            .body!
-                                                            .copyWith(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal,
+                                                        style: FluentTheme.of(context).typography.body!.copyWith(
+                                                              fontWeight: FontWeight.normal,
                                                             ),
-                                                        textAlign:
-                                                            TextAlign.center,
+                                                        textAlign: TextAlign.center,
                                                       ),
                                                     ],
                                                   ),
                                                   actions: [
                                                     FilledButton(
                                                       onPressed: () async {
-                                                        bool res = await context
-                                                            .read<
-                                                                ProductProvider>()
-                                                            .deleteProduct(
-                                                                product.id);
-                                                        Navigator.of(context)
-                                                            .pop(true);
+                                                        bool res = await context.read<ProductProvider>().deleteProduct(product.id);
+                                                        Navigator.of(context).pop(true);
                                                       },
                                                       child: Text('Yes'),
                                                     ),
                                                     Button(
                                                       onPressed: () {
-                                                        Navigator.of(context)
-                                                            .pop(false);
+                                                        Navigator.of(context).pop(false);
                                                       },
                                                       child: Text('No'),
                                                     ),
@@ -516,41 +427,19 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                                 );
                                               });
                                           if (confirmed != null && confirmed) {
-                                            bool res = await context
-                                                .read<ProductProvider>()
-                                                .deleteProduct(product.id);
+                                            bool res = await context.read<ProductProvider>().deleteProduct(product.id);
                                             if (res) {
                                               await displayInfoBar(
                                                 context,
                                                 builder: (context, close) {
                                                   return InfoBar(
-                                                    title:
-                                                        const Text('Success'),
-                                                    content: Text(
-                                                        "Product deleted successfully"),
-                                                    severity:
-                                                        InfoBarSeverity.success,
+                                                    title: const Text('Success'),
+                                                    content: Text("Product deleted successfully"),
+                                                    severity: InfoBarSeverity.success,
                                                     isLong: false,
-                                                    action: Button(
-                                                      style: ButtonStyle(
-                                                        padding:
-                                                            ButtonState.all(
-                                                                const EdgeInsets
-                                                                    .all(4.0)),
-                                                      ),
+                                                    action: IconButton(
+                                                      icon: const Icon(FluentIcons.clear),
                                                       onPressed: close,
-                                                      child: Container(
-                                                        height: 16,
-                                                        width: 16,
-                                                        child: Icon(
-                                                            FluentIcons.clear,
-                                                            color:
-                                                                FluentTheme.of(
-                                                                        context)
-                                                                    .typography
-                                                                    .caption!
-                                                                    .color),
-                                                      ),
                                                     ),
                                                   );
                                                 },
@@ -563,32 +452,13 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                                   return InfoBar(
                                                     title: const Text('Error'),
                                                     content: Container(
-                                                      child: Text(
-                                                          "Something went wrong"),
+                                                      child: Text("Something went wrong"),
                                                     ),
-                                                    severity:
-                                                        InfoBarSeverity.error,
+                                                    severity: InfoBarSeverity.error,
                                                     isLong: false,
-                                                    action: Button(
-                                                      style: ButtonStyle(
-                                                        padding:
-                                                            ButtonState.all(
-                                                                const EdgeInsets
-                                                                    .all(4.0)),
-                                                      ),
+                                                    action: IconButton(
+                                                      icon: const Icon(FluentIcons.clear),
                                                       onPressed: close,
-                                                      child: Container(
-                                                        height: 16,
-                                                        width: 16,
-                                                        child: Icon(
-                                                            FluentIcons.clear,
-                                                            color:
-                                                                FluentTheme.of(
-                                                                        context)
-                                                                    .typography
-                                                                    .caption!
-                                                                    .color),
-                                                      ),
                                                     ),
                                                   );
                                                 },
@@ -614,33 +484,21 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           IconButton(
-                            icon: Icon(FluentIcons.back,
-                                color: FluentTheme.of(context)
-                                    .typography
-                                    .subtitle!
-                                    .color),
+                            icon: Icon(FluentIcons.back, color: FluentTheme.of(context).typography.subtitle!.color),
                             onPressed: () {
-                              pageController.previousPage(
-                                  duration: Duration(milliseconds: 300),
-                                  curve: Curves.easeIn);
+                              pageController.previousPage(duration: Duration(milliseconds: 300), curve: Curves.easeIn);
                             },
                           ),
                           RichText(
                             text: TextSpan(
                               text: '${currentPage + 1}',
-                              style: FluentTheme.of(context)
-                                  .typography
-                                  .subtitle!
-                                  .copyWith(
+                              style: FluentTheme.of(context).typography.subtitle!.copyWith(
                                     fontWeight: FontWeight.bold,
                                   ),
                               children: [
                                 TextSpan(
                                   text: '/${productList.length}',
-                                  style: FluentTheme.of(context)
-                                      .typography
-                                      .subtitle!
-                                      .copyWith(
+                                  style: FluentTheme.of(context).typography.subtitle!.copyWith(
                                         fontWeight: FontWeight.normal,
                                       ),
                                 ),
@@ -648,15 +506,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
                             ),
                           ),
                           IconButton(
-                            icon: Icon(FluentIcons.forward,
-                                color: FluentTheme.of(context)
-                                    .typography
-                                    .subtitle!
-                                    .color),
+                            icon: Icon(FluentIcons.forward, color: FluentTheme.of(context).typography.subtitle!.color),
                             onPressed: () {
-                              pageController.nextPage(
-                                  duration: Duration(milliseconds: 300),
-                                  curve: Curves.easeIn);
+                              pageController.nextPage(duration: Duration(milliseconds: 300), curve: Curves.easeIn);
                             },
                           ),
                         ],

@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../../../../core/helper/date_helper.dart';
 import '../../data/model/order_model.dart';
 import '../provider/order_provider.dart';
-import '../widget/date_item_widget.dart';
 import '../widget/order_item_view_by_status_widget.dart';
 
 class OrderScreen extends StatefulWidget {
@@ -16,8 +15,7 @@ class OrderScreen extends StatefulWidget {
 }
 
 // keep alive mixin
-class _OrderScreenState extends State<OrderScreen>
-    with AutomaticKeepAliveClientMixin {
+class _OrderScreenState extends State<OrderScreen> with AutomaticKeepAliveClientMixin {
   ScrollController _mainScrollController = ScrollController();
   ScrollController _testController = ScrollController();
   List<DateTime> lstWeedDays = [];
@@ -26,33 +24,70 @@ class _OrderScreenState extends State<OrderScreen>
   void initState() {
     super.initState();
     setState(() {
-      lstWeedDays =
-          DateHelper.getDaysInWeek(context.read<OrderProvider>().selectedDate);
+      lstWeedDays = DateHelper.getDaysInWeek(context.read<OrderProvider>().selectedDate);
     });
   }
 
   Future<DateTime?> selectDate() async {
     // global key for the form
-    return material.showDatePicker(
+    /*return material.showDatePicker(
         context: context,
         currentDate: context.read<OrderProvider>().selectedDate,
         initialDate: context.read<OrderProvider>().selectedDate,
         // first date of the year
         firstDate: DateTime.now().subtract(Duration(days: 365)),
-        lastDate: DateTime.now().add(Duration(days: 365)));
+        lastDate: DateTime.now().add(Duration(days: 365)));*/
+
+    return await showDialog<DateTime?>(
+        context: context,
+        builder: (context) {
+          DateTime selectedDate = context.read<OrderProvider>().selectedDate;
+          return ContentDialog(
+            title: Container(
+              alignment: Alignment.center,
+              child: Text(
+                'Select Date',
+              ),
+            ),
+            content: material.Card(
+              surfaceTintColor: FluentTheme.of(context).navigationPaneTheme.overlayBackgroundColor,
+              elevation: 4,
+              margin: EdgeInsets.zero,
+              child: material.CalendarDatePicker(
+                initialDate: context.read<OrderProvider>().selectedDate,
+                firstDate: DateTime.now().subtract(Duration(days: 365)),
+                lastDate: DateTime.now().add(Duration(days: 365)),
+                onDateChanged: (DateTime value) {
+                  selectedDate = value;
+                },
+              ),
+            ),
+            actions: [
+              FilledButton(
+                onPressed: () {
+                  Navigator.pop(context, selectedDate);
+                },
+                child: Text('Confirm'),
+              ),
+              Button(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Cancel'),
+              ),
+            ],
+          );
+        });
   }
 
   @override
   Widget build(BuildContext context) {
     return material.Scaffold(
-      backgroundColor:
-          FluentTheme.of(context).navigationPaneTheme.backgroundColor,
+      backgroundColor: FluentTheme.of(context).navigationPaneTheme.backgroundColor,
       appBar: material.AppBar(
         shadowColor: FluentTheme.of(context).shadowColor,
-        surfaceTintColor:
-            FluentTheme.of(context).navigationPaneTheme.backgroundColor,
-        backgroundColor:
-            FluentTheme.of(context).navigationPaneTheme.backgroundColor,
+        surfaceTintColor: FluentTheme.of(context).navigationPaneTheme.backgroundColor,
+        backgroundColor: FluentTheme.of(context).navigationPaneTheme.backgroundColor,
         elevation: 0,
         /* leading: material.BackButton(
           onPressed: () {
@@ -62,8 +97,7 @@ class _OrderScreenState extends State<OrderScreen>
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(DateHelper.getMonthNameAndYear(
-                context.watch<OrderProvider>().selectedDate)),
+            Text(DateHelper.getFormattedDateWithoutTime(context.watch<OrderProvider>().selectedDate, isShort: true)),
           ],
         ),
         actions: [
@@ -96,90 +130,20 @@ class _OrderScreenState extends State<OrderScreen>
         orderDate: context.watch<OrderProvider>().selectedDate,
       ),*/
       body: CustomScrollView(controller: _mainScrollController, slivers: [
-        material.SliverPersistentHeader(
-          floating: true,
-          delegate: HeaderDelegate(
-            child: Container(
-              child: Stack(
-                children: [
-                  /*Container(
-                    height: 70,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: FluentTheme.of(context).navigationPaneTheme.backgroundColor,
-                      boxShadow: [
-                        BoxShadow(
-                          color: FluentTheme.of(context).shadowColor,
-                          offset: Offset(0, 1),
-                          spreadRadius: 1,
-                          blurRadius: 3,
-                        ),
-                      ],
-                    ),
-                  ),*/
-                  material.Card(
-                    shadowColor: FluentTheme.of(context).shadowColor,
-                    margin: EdgeInsets.all(0),
-                    shape: material.RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
-                    ),
-                    elevation: 2,
-                    child: Container(
-                      color: FluentTheme.of(context)
-                          .navigationPaneTheme
-                          .backgroundColor,
-                      height: 70,
-                      width: double.infinity,
-                    ),
-                  ),
-                  Container(
-                    height: 80,
-                    /*gradient: LinearGradient(
-                  stops: [
-                    0.0,
-                    0.9,
-                    0.9,
-                    1.0,
-                  ],
-                  colors: [
-                    FluentTheme.of(context).navigationPaneTheme.backgroundColor!,
-                    FluentTheme.of(context).navigationPaneTheme.backgroundColor!,
-                    Colors.transparent,
-                    Colors.transparent,
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),*/
-
-                    width: double.infinity,
-                    child: DateListWidget(
-                      lstWeedDays: lstWeedDays,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
         FutureBuilder(
-          future: context
-              .read<OrderProvider>()
-              .getOrdersByDate(context.watch<OrderProvider>().selectedDate),
+          future: context.read<OrderProvider>().getOrdersByDate(context.watch<OrderProvider>().selectedDate),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasData) {
                 List<Map<String, dynamic>> lstHourMap = [];
 
                 List<OrderModel> orderList = snapshot.data as List<OrderModel>;
-                List<int> lstHourDistinct =
-                    orderList.map((e) => e.time.hour).toSet().toList();
+                List<int> lstHourDistinct = orderList.map((e) => e.time.hour).toSet().toList();
                 print('order list length');
                 print(orderList.length);
 
                 for (var hour in lstHourDistinct) {
-                  List<OrderModel> orderListOfTheHour = orderList
-                      .where((element) => element.time.hour == hour)
-                      .toList();
+                  List<OrderModel> orderListOfTheHour = orderList.where((element) => element.time.hour == hour).toList();
 
                   Map<String, dynamic> map = {
                     'hour': hour,
@@ -205,6 +169,7 @@ class _OrderScreenState extends State<OrderScreen>
                       return Container(
                         padding: EdgeInsets.all(8),
                         child: Expander(
+                          initiallyExpanded: true,
                           header: Container(
                             height: 60,
                             child: Row(
@@ -212,23 +177,24 @@ class _OrderScreenState extends State<OrderScreen>
                               children: [
                                 Text(
                                   '${DateHelper.get24HourTime(material.TimeOfDay(hour: data['hour'], minute: 0))}',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),
+                                  style: FluentTheme.of(context).typography.subtitle!.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                 ),
                                 RichText(
                                     text: TextSpan(
                                   children: [
                                     TextSpan(
                                       text: '${data['order'].length}',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                      ),
+                                      style: FluentTheme.of(context).typography.subtitle!.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                     ),
                                     TextSpan(
                                       text: ' orders',
+                                      style: FluentTheme.of(context).typography.subtitle!.copyWith(
+                                            fontWeight: FontWeight.normal,
+                                          ),
                                     ),
                                   ],
                                 ))
@@ -308,67 +274,5 @@ class HorizontalSliverList extends StatelessWidget {
     );
   }
 
-  Widget addDivider() =>
-      divider ?? Padding(padding: const EdgeInsets.symmetric(horizontal: 8));
-}
-
-class HeaderDelegate extends SliverPersistentHeaderDelegate {
-  final Widget child;
-  final double height;
-
-  const HeaderDelegate({
-    required this.child,
-    this.height = 80,
-  });
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return SizedBox.expand(child: child);
-  }
-
-  @override
-  double get maxExtent => height;
-
-  @override
-  double get minExtent => height;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return false;
-  }
-}
-
-class DateListWidget extends StatelessWidget {
-  final List<DateTime> lstWeedDays;
-
-  DateListWidget({
-    super.key,
-    required this.lstWeedDays,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: List.generate(
-        7,
-        (index) {
-          DateTime dateItem = lstWeedDays[index];
-          print('test: ' + index.toString());
-          print(dateItem);
-
-          print(dateItem.day);
-
-          return Expanded(
-            child: DateItemWidget(
-              selectedDate: context.watch<OrderProvider>().selectedDate,
-              dateItem: dateItem,
-              isToday: dateItem.day ==
-                  context.watch<OrderProvider>().selectedDate.day,
-            ),
-          );
-        },
-      ),
-    );
-  }
+  Widget addDivider() => divider ?? Padding(padding: const EdgeInsets.symmetric(horizontal: 8));
 }

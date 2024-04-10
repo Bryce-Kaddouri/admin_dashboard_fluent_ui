@@ -1,6 +1,5 @@
 import 'package:admin_dashboard/src/feature/category/data/datasource/category_datasource.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -420,45 +419,102 @@ class _CategoryListScreenState extends State<CategoryListScreen> with AutomaticK
                                             backgroundColor: ButtonState.all(Colors.red),
                                             foregroundColor: ButtonState.all(Colors.white),
                                           ),
-                                          onPressed: () {
+                                          onPressed: () async {
                                             print('delete');
                                             print('category id: ${category.id}');
-                                            Get.defaultDialog(
-                                              contentPadding: EdgeInsets.all(20),
-                                              content: Column(
-                                                children: [
-                                                  Icon(
-                                                    FluentIcons.delete,
-                                                    color: Colors.red,
-                                                    size: 100,
-                                                  ),
-                                                  Text('Are you sure to delete this category? The deletion of this category will delete all products associated with it.'),
-                                                ],
-                                              ),
-                                              title: 'Delete category',
-                                              textConfirm: 'Yes',
-                                              textCancel: 'No',
-                                              confirmTextColor: Colors.white,
-                                              onConfirm: () async {
-                                                bool res = await context.read<CategoryProvider>().deleteCategory(category.id);
-                                                Get.back();
-                                                if (res) {
-                                                  Get.snackbar(
-                                                    'Success',
-                                                    'Category deleted successfully',
-                                                    backgroundColor: Colors.green,
-                                                    colorText: Colors.white,
+
+                                            bool? confirmed = await showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return ContentDialog(
+                                                    title: Container(
+                                                      alignment: Alignment.center,
+                                                      padding: const EdgeInsets.symmetric(vertical: 10),
+                                                      child: Text(
+                                                        'Delete Category',
+                                                        style: FluentTheme.of(context).typography.title!.copyWith(
+                                                              fontWeight: FontWeight.bold,
+                                                            ),
+                                                      ),
+                                                    ),
+                                                    content: Column(
+                                                      mainAxisSize: MainAxisSize.min,
+                                                      children: [
+                                                        Icon(
+                                                          FluentIcons.delete,
+                                                          color: Colors.red,
+                                                          size: 60,
+                                                        ),
+                                                        SizedBox(height: 20),
+                                                        Text(
+                                                          'Are you sure to delete this category?\n\nThe deletion of this category will delete all order and product associated with it.',
+                                                          style: FluentTheme.of(context).typography.body!.copyWith(
+                                                                fontWeight: FontWeight.normal,
+                                                              ),
+                                                          textAlign: TextAlign.center,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    actions: [
+                                                      FilledButton(
+                                                        onPressed: () async {
+                                                          /* bool res = await context
+        .read<
+    CategoryProvider>()
+        .deleteCategory(category.id);*/
+                                                          Navigator.of(context).pop(true);
+                                                        },
+                                                        child: Text('Yes'),
+                                                      ),
+                                                      Button(
+                                                        onPressed: () {
+                                                          Navigator.of(context).pop(false);
+                                                        },
+                                                        child: Text('No'),
+                                                      ),
+                                                    ],
                                                   );
-                                                } else {
-                                                  Get.snackbar(
-                                                    'Error',
-                                                    'An error occured while deleting category',
-                                                    backgroundColor: Colors.red,
-                                                    colorText: Colors.white,
-                                                  );
-                                                }
-                                              },
-                                            );
+                                                });
+                                            if (confirmed != null && confirmed) {
+                                              bool res = await context.read<CategoryProvider>().deleteCategory(category.id);
+                                              if (res) {
+                                                await displayInfoBar(
+                                                  context,
+                                                  builder: (context, close) {
+                                                    return InfoBar(
+                                                      title: const Text('Success'),
+                                                      content: Text("Product deleted successfully"),
+                                                      severity: InfoBarSeverity.success,
+                                                      isLong: false,
+                                                      action: IconButton(
+                                                        icon: const Icon(FluentIcons.clear),
+                                                        onPressed: close,
+                                                      ),
+                                                    );
+                                                  },
+                                                  alignment: Alignment.topRight,
+                                                );
+                                              } else {
+                                                await displayInfoBar(
+                                                  context,
+                                                  builder: (context, close) {
+                                                    return InfoBar(
+                                                      title: const Text('Error'),
+                                                      content: Container(
+                                                        child: Text("Something went wrong"),
+                                                      ),
+                                                      severity: InfoBarSeverity.error,
+                                                      isLong: false,
+                                                      action: IconButton(
+                                                        icon: const Icon(FluentIcons.clear),
+                                                        onPressed: close,
+                                                      ),
+                                                    );
+                                                  },
+                                                  alignment: Alignment.topRight,
+                                                );
+                                              }
+                                            }
                                           },
                                           child: const Icon(FluentIcons.delete),
                                         ),

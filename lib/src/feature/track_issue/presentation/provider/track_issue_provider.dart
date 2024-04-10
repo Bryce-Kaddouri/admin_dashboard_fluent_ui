@@ -31,8 +31,7 @@ class TrackIssueProvider with ChangeNotifier {
     return trackIssues;
   }
 
-  Future<bool> updateTrackIssue(
-      int orderId, DateTime orderDate, TrackIssueStatus status) async {
+  Future<bool> updateTrackIssue(int orderId, DateTime orderDate, TrackIssueStatus status) async {
     TrackIssueUpdateStatusParam param = TrackIssueUpdateStatusParam(
       orderId: orderId,
       orderDate: orderDate,
@@ -51,5 +50,13 @@ class TrackIssueProvider with ChangeNotifier {
     print(isUpdated);
 
     return isUpdated;
+  }
+
+  int _selectedIndex = 0;
+  int get selectedIndex => _selectedIndex;
+
+  void updateSelectedIndex(int index) {
+    _selectedIndex = index;
+    notifyListeners();
   }
 }

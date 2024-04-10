@@ -167,7 +167,7 @@ class _UpdateCategoryFormState extends State<UpdateCategoryForm> {
                     SizedBox(height: 10),
                     FilledButton(
                       onPressed: () async {
-                        XFile? result = await context.read<CategoryProvider>().pickImage();
+                        XFile? result = await context.read<CategoryProvider>().pickImage(context);
                         if (result != null) {
                           Uint8List bytes = await result.readAsBytes();
                           setState(() {

@@ -74,8 +74,7 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
                     focusNode: focusNode,
                     key: autoKey,
                     validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(
-                          errorText: 'Please select category'),
+                      FormBuilderValidators.required(errorText: 'Please select category'),
                       // check if category is selected
                       (value) {
                         if (selectedObjectCategory == null) {
@@ -143,8 +142,7 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
                     SizedBox(height: 10),
                     FilledButton(
                       onPressed: () async {
-                        XFile? result =
-                            await context.read<CategoryProvider>().pickImage();
+                        XFile? result = await context.read<CategoryProvider>().pickImage(context);
                         if (result != null) {
                           Uint8List bytes = await result.readAsBytes();
                           setState(() {
@@ -156,8 +154,7 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
                         alignment: Alignment.center,
                         width: 200,
                         height: 30,
-                        child:
-                            Text(image != null ? 'Change Image' : 'Pick Image'),
+                        child: Text(image != null ? 'Change Image' : 'Pick Image'),
                       ),
                     ),
                   ],
@@ -248,14 +245,9 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
                             double price = double.parse(priceController.text);
                             int categoryId = selectedObjectCategory!.id;
                             if (image != null) {
-                              imageUrl = await context
-                                  .read<ProductProvider>()
-                                  .uploadImage(image!);
+                              imageUrl = await context.read<ProductProvider>().uploadImage(image!);
                             }
-                            bool res = await context
-                                .read<ProductProvider>()
-                                .addProduct(name, description, imageUrl ?? '',
-                                    price, categoryId, context);
+                            bool res = await context.read<ProductProvider>().addProduct(name, description, imageUrl ?? '', price, categoryId, context);
                             if (res) {
                               // reset form
                               nameController.clear();
@@ -266,8 +258,7 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
                                 image = null;
                               });
                             } else {
-                              await displayInfoBar(context,
-                                  builder: (context, close) {
+                              await displayInfoBar(context, builder: (context, close) {
                                 return InfoBar(
                                   title: const Text('Title'),
                                   content: const Text(

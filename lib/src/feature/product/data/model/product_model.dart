@@ -28,7 +28,7 @@ class ProductModel {
         imageUrl: json['photo_url'],
         createdAt: DateTime.parse(json['created_at']),
         updatedAt: DateTime.parse(json['updated_at']),
-        price: json['price'],
+        price: double.parse(json['price'].toString()),
         categoryId: json['category_id'],
       );
     } else {

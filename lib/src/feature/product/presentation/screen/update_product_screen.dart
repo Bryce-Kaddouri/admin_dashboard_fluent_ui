@@ -22,8 +22,7 @@ class UpdateProductScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return material.Scaffold(
-      backgroundColor:
-          FluentTheme.of(context).navigationPaneTheme.backgroundColor,
+      backgroundColor: FluentTheme.of(context).navigationPaneTheme.backgroundColor,
 
       /* padding: EdgeInsets.zero,
       header: Container(
@@ -52,10 +51,8 @@ class UpdateProductScreen extends StatelessWidget {
       appBar: material.AppBar(
         elevation: 4,
         shadowColor: FluentTheme.of(context).shadowColor,
-        surfaceTintColor:
-            FluentTheme.of(context).navigationPaneTheme.backgroundColor,
-        backgroundColor:
-            FluentTheme.of(context).navigationPaneTheme.backgroundColor,
+        surfaceTintColor: FluentTheme.of(context).navigationPaneTheme.backgroundColor,
+        backgroundColor: FluentTheme.of(context).navigationPaneTheme.backgroundColor,
         centerTitle: true,
         title: Text('Update Product'),
         leading: material.BackButton(
@@ -111,10 +108,7 @@ class _ProductUpdateFormState extends State<ProductUpdateForm> {
         lstCategory = value ?? [];
       });
     }).whenComplete(() {
-      return context
-          .read<ProductProvider>()
-          .getProductById(widget.id)
-          .then((ProductModel? value) {
+      return context.read<ProductProvider>().getProductById(widget.id).then((ProductModel? value) {
         if (value != null) {
           setState(() {
             nameController.text = value.name;
@@ -153,8 +147,7 @@ class _ProductUpdateFormState extends State<ProductUpdateForm> {
               child: AutoSuggestBox.form(
                 key: autoKey,
                 validator: FormBuilderValidators.compose([
-                  FormBuilderValidators.required(
-                      errorText: 'Please select category'),
+                  FormBuilderValidators.required(errorText: 'Please select category'),
                   // check if category is selected
                   (value) {
                     if (selectedObjectCategory == null) {
@@ -237,8 +230,7 @@ class _ProductUpdateFormState extends State<ProductUpdateForm> {
                 SizedBox(height: 10),
                 FilledButton(
                   onPressed: () async {
-                    XFile? result =
-                        await context.read<CategoryProvider>().pickImage();
+                    XFile? result = await context.read<CategoryProvider>().pickImage(context);
                     if (result != null) {
                       Uint8List bytes = await result.readAsBytes();
                       setState(() {
@@ -282,9 +274,7 @@ class _ProductUpdateFormState extends State<ProductUpdateForm> {
               constraints: BoxConstraints(maxWidth: 500, minHeight: 50),
               child: NumberFormBox<double>(
                 precision: 2,
-                value: priceController.text.isEmpty
-                    ? null
-                    : double.parse(priceController.text),
+                value: priceController.text.isEmpty ? null : double.parse(priceController.text),
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(
                     RegExp(r'^\d+\.?\d{0,2}'),
@@ -339,9 +329,7 @@ class _ProductUpdateFormState extends State<ProductUpdateForm> {
                   bool? saveToHistory = false;
 
                   // check if price have changed
-                  ProductModel? oldProduct = await context
-                      .read<ProductProvider>()
-                      .getProductById(widget.id);
+                  ProductModel? oldProduct = await context.read<ProductProvider>().getProductById(widget.id);
                   if (oldProduct!.price != price) {
                     saveToHistory = await showDialog<bool>(
                         dismissWithEsc: false,
@@ -349,8 +337,7 @@ class _ProductUpdateFormState extends State<ProductUpdateForm> {
                         context: context,
                         builder: (context) => ContentDialog(
                               title: Text('Save Product'),
-                              content: Text(
-                                  'Do you want to save this product to history?'),
+                              content: Text('Do you want to save this product to history?'),
                               actions: [
                                 FilledButton(
                                   onPressed: () {
@@ -373,56 +360,32 @@ class _ProductUpdateFormState extends State<ProductUpdateForm> {
                   }
 
                   if (imageUrl != null) {
-                    String? imageUrl = await context
-                        .read<ProductProvider>()
-                        .uploadImage(image!);
-                    ProductModel? oldProduct = await context
-                        .read<ProductProvider>()
-                        .getProductById(widget.id);
+                    String? imageUrl = await context.read<ProductProvider>().uploadImage(image!);
+                    ProductModel? oldProduct = await context.read<ProductProvider>().getProductById(widget.id);
                     ProductModel newProduct = ProductModel(
                       id: oldProduct!.id,
                       name: oldProduct.name != name ? name : oldProduct.name,
-                      description: oldProduct.description != description
-                          ? description
-                          : oldProduct.description,
-                      imageUrl: oldProduct.imageUrl != imageUrl
-                          ? imageUrl ?? oldProduct.imageUrl
-                          : oldProduct.imageUrl,
+                      description: oldProduct.description != description ? description : oldProduct.description,
+                      imageUrl: oldProduct.imageUrl != imageUrl ? imageUrl ?? oldProduct.imageUrl : oldProduct.imageUrl,
                       createdAt: oldProduct.createdAt,
                       updatedAt: DateTime.now(),
-                      price:
-                          oldProduct.price != price ? price : oldProduct.price,
-                      categoryId: oldProduct.categoryId != categoryId
-                          ? categoryId
-                          : oldProduct.categoryId,
+                      price: oldProduct.price != price ? price : oldProduct.price,
+                      categoryId: oldProduct.categoryId != categoryId ? categoryId : oldProduct.categoryId,
                     );
-                    bool res = await context
-                        .read<ProductProvider>()
-                        .updateProduct(newProduct, saveToHistory!, context);
+                    bool res = await context.read<ProductProvider>().updateProduct(newProduct, saveToHistory!, context);
                   } else {
-                    ProductModel? oldProduct = await context
-                        .read<ProductProvider>()
-                        .getProductById(widget.id);
+                    ProductModel? oldProduct = await context.read<ProductProvider>().getProductById(widget.id);
                     ProductModel newProduct = ProductModel(
                       id: oldProduct!.id,
                       name: oldProduct.name != name ? name : oldProduct.name,
-                      description: oldProduct.description != description
-                          ? description
-                          : oldProduct.description,
-                      imageUrl: oldProduct.imageUrl != imageUrl
-                          ? imageUrl ?? oldProduct.imageUrl
-                          : oldProduct.imageUrl,
+                      description: oldProduct.description != description ? description : oldProduct.description,
+                      imageUrl: oldProduct.imageUrl != imageUrl ? imageUrl ?? oldProduct.imageUrl : oldProduct.imageUrl,
                       createdAt: oldProduct.createdAt,
                       updatedAt: DateTime.now(),
-                      price:
-                          oldProduct.price != price ? price : oldProduct.price,
-                      categoryId: oldProduct.categoryId != categoryId
-                          ? categoryId
-                          : oldProduct.categoryId,
+                      price: oldProduct.price != price ? price : oldProduct.price,
+                      categoryId: oldProduct.categoryId != categoryId ? categoryId : oldProduct.categoryId,
                     );
-                    bool res = await context
-                        .read<ProductProvider>()
-                        .updateProduct(newProduct, saveToHistory!, context);
+                    bool res = await context.read<ProductProvider>().updateProduct(newProduct, saveToHistory!, context);
                   }
                   // reset form
                   /*  nameController.clear();

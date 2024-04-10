@@ -1,6 +1,7 @@
 import 'package:admin_dashboard/src/feature/category/presentation/category_provider/category_provider.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 // add catgeory screen
@@ -33,66 +34,6 @@ class _CategoryAddScreenState extends State<CategoryAddScreen> {
             key: _formKey,
             child: Column(
               children: [
-                /*FormField<Uint8List>(
-                    initialValue: image,
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Please pick an image';
-                      }
-                      return null;
-                    },
-                    builder: (FormFieldState field) {
-                      return Column(
-                        children: [
-                          Text('Image'),
-                          SizedBox(height: 10),
-                          if (image != null)
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              height: 200,
-                              width: 200,
-                              clipBehavior: Clip.antiAlias,
-                              child: AspectRatio(
-                                aspectRatio: 1,
-                                child: Image.memory(
-                                  image!,
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                            )
-                          else
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.grey,
-                              ),
-                              height: 200,
-                              width: 200,
-                              child: Icon(FluentIcons.photo2_add),
-                            ),
-                          SizedBox(height: 10),
-                          FilledButton(
-                            onPressed: () async {
-                              XFile? result = await context.read<CategoryProvider>().pickImage();
-                              if (result != null) {
-                                Uint8List bytes = await result.readAsBytes();
-                                setState(() {
-                                  image = bytes;
-                                });
-                              }
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: 200,
-                              height: 30,
-                              child: Text(image != null ? 'Change Image' : 'Pick Image'),
-                            ),
-                          ),
-                        ],
-                      );
-                    }),*/
                 SizedBox(height: 50),
                 InfoLabel(
                   label: 'Enter category name:',
@@ -110,6 +51,56 @@ class _CategoryAddScreenState extends State<CategoryAddScreen> {
                       },
                     ),
                   ),
+                ),
+                Column(
+                  children: [
+                    Text('Image'),
+                    SizedBox(height: 10),
+                    if (image != null)
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        height: 200,
+                        width: 200,
+                        clipBehavior: Clip.antiAlias,
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: Image.memory(
+                            image!,
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                      )
+                    else
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.grey,
+                        ),
+                        height: 200,
+                        width: 200,
+                        child: Icon(FluentIcons.photo2_add),
+                      ),
+                    SizedBox(height: 10),
+                    FilledButton(
+                      onPressed: () async {
+                        XFile? result = await context.read<CategoryProvider>().pickImage(context);
+                        if (result != null) {
+                          Uint8List bytes = await result.readAsBytes();
+                          setState(() {
+                            image = bytes;
+                          });
+                        }
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: 200,
+                        height: 30,
+                        child: Text(image != null ? 'Change Image' : 'Pick Image'),
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(height: 50),
                 InfoLabel(

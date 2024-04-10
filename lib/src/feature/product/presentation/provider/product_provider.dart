@@ -1,3 +1,4 @@
+import 'package:admin_dashboard/src/core/data/usecase/usecase.dart';
 import 'package:admin_dashboard/src/feature/product/business/param/update_product_param.dart';
 import 'package:admin_dashboard/src/feature/product/data/model/product_model.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
@@ -344,5 +345,20 @@ class ProductProvider with ChangeNotifier {
     _isLoading = false;
     notifyListeners();
     return isSuccess;
+  }
+
+  Future<List<ProductModel>> getProducts() async {
+    List<ProductModel> productList = [];
+
+    final result = await productGetProductsUseCase.call(NoParams());
+
+    await result.fold((l) async {
+      _addProductErrorMessage = l.errorMessage;
+    }, (r) async {
+      print(r);
+      productList = r;
+    });
+
+    return productList;
   }
 }
