@@ -2,6 +2,8 @@ import 'package:admin_dashboard/src/feature/category/presentation/screen/categor
 import 'package:admin_dashboard/src/feature/category/presentation/screen/category_list_screen.dart';
 import 'package:admin_dashboard/src/feature/customer/presentation/screen/customer_add_screen.dart';
 import 'package:admin_dashboard/src/feature/customer/presentation/screen/customer_list_screen.dart';
+import 'package:admin_dashboard/src/feature/ingredient/presentation/screen/ingredient_add_screen.dart';
+import 'package:admin_dashboard/src/feature/ingredient/presentation/screen/ingredient_list_screen.dart';
 import 'package:admin_dashboard/src/feature/order/presentation/screen/order_screen.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/product_add_screen.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/product_list_screen.dart';
@@ -14,6 +16,8 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../auth/presentation/provider/auth_provider.dart';
+import '../../../recipe/presentation/screen/recipe_add_screen.dart';
+import '../../../recipe/presentation/screen/recipe_list_screen.dart';
 import '../../../track_issue/presentation/screen/track_issue_screen.dart';
 
 class NewHomeScreen extends StatefulWidget {
@@ -66,6 +70,10 @@ class _NewHomeScreenState extends State<NewHomeScreen> with AutomaticKeepAliveCl
         return 'Customer List';
       case 16:
         return 'Add Customer';
+      case 18:
+        return 'Ingredient List';
+      case 19:
+        return 'Add Ingredient';
       case 17:
         return 'Settings';
       default:
@@ -259,6 +267,66 @@ class _NewHomeScreenState extends State<NewHomeScreen> with AutomaticKeepAliveCl
                 icon: const Icon(FluentIcons.add),
                 title: const Text('Customer User', overflow: TextOverflow.ellipsis),
                 body: CustomerAddScreen(),
+              ),
+            ],
+          ),
+          // ingredient list
+          PaneItemExpander(
+            icon: const Icon(FluentIcons.breakfast),
+            title: const Text('Ingredient', overflow: TextOverflow.ellipsis),
+            body: Container(
+              padding: const EdgeInsets.all(16.0),
+              child: const Text(
+                'Manage your ingredient here',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            items: [
+              PaneItem(
+                onTap: () {
+                  context.go('/ingredient');
+                },
+                icon: const Icon(FluentIcons.list),
+                title: const Text('Ingredient List', overflow: TextOverflow.ellipsis),
+                body: IngredientListScreen(),
+              ),
+              PaneItem(
+                onTap: () {
+                  context.go('/ingredient/add');
+                },
+                icon: const Icon(FluentIcons.add),
+                title: const Text('Add Ingredient', overflow: TextOverflow.ellipsis),
+                body: IngredientAddScreen(),
+              ),
+            ],
+          ),
+          // recipes listy
+          PaneItemExpander(
+            icon: const Icon(FluentIcons.birthday_cake),
+            title: const Text('Recipe', overflow: TextOverflow.ellipsis),
+            body: Container(
+              padding: const EdgeInsets.all(16.0),
+              child: const Text(
+                'Manage your recipe here',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            items: [
+              PaneItem(
+                onTap: () {
+                  context.go('/recipe');
+                },
+                icon: const Icon(FluentIcons.list),
+                title: const Text('Ingredient List', overflow: TextOverflow.ellipsis),
+                body: RecipeListScreen(),
+              ),
+              PaneItem(
+                onTap: () {
+                  context.go('/recipe/add');
+                },
+                icon: const Icon(FluentIcons.add),
+                title: const Text('Add Recipe', overflow: TextOverflow.ellipsis),
+                body: RecipeAddScreen(),
               ),
             ],
           ),

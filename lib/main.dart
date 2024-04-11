@@ -28,6 +28,12 @@ import 'package:admin_dashboard/src/feature/customer/data/datasource/customer_da
 import 'package:admin_dashboard/src/feature/customer/data/repository/customer_repository_impl.dart';
 import 'package:admin_dashboard/src/feature/customer/presentation/provider/customer_provider.dart';
 import 'package:admin_dashboard/src/feature/home/presentation/provider/home_provider.dart';
+import 'package:admin_dashboard/src/feature/ingredient/business/repository/ingredient_repository.dart';
+import 'package:admin_dashboard/src/feature/ingredient/business/usecase/ingredient_add_usecase.dart';
+import 'package:admin_dashboard/src/feature/ingredient/business/usecase/ingredient_get_ingredients_usecase.dart';
+import 'package:admin_dashboard/src/feature/ingredient/data/datasource/ingredient_datasource.dart';
+import 'package:admin_dashboard/src/feature/ingredient/data/repository/ingredient_repository_impl.dart';
+import 'package:admin_dashboard/src/feature/ingredient/presentation/provider/ingredient_provider.dart';
 import 'package:admin_dashboard/src/feature/order/business/usecase/order_get_order_by_id_usecase.dart';
 import 'package:admin_dashboard/src/feature/order/business/usecase/order_get_orders_by_customer_id_usecase.dart';
 import 'package:admin_dashboard/src/feature/order/business/usecase/order_get_orders_by_date_usecase.dart';
@@ -45,6 +51,12 @@ import 'package:admin_dashboard/src/feature/product/business/usecase/product_upl
 import 'package:admin_dashboard/src/feature/product/data/datasource/product_datasource.dart';
 import 'package:admin_dashboard/src/feature/product/data/repository/product_repository_impl.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/provider/product_provider.dart';
+import 'package:admin_dashboard/src/feature/recipe/business/repository/recipe_repository.dart';
+import 'package:admin_dashboard/src/feature/recipe/business/usecase/recipe_add_usecase.dart';
+import 'package:admin_dashboard/src/feature/recipe/business/usecase/recipe_get_ingredients_usecase.dart';
+import 'package:admin_dashboard/src/feature/recipe/data/datasource/recipe_datasource.dart';
+import 'package:admin_dashboard/src/feature/recipe/data/repository/recipe_repository_impl.dart';
+import 'package:admin_dashboard/src/feature/recipe/presentation/provider/recipe_provider.dart';
 import 'package:admin_dashboard/src/feature/theme/presentation/provider/theme_provider.dart';
 import 'package:admin_dashboard/src/feature/track_issue/business/usecase/track_issue_get_all_track_issues_usecase.dart';
 import 'package:admin_dashboard/src/feature/track_issue/business/usecase/track_issue_update_track_issue_usecase.dart';
@@ -74,30 +86,27 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 Future<void> main() async {
   await Supabase.initialize(
     url: 'https://qlhzemdpzbonyqdecfxn.supabase.co',
-    anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFsaHplbWRwemJvbnlxZGVjZnhuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDQ4ODY4MDYsImV4cCI6MjAyMDQ2MjgwNn0.lcUJMI3dvMDT7LaO7MiudIkdxAZOZwF_hNtkQtF3OC8',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFsaHplbWRwemJvbnlxZGVjZnhuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDQ4ODY4MDYsImV4cCI6MjAyMDQ2MjgwNn0.lcUJMI3dvMDT7LaO7MiudIkdxAZOZwF_hNtkQtF3OC8',
   );
 
-  final supabaseAdmin = SupabaseClient(
-      'https://qlhzemdpzbonyqdecfxn.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFsaHplbWRwemJvbnlxZGVjZnhuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDQ4ODY4MDYsImV4cCI6MjAyMDQ2MjgwNn0.lcUJMI3dvMDT7LaO7MiudIkdxAZOZwF_hNtkQtF3OC8');
+  final supabaseAdmin = SupabaseClient('https://qlhzemdpzbonyqdecfxn.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFsaHplbWRwemJvbnlxZGVjZnhuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDQ4ODY4MDYsImV4cCI6MjAyMDQ2MjgwNn0.lcUJMI3dvMDT7LaO7MiudIkdxAZOZwF_hNtkQtF3OC8');
   final supabaseClient = Supabase.instance;
-  AuthRepository authRepository =
-      AuthRepositoryImpl(dataSource: AuthDataSource());
-  CategoryRepository categoryRepository =
-      CategoryRepositoryImpl(dataSource: CategoryDataSource());
-  ProductRepository productRepository =
-      ProductRepositoryImpl(dataSource: ProductDataSource());
-  UserRepository userRepository =
-      UserRepositoryImpl(dataSource: UserDataSource());
-  CustomerRepositoryImpl customerRepository =
-      CustomerRepositoryImpl(dataSource: CustomerDataSource());
-  TrackIssueRepositoryImpl trackIssueRepository =
-      TrackIssueRepositoryImpl(dataSource: TrackIssueDataSource());
+  AuthRepository authRepository = AuthRepositoryImpl(dataSource: AuthDataSource());
+  CategoryRepository categoryRepository = CategoryRepositoryImpl(dataSource: CategoryDataSource());
+  ProductRepository productRepository = ProductRepositoryImpl(dataSource: ProductDataSource());
+  UserRepository userRepository = UserRepositoryImpl(dataSource: UserDataSource());
+  CustomerRepositoryImpl customerRepository = CustomerRepositoryImpl(dataSource: CustomerDataSource());
+  TrackIssueRepositoryImpl trackIssueRepository = TrackIssueRepositoryImpl(dataSource: TrackIssueDataSource());
 
   OrderRepositoryImpl orderRepository = OrderRepositoryImpl(
     orderDataSource: OrderDataSource(),
   );
+
+  IngredientRepository ingredientRepository = IngredientRepositoryImpl(
+    dataSource: IngredientDataSource(),
+  );
+
+  RecipeRepository recipeRepository = RecipeRepositoryImpl(dataSource: RecipeDataSource());
   // set path strategy
   usePathUrlStrategy();
 
@@ -107,78 +116,57 @@ Future<void> main() async {
         ChangeNotifierProvider<AuthProvider>(
           create: (context) => AuthProvider(
             authLoginUseCase: AuthLoginUseCase(authRepository: authRepository),
-            authLogoutUseCase:
-                AuthLogoutUseCase(authRepository: authRepository),
-            authGetUserUseCase:
-                AuthGetUserUseCase(authRepository: authRepository),
-            authIsLoggedInUseCase:
-                AuthIsLoggedInUseCase(authRepository: authRepository),
-            authOnAuthChangeUseCase:
-                AuthOnAuthOnAuthChangeUseCase(authRepository: authRepository),
+            authLogoutUseCase: AuthLogoutUseCase(authRepository: authRepository),
+            authGetUserUseCase: AuthGetUserUseCase(authRepository: authRepository),
+            authIsLoggedInUseCase: AuthIsLoggedInUseCase(authRepository: authRepository),
+            authOnAuthChangeUseCase: AuthOnAuthOnAuthChangeUseCase(authRepository: authRepository),
           ),
         ),
         ChangeNotifierProvider<CategoryProvider>(
           create: (context) => CategoryProvider(
-            categoryAddUseCase:
-                CategoryAddUseCase(categoryRepository: categoryRepository),
-            categoryGetCategoriesUseCase: CategoryGetCategoriesUseCase(
-                categoryRepository: categoryRepository),
-            categoryGetCategoryByIdUseCase: CategoryGetCategoryByIdUseCase(
-                categoryRepository: categoryRepository),
-            categoryUpdateCategoryUseCase:
-                CategoryUpdateUseCase(categoryRepository: categoryRepository),
-            categoryUploadImageUseCase: CategoryUploadImageUseCase(
-                categoryRepository: categoryRepository),
-            categoryGetSignedUrlUseCase: CategoryGetSignedUrlUseCase(
-                categoryRepository: categoryRepository),
-            categoryDeleteUseCase:
-                CategoryDeleteUseCase(categoryRepository: categoryRepository),
+            categoryAddUseCase: CategoryAddUseCase(categoryRepository: categoryRepository),
+            categoryGetCategoriesUseCase: CategoryGetCategoriesUseCase(categoryRepository: categoryRepository),
+            categoryGetCategoryByIdUseCase: CategoryGetCategoryByIdUseCase(categoryRepository: categoryRepository),
+            categoryUpdateCategoryUseCase: CategoryUpdateUseCase(categoryRepository: categoryRepository),
+            categoryUploadImageUseCase: CategoryUploadImageUseCase(categoryRepository: categoryRepository),
+            categoryGetSignedUrlUseCase: CategoryGetSignedUrlUseCase(categoryRepository: categoryRepository),
+            categoryDeleteUseCase: CategoryDeleteUseCase(categoryRepository: categoryRepository),
           ),
         ),
         ChangeNotifierProvider<ProductProvider>(
           create: (context) => ProductProvider(
-            productAddUseCase:
-                ProductAddUseCase(productRepository: productRepository),
-            productGetProductsUseCase:
-                ProductGetProductsUseCase(productRepository: productRepository),
-            productGetProductByIdUseCase: ProductGetProductByIdUseCase(
-                productRepository: productRepository),
-            productUpdateProductUseCase:
-                ProductUpdateUseCase(productRepository: productRepository),
-            productUploadImageUseCase:
-                ProductUploadImageUseCase(productRepository: productRepository),
-            productGetSignedUrlUseCase: ProductGetSignedUrlUseCase(
-                productRepository: productRepository),
-            productDeleteUseCase:
-                ProductDeleteUseCase(productRepository: productRepository),
+            productAddUseCase: ProductAddUseCase(productRepository: productRepository),
+            productGetProductsUseCase: ProductGetProductsUseCase(productRepository: productRepository),
+            productGetProductByIdUseCase: ProductGetProductByIdUseCase(productRepository: productRepository),
+            productUpdateProductUseCase: ProductUpdateUseCase(productRepository: productRepository),
+            productUploadImageUseCase: ProductUploadImageUseCase(productRepository: productRepository),
+            productGetSignedUrlUseCase: ProductGetSignedUrlUseCase(productRepository: productRepository),
+            productDeleteUseCase: ProductDeleteUseCase(productRepository: productRepository),
           ),
         ),
         ChangeNotifierProvider<UserProvider>(
           create: (context) => UserProvider(
             userAddUseCase: UserAddUseCase(userRepository: userRepository),
-            userGetUsersUseCase:
-                UserGetUsersUseCase(userRepository: userRepository),
-            userGetUserByIdUseCase:
-                UserGetUserByIdUseCase(userRepository: userRepository),
-            userUpdateUserUseCase:
-                UserUpdateUseCase(userRepository: userRepository),
-            userDeleteUseCase:
-                UserDeleteUseCase(userRepository: userRepository),
+            userGetUsersUseCase: UserGetUsersUseCase(userRepository: userRepository),
+            userGetUserByIdUseCase: UserGetUserByIdUseCase(userRepository: userRepository),
+            userUpdateUserUseCase: UserUpdateUseCase(userRepository: userRepository),
+            userDeleteUseCase: UserDeleteUseCase(userRepository: userRepository),
           ),
         ),
         ChangeNotifierProvider<CustomerProvider>(
           create: (context) => CustomerProvider(
-            customerAddUseCase:
-                CustomerAddUseCase(customerRepository: customerRepository),
-            customerUpdateUseCase:
-                CustomerUpdateUseCase(customerRepository: customerRepository),
-            customerDeleteUseCase:
-                CustomerDeleteUseCase(customerRepository: customerRepository),
-            customerGetCustomerByIdUseCase: CustomerGetCustomerByIdUseCase(
-                customerRepository: customerRepository),
-            customerGetCustomersUseCase: CustomerGetCustomersUseCase(
-                customerRepository: customerRepository),
+            customerAddUseCase: CustomerAddUseCase(customerRepository: customerRepository),
+            customerUpdateUseCase: CustomerUpdateUseCase(customerRepository: customerRepository),
+            customerDeleteUseCase: CustomerDeleteUseCase(customerRepository: customerRepository),
+            customerGetCustomerByIdUseCase: CustomerGetCustomerByIdUseCase(customerRepository: customerRepository),
+            customerGetCustomersUseCase: CustomerGetCustomersUseCase(customerRepository: customerRepository),
           ),
+        ),
+        ChangeNotifierProvider<IngredientProvider>(
+          create: (context) => IngredientProvider(ingredientGetIngredientsUseCase: IngredientGetIngredientsUseCase(ingredientRepository: ingredientRepository), ingredientAddUseCase: IngredientAddUseCase(ingredientRepository: ingredientRepository)),
+        ),
+        ChangeNotifierProvider<RecipeProvider>(
+          create: (context) => RecipeProvider(recipeGetRecipesUseCase: RecipeGetRecipesUseCase(recipeRepository: recipeRepository), recipeAddUseCase: RecipeAddUseCase(recipeRepository: recipeRepository)),
         ),
         ChangeNotifierProvider<HomeProvider>(
           create: (context) => HomeProvider(),
@@ -188,21 +176,15 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider<OrderProvider>(
           create: (context) => OrderProvider(
-            orderGetOrdersByDateUseCase:
-                OrderGetOrdersByDateUseCase(orderRepository: orderRepository),
-            orderGetOrdersByCustomerIdUseCase:
-                OrderGetOrdersByCustomerIdUseCase(
-                    orderRepository: orderRepository),
-            orderGetOrdersByIdUseCase:
-                OrderGetOrdersByIdUseCase(orderRepository: orderRepository),
+            orderGetOrdersByDateUseCase: OrderGetOrdersByDateUseCase(orderRepository: orderRepository),
+            orderGetOrdersByCustomerIdUseCase: OrderGetOrdersByCustomerIdUseCase(orderRepository: orderRepository),
+            orderGetOrdersByIdUseCase: OrderGetOrdersByIdUseCase(orderRepository: orderRepository),
           ),
         ),
         ChangeNotifierProvider<TrackIssueProvider>(
           create: (context) => TrackIssueProvider(
-            getAllTrackIssuesUsecase: TrackIssueGetAllTrackIssuesUsecase(
-                repository: trackIssueRepository),
-            updateTrackIssueUsecase: TrackIssueUpdateTrackIssueUsecase(
-                repository: trackIssueRepository),
+            getAllTrackIssuesUsecase: TrackIssueGetAllTrackIssuesUsecase(repository: trackIssueRepository),
+            updateTrackIssueUsecase: TrackIssueUpdateTrackIssueUsecase(repository: trackIssueRepository),
           ),
         ),
       ],
@@ -222,8 +204,7 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   GoRouter? router;
 
-  GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
-      GlobalKey<ScaffoldMessengerState>();
+  GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
   @override
   void initState() {

@@ -55,6 +55,7 @@ dependencies:
   #paged_datatable: ^1.4.4
   darq: ^2.0.0
   intl: ^0.18.0
+  cropperx: ^1.1.1
 
 dev_dependencies:
   flutter_test:

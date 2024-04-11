@@ -158,12 +158,13 @@ class CategoryProvider with ChangeNotifier {
     }
 
     final XFile? image = await picker.pickImage(
-      preferredCameraDevice: CameraDevice.front,
+      preferredCameraDevice: CameraDevice.rear,
       source: source,
       imageQuality: 50,
       maxHeight: 300,
       maxWidth: 300,
     );
+
     return image;
   }
 

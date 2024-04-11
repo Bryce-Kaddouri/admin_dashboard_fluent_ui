@@ -50,6 +50,12 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "cropperx",
+      "rootUri": "file:///Users/bryce/.pub-cache/hosted/pub.dev/cropperx-1.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "cross_file",
       "rootUri": "file:///Users/bryce/.pub-cache/hosted/pub.dev/cross_file-0.3.4+1",
       "packageUri": "lib/",
@@ -728,7 +734,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2024-04-10T15:03:54.515508Z",
+  "generated": "2024-04-11T13:32:42.053355Z",
   "generator": "pub",
   "generatorVersion": "3.3.0"
 }
