@@ -103,9 +103,7 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
                     SizedBox(height: 10),
                     FilledButton(
                       onPressed: () async {
-                        XFile? result = await context
-                            .read<CategoryProvider>()
-                            .pickImage(context);
+                        XFile? result = await context.read<CategoryProvider>().pickImage(context);
                         if (result != null) {
                           Uint8List bytes = await result.readAsBytes();
                           setState(() {
@@ -117,8 +115,7 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
                         alignment: Alignment.center,
                         width: 200,
                         height: 30,
-                        child:
-                            Text(image != null ? 'Change Image' : 'Pick Image'),
+                        child: Text(image != null ? 'Change Image' : 'Pick Image'),
                       ),
                     ),
                   ],
@@ -149,12 +146,7 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
                         value: selectedIngredient,
                         isExpanded: true,
                         placeholder: Text('-- Select ingredient --'),
-                        items: context
-                            .watch<IngredientProvider>()
-                            .ingredients
-                            .map((e) => ComboBoxItem<IngredientModel>(
-                                value: e, child: Text(e.name)))
-                            .toList(),
+                        items: context.watch<IngredientProvider>().ingredients.map((e) => ComboBoxItem<IngredientModel>(value: e, child: Text(e.name))).toList(),
                         onChanged: (value) {
                           setState(() {
                             selectedIngredient = value;
@@ -201,11 +193,7 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
                           value: unit,
                           isExpanded: true,
                           placeholder: Text('-- Select ingredient unit --'),
-                          items: IngredientUnitImpl.getUnits(
-                                  selectedIngredient!.type)
-                              .map((e) => ComboBoxItem<String>(
-                                  value: e, child: Text(e)))
-                              .toList(),
+                          items: IngredientUnitImpl.getUnits(selectedIngredient!.type).map((e) => ComboBoxItem<String>(value: e, child: Text(e))).toList(),
                           onChanged: (value) {
                             setState(() {
                               unit = value;
@@ -220,23 +208,22 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
                         ),
                       ),
                     ),
-                  if (selectedIngredient != null &&
-                      unit != null &&
-                      quantity != null)
+                  if (selectedIngredient != null && unit != null && quantity != null)
                     Container(
                       alignment: Alignment.center,
                       constraints: BoxConstraints(maxWidth: 500),
                       child: FilledButton(
                           onPressed: () {
                             // add ingredient
+
                             print('add ingredient');
-                            RecipeIngredientModel ingredient =
-                                RecipeIngredientModel(
+                            RecipeIngredientModel ingredient = RecipeIngredientModel(
                               ingredientId: selectedIngredient!.id,
                               name: selectedIngredient!.name,
                               photoUrl: selectedIngredient!.photoUrl,
                               quantity: quantity!,
                               unit: unit!,
+                              type: selectedIngredient!.type,
                             );
                             // add ingredient to recipe
                             context.read<RecipeProvider>().addDraft(ingredient);
@@ -260,28 +247,22 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
                         child: ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount:
-                              context.watch<RecipeProvider>().draftList.length,
+                          itemCount: context.watch<RecipeProvider>().draftList.length,
                           itemBuilder: (context, index) {
-                            RecipeIngredientModel ingredient = context
-                                .watch<RecipeProvider>()
-                                .draftList[index];
+                            RecipeIngredientModel ingredient = context.watch<RecipeProvider>().draftList[index];
                             return Card(
                               child: Row(children: [
                                 ingredient.photoUrl != null
                                     ? Container(
-                                        constraints: BoxConstraints(
-                                            maxHeight: 60, maxWidth: 60),
+                                        constraints: BoxConstraints(maxHeight: 60, maxWidth: 60),
                                         decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
+                                          borderRadius: BorderRadius.circular(10),
                                         ),
                                         child: ClipRect(
                                           child: Image.network(
                                             fit: BoxFit.cover,
                                             ingredient.photoUrl!,
-                                            errorBuilder:
-                                                (context, obj, trace) {
+                                            errorBuilder: (context, obj, trace) {
                                               return Container(
                                                 height: 0,
                                                 width: 0,
@@ -294,18 +275,12 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
                                 Expanded(
                                   child: ListTile(
                                     title: Text(ingredient.name ?? ''),
-                                    subtitle: Text(
-                                        '${ingredient.quantity} ${ingredient.unit}'),
+                                    subtitle: Text('${ingredient.quantity}'),
                                     trailing: IconButton(
                                       icon: Icon(FluentIcons.delete),
                                       onPressed: () {
-                                        RecipeIngredientModel ingredient =
-                                            context
-                                                .read<RecipeProvider>()
-                                                .draftList[index];
-                                        context
-                                            .read<RecipeProvider>()
-                                            .removeDraft(ingredient);
+                                        RecipeIngredientModel ingredient = context.read<RecipeProvider>().draftList[index];
+                                        context.read<RecipeProvider>().removeDraft(ingredient);
                                       },
                                     ),
                                   ),
@@ -319,8 +294,7 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
                   ),
                 const SizedBox(height: 50),
                 InfoLabel(
-                  label:
-                      'Step ${context.watch<RecipeProvider>().draftSteps.length + 1} \n\nEnter step description:',
+                  label: 'Step ${context.watch<RecipeProvider>().draftSteps.length + 1} \n\nEnter step description:',
                   child: Container(
                     alignment: Alignment.center,
                     constraints: BoxConstraints(maxWidth: 500),
@@ -338,11 +312,7 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
                     onPressed: () {
                       // add step
                       print('add step');
-                      RecipeStepModel step = RecipeStepModel(
-                          description: stepController.text,
-                          stepNumber:
-                              context.read<RecipeProvider>().draftSteps.length +
-                                  1);
+                      RecipeStepModel step = RecipeStepModel(description: stepController.text, stepNumber: context.read<RecipeProvider>().draftSteps.length + 1);
                       context.read<RecipeProvider>().addDraftStep(step);
                       stepController.clear();
                     }),
@@ -357,13 +327,7 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
                             Container(
                               alignment: Alignment.centerLeft,
                               constraints: BoxConstraints(maxWidth: 500),
-                              child: Text('Step ${index + 1}',
-                                  style: FluentTheme.of(context)
-                                      .typography
-                                      .subtitle!
-                                      .copyWith(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold)),
+                              child: Text('Step ${index + 1}', style: FluentTheme.of(context).typography.subtitle!.copyWith(fontSize: 20, fontWeight: FontWeight.bold)),
                             ),
                             SizedBox(height: 10),
                             Container(
@@ -372,21 +336,14 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
                                 Expanded(
                                   child: Container(
                                     alignment: Alignment.centerLeft,
-                                    child: Text(context
-                                        .watch<RecipeProvider>()
-                                        .draftSteps[index]
-                                        .description),
+                                    child: Text(context.watch<RecipeProvider>().draftSteps[index].description),
                                   ),
                                 ),
                                 IconButton(
                                   icon: Icon(FluentIcons.delete),
                                   onPressed: () {
-                                    RecipeIngredientModel ingredient = context
-                                        .read<RecipeProvider>()
-                                        .draftList[index];
-                                    context
-                                        .read<RecipeProvider>()
-                                        .removeDraft(ingredient);
+                                    RecipeIngredientModel ingredient = context.read<RecipeProvider>().draftList[index];
+                                    context.read<RecipeProvider>().removeDraft(ingredient);
                                   },
                                 ),
                               ]),
@@ -399,13 +356,7 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
                   ),
                 const SizedBox(height: 100),
                 FilledButton(
-                    child: context.watch<CategoryProvider>().isLoading
-                        ? const ProgressRing()
-                        : Container(
-                            alignment: Alignment.center,
-                            width: 200,
-                            height: 30,
-                            child: const Text('Add Recipe')),
+                    child: context.watch<CategoryProvider>().isLoading ? const ProgressRing() : Container(alignment: Alignment.center, width: 200, height: 30, child: const Text('Add Recipe')),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         if (context.read<RecipeProvider>().draftList.isEmpty) {
@@ -416,18 +367,14 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
                                 title: Text('Please add ingredients'),
                                 severity: InfoBarSeverity.error,
                                 isLong: false,
-                                style: InfoBarThemeData.standard(
-                                    FluentTheme.of(context)),
+                                style: InfoBarThemeData.standard(FluentTheme.of(context)),
                                 onClose: close,
                               );
                             },
                             alignment: Alignment.topRight,
                           );
                           return;
-                        } else if (context
-                            .read<RecipeProvider>()
-                            .draftSteps
-                            .isEmpty) {
+                        } else if (context.read<RecipeProvider>().draftSteps.isEmpty) {
                           await displayInfoBar(
                             context,
                             builder: (context, close) {
@@ -435,8 +382,7 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
                                 title: Text('Please add steps'),
                                 severity: InfoBarSeverity.error,
                                 isLong: false,
-                                style: InfoBarThemeData.standard(
-                                    FluentTheme.of(context)),
+                                style: InfoBarThemeData.standard(FluentTheme.of(context)),
                                 onClose: close,
                               );
                             },
@@ -451,21 +397,16 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
                         // upload image
                         if (image != null) {
                           final imageBytes = await Cropper.crop(
-                            cropperKey:
-                                _cropperKey, // Reference it through the key
+                            cropperKey: _cropperKey, // Reference it through the key
                           );
-                          String? imageUrl = await context
-                              .read<CategoryProvider>()
-                              .uploadImage(imageBytes!);
+                          String? imageUrl = await context.read<CategoryProvider>().uploadImage(imageBytes!);
                           if (imageUrl != null) {
                             int recipeId = 0;
                             String photoUrl = imageUrl;
                             String recipeName = name;
                             String recipeDescription = description;
-                            List<RecipeStepModel> steps =
-                                context.read<RecipeProvider>().draftSteps;
-                            List<RecipeIngredientModel> ingredients =
-                                context.read<RecipeProvider>().draftList;
+                            List<RecipeStepModel> steps = context.read<RecipeProvider>().draftSteps;
+                            List<RecipeIngredientModel> ingredients = context.read<RecipeProvider>().draftList;
                             List<int> productIds = [];
 
                             RecipeModel model = RecipeModel(
@@ -477,9 +418,7 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
                               ingredients: ingredients,
                               productIds: productIds,
                             );
-                            bool res = await context
-                                .read<RecipeProvider>()
-                                .addRecipe(model);
+                            bool res = await context.read<RecipeProvider>().addRecipe(model);
                             if (res) {
                               nameController.clear();
                               descriptionController.clear();
@@ -498,12 +437,10 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
                                 context,
                                 builder: (context, close) {
                                   return InfoBar(
-                                    title:
-                                        Text('Ingredient added successfully'),
+                                    title: Text('Ingredient added successfully'),
                                     severity: InfoBarSeverity.success,
                                     isLong: false,
-                                    style: InfoBarThemeData.standard(
-                                        FluentTheme.of(context)),
+                                    style: InfoBarThemeData.standard(FluentTheme.of(context)),
                                     onClose: close,
                                   );
                                 },
@@ -517,8 +454,7 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
                                     title: Text('Ingredient added failed'),
                                     severity: InfoBarSeverity.error,
                                     isLong: false,
-                                    style: InfoBarThemeData.standard(
-                                        FluentTheme.of(context)),
+                                    style: InfoBarThemeData.standard(FluentTheme.of(context)),
                                     onClose: close,
                                   );
                                 },
@@ -534,10 +470,8 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
                           int recipeId = 0;
                           String recipeName = name;
                           String recipeDescription = description;
-                          List<RecipeStepModel> steps =
-                              context.read<RecipeProvider>().draftSteps;
-                          List<RecipeIngredientModel> ingredients =
-                              context.read<RecipeProvider>().draftList;
+                          List<RecipeStepModel> steps = context.read<RecipeProvider>().draftSteps;
+                          List<RecipeIngredientModel> ingredients = context.read<RecipeProvider>().draftList;
                           List<int> productIds = [];
 
                           RecipeModel model = RecipeModel(
@@ -549,9 +483,7 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
                             ingredients: ingredients,
                             productIds: productIds,
                           );
-                          bool res = await context
-                              .read<RecipeProvider>()
-                              .addRecipe(model);
+                          bool res = await context.read<RecipeProvider>().addRecipe(model);
 
                           if (res) {
                             nameController.clear();
@@ -573,8 +505,7 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
                                   title: Text('Recipe added successfully'),
                                   severity: InfoBarSeverity.success,
                                   isLong: false,
-                                  style: InfoBarThemeData.standard(
-                                      FluentTheme.of(context)),
+                                  style: InfoBarThemeData.standard(FluentTheme.of(context)),
                                   onClose: close,
                                 );
                               },
@@ -588,8 +519,7 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
                                   title: Text('Ingredient added failed'),
                                   severity: InfoBarSeverity.error,
                                   isLong: false,
-                                  style: InfoBarThemeData.standard(
-                                      FluentTheme.of(context)),
+                                  style: InfoBarThemeData.standard(FluentTheme.of(context)),
                                   onClose: close,
                                 );
                               },

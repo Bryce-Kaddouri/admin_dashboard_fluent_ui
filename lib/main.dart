@@ -54,6 +54,7 @@ import 'package:admin_dashboard/src/feature/product/presentation/provider/produc
 import 'package:admin_dashboard/src/feature/recipe/business/repository/recipe_repository.dart';
 import 'package:admin_dashboard/src/feature/recipe/business/usecase/recipe_add_usecase.dart';
 import 'package:admin_dashboard/src/feature/recipe/business/usecase/recipe_get_ingredients_usecase.dart';
+import 'package:admin_dashboard/src/feature/recipe/business/usecase/recipe_get_recipe_by_id_usecase.dart';
 import 'package:admin_dashboard/src/feature/recipe/data/datasource/recipe_datasource.dart';
 import 'package:admin_dashboard/src/feature/recipe/data/repository/recipe_repository_impl.dart';
 import 'package:admin_dashboard/src/feature/recipe/presentation/provider/recipe_provider.dart';
@@ -166,7 +167,11 @@ Future<void> main() async {
           create: (context) => IngredientProvider(ingredientGetIngredientsUseCase: IngredientGetIngredientsUseCase(ingredientRepository: ingredientRepository), ingredientAddUseCase: IngredientAddUseCase(ingredientRepository: ingredientRepository)),
         ),
         ChangeNotifierProvider<RecipeProvider>(
-          create: (context) => RecipeProvider(recipeGetRecipesUseCase: RecipeGetRecipesUseCase(recipeRepository: recipeRepository), recipeAddUseCase: RecipeAddUseCase(recipeRepository: recipeRepository)),
+          create: (context) => RecipeProvider(
+            recipeGetRecipesUseCase: RecipeGetRecipesUseCase(recipeRepository: recipeRepository),
+            recipeAddUseCase: RecipeAddUseCase(recipeRepository: recipeRepository),
+            recipeGetRecipeByIdUseCase: RecipeGetRecipeByIdUseCase(recipeRepository: recipeRepository),
+          ),
         ),
         ChangeNotifierProvider<HomeProvider>(
           create: (context) => HomeProvider(),

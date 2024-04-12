@@ -33,8 +33,8 @@ class RecipeModel {
     for (Map<String, dynamic> ingredient in json['ingredients']) {
       ingredients.add(RecipeIngredientModel.fromJson(ingredient));
     }
-
-    for (int product in json['product_ids'] ?? []) {
+    final products = json['product_ids'] ?? [];
+    for (int product in products) {
       productIds.add(product);
     }
 
@@ -42,7 +42,7 @@ class RecipeModel {
       id: json['id'],
       name: json['name'],
       photoUrl: json['photo_url'] ?? '',
-      description: json['description'],
+      description: json['description'] ?? '',
       steps: steps,
       ingredients: ingredients,
       productIds: productIds,
@@ -113,23 +113,27 @@ class RecipeIngredientModel {
   final int? ingredientId;
   final String? name;
   final double quantity;
-  final String unit;
+  final String? unit;
   final String? photoUrl;
+  final IngredientType? type;
 
   RecipeIngredientModel({
     this.ingredientId,
     this.name,
     required this.quantity,
-    required this.unit,
+    this.unit,
     this.photoUrl,
+    this.type,
   });
 
   factory RecipeIngredientModel.fromJson(Map<String, dynamic> json) {
+    int indexType = json['type'] - 1;
     return RecipeIngredientModel(
       name: json['name'],
-      quantity: json['quantity'],
-      unit: json['measurement_unit'],
-      photoUrl: json['photo_url'],
+      quantity: double.parse(json['quantity'].toString()),
+      photoUrl: json['photo_url'] ?? '',
+      type: IngredientType.values[indexType],
+      ingredientId: json['id'],
     );
   }
 
@@ -139,7 +143,6 @@ class RecipeIngredientModel {
         'recipe_id': recipeId,
         'ingredient_id': ingredientId,
         'quantity': quantity,
-        'measurement_unit': unit,
       };
     }
     return {
@@ -147,9 +150,109 @@ class RecipeIngredientModel {
       'ingredient_id': ingredientId,
       'name': name,
       'quantity': quantity,
-      'measurement_unit': unit,
       'photo_url': photoUrl ?? '',
     };
+  }
+
+  static String getUnit(double qty, IngredientType type) {
+    if (type == IngredientType.solid) {
+      // check the first one where is > to 0
+      switch (SolidUnit.values.firstWhere((e) => convertToGram(qty, type, e.toString().split('.').last) > 0)) {
+        case SolidUnit.mg:
+          return SolidUnit.mg.toString().split('.').last;
+        case SolidUnit.cg:
+          return SolidUnit.cg.toString().split('.').last;
+        case SolidUnit.dg:
+          return SolidUnit.dg.toString().split('.').last;
+        case SolidUnit.g:
+          return SolidUnit.g.toString().split('.').last;
+        case SolidUnit.dag:
+          return SolidUnit.dag.toString().split('.').last;
+        case SolidUnit.hg:
+          return SolidUnit.hg.toString().split('.').last;
+        case SolidUnit.kg:
+          return SolidUnit.kg.toString().split('.').last;
+      }
+    } else if (type == IngredientType.liquid) {
+      // check the first one where is > to 0
+      switch (LiquidUnit.values.firstWhere((e) => convertToGram(qty, type, e.toString().split('.').last) > 0)) {
+        case LiquidUnit.ml:
+          return LiquidUnit.ml.toString().split('.').last;
+        case LiquidUnit.cl:
+          return LiquidUnit.cl.toString().split('.').last;
+        case LiquidUnit.dl:
+          return LiquidUnit.dl.toString().split('.').last;
+        case LiquidUnit.l:
+          return LiquidUnit.l.toString().split('.').last;
+        case LiquidUnit.dal:
+          return LiquidUnit.dal.toString().split('.').last;
+        case LiquidUnit.hl:
+          return LiquidUnit.hl.toString().split('.').last;
+        case LiquidUnit.kl:
+          return LiquidUnit.kl.toString().split('.').last;
+      }
+    } else {
+      return NumberUnit.unit.toString().split('.').last;
+    }
+  }
+
+  static double convertToGram(double qty, IngredientType type, String unit) {
+    // check if solid or liquid or number
+    if (type == IngredientType.solid) {
+      // check the measurement unit
+      SolidUnit solidUnit = SolidUnit.values.firstWhere((e) => e.toString() == 'SolidUnit.${unit}');
+      if (solidUnit == SolidUnit.mg) {
+        // mg --> g
+        qty = qty / 1000;
+      } else if (solidUnit == SolidUnit.cg) {
+        // cg --> g
+        qty = qty / 100;
+      } else if (solidUnit == SolidUnit.dg) {
+        // dg --> g
+        qty = qty / 10;
+      } else if (solidUnit == SolidUnit.g) {
+        // g
+      } else if (solidUnit == SolidUnit.dag) {
+        // dag --> g
+        qty = qty * 10;
+      } else if (solidUnit == SolidUnit.hg) {
+        // hg --> g
+        qty = qty * 100;
+      } else {
+        // kg --> g
+        qty = qty * 1000;
+      }
+    } else if (type == IngredientType.liquid) {
+      // liquid
+      LiquidUnit liquidUnit = LiquidUnit.values.firstWhere((e) => e.toString() == 'LiquidUnit.${unit!}');
+      if (liquidUnit == LiquidUnit.ml) {
+        // ml --> l
+        qty = qty / 1000;
+      } else if (liquidUnit == LiquidUnit.cl) {
+        // cl --> l
+        qty = qty / 100;
+      } else if (liquidUnit == LiquidUnit.dl) {
+        // dl --> l
+        qty = qty / 10;
+      } else if (liquidUnit == LiquidUnit.l) {
+        // l --> l
+        qty = qty * 1000;
+      } else if (liquidUnit == LiquidUnit.dal) {
+        // dal --> l
+        qty = qty * 10;
+      } else if (liquidUnit == LiquidUnit.hl) {
+        // hl --> l
+        qty = qty * 100;
+      } else {
+        // kl --> l
+        qty = qty * 1000;
+      }
+    } else {
+      // number
+      qty = qty;
+    }
+
+    return qty;
   }
 }
 
@@ -168,6 +271,9 @@ enum LiquidUnit {
   cl,
   dl,
   l,
+  dal,
+  hl,
+  kl,
 }
 
 enum NumberUnit {

@@ -5,7 +5,7 @@ import '../../../../core/data/exception/failure.dart';
 import '../../../../core/data/usecase/usecase.dart';
 import '../repository/recipe_repository.dart';
 
-class RecipeAddUseCase implements UseCase<RecipeModel, RecipeModel> {
+class RecipeAddUseCase implements UseCase<bool, RecipeModel> {
   final RecipeRepository recipeRepository;
 
   const RecipeAddUseCase({
@@ -13,7 +13,7 @@ class RecipeAddUseCase implements UseCase<RecipeModel, RecipeModel> {
   });
 
   @override
-  Future<Either<DatabaseFailure, RecipeModel>> call(RecipeModel param) {
+  Future<Either<DatabaseFailure, bool>> call(RecipeModel param) {
     return recipeRepository.addRecipe(param);
   }
 }

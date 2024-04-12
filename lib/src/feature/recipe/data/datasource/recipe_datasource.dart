@@ -1,3 +1,4 @@
+import 'package:admin_dashboard/src/feature/ingredient/data/model/ingredient_model.dart';
 import 'package:admin_dashboard/src/feature/recipe/data/model/recipe_model.dart';
 import 'package:dartz/dartz.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -7,7 +8,7 @@ import '../../../../core/data/exception/failure.dart';
 class RecipeDataSource {
   final _client = Supabase.instance.client;
 
-  Future<Either<DatabaseFailure, RecipeModel>> addRecipe(RecipeModel params) async {
+  Future<Either<DatabaseFailure, bool>> addRecipe(RecipeModel params) async {
     try {
       Map<String, dynamic> recipeResponse = await _client.from('recipes').insert(params.toJson(isToAdd: true)).select().single();
       print('response recipes');
@@ -24,13 +25,17 @@ class RecipeDataSource {
       finalRecipe['product_ids'] = [];
 
       for (var ing in params.ingredients) {
+        double qty = ing.quantity;
+        IngredientType ingredientType = ing.type!;
+        String unit = ing.unit!;
+        qty = RecipeIngredientModel.convertToGram(qty, ingredientType, unit);
+
         Map<String, dynamic> response = await _client
             .from('recipe_ingredients')
             .insert({
               'recipe_id': recipeId,
               'ingredient_id': ing.ingredientId,
-              'quantity': ing.quantity,
-              'measurement_unit': ing.unit,
+              'quantity': qty,
             })
             .select()
             .single();
@@ -54,7 +59,7 @@ class RecipeDataSource {
         finalRecipe['steps'].add(response);
       }
 
-      for (int productId in params.productIds) {
+      /*for (int productId in params.productIds) {
         Map<String, dynamic> response = await _client
             .from('recipe_products')
             .insert({
@@ -66,17 +71,18 @@ class RecipeDataSource {
         print('response recipe_products');
         print(response);
         finalRecipe['product_ids'].add(response);
-      }
+      }*/
 
-      RecipeModel recipeModel = RecipeModel.fromJson(finalRecipe);
+      print('final recipe');
+      print(finalRecipe);
 
-      print(recipeModel.toJson(isToAdd: false));
-      return Right(recipeModel);
+      return const Right(true);
     } on PostgrestException catch (error) {
       print('postgrest error');
       print(error);
       return Left(DatabaseFailure(errorMessage: error.message));
     } catch (e) {
+      print('error');
       print(e);
       return Left(DatabaseFailure(errorMessage: e.toString()));
     }
@@ -98,6 +104,27 @@ class RecipeDataSource {
       print('recipeListList');
       print(recipeList.length);
       return Right(recipeList);
+    } on PostgrestException catch (error) {
+      print('postgrest error');
+      print(error);
+      return Left(DatabaseFailure(errorMessage: error.message));
+    } catch (e) {
+      print(e);
+      return Left(DatabaseFailure(errorMessage: 'Error getting recipeListList'));
+    }
+  }
+
+  Future<Either<DatabaseFailure, RecipeModel>> getRecipeById(int id) async {
+    try {
+      Map<String, dynamic> response = await _client.from('all_recipes_view').select().eq('id', id).single();
+
+      print('response getRecipeBy Id');
+      print(response);
+
+      RecipeModel recipe = RecipeModel.fromJson(response);
+      print('recipe model');
+      print(recipe);
+      return Right(recipe);
     } on PostgrestException catch (error) {
       print('postgrest error');
       print(error);

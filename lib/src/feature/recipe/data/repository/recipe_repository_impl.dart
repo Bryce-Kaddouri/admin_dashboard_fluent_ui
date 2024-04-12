@@ -12,12 +12,17 @@ class RecipeRepositoryImpl extends RecipeRepository {
   RecipeRepositoryImpl({required this.dataSource});
 
   @override
-  Future<Either<DatabaseFailure, RecipeModel>> addRecipe(RecipeModel param) async {
+  Future<Either<DatabaseFailure, bool>> addRecipe(RecipeModel param) async {
     return await dataSource.addRecipe(param);
   }
 
   @override
   Future<Either<DatabaseFailure, List<RecipeModel>>> getRecipes(NoParams param) async {
     return await dataSource.getRecipes();
+  }
+
+  @override
+  Future<Either<DatabaseFailure, RecipeModel>> getRecipeById(int recipeId) async {
+    return await dataSource.getRecipeById(recipeId);
   }
 }

@@ -280,6 +280,9 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
                                 margin: const EdgeInsets.all(10),
                                 padding: const EdgeInsets.all(0),
                                 child: ListTile(
+                                  onPressed: () {
+                                    context.go('/recipe/${recipe.id}');
+                                  },
                                   leading: Container(
                                     height: 50,
                                     width: 100,

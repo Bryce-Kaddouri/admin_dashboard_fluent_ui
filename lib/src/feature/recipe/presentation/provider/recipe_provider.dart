@@ -4,14 +4,17 @@ import 'package:admin_dashboard/src/feature/recipe/data/model/recipe_model.dart'
 import 'package:flutter/material.dart';
 
 import '../../../../core/data/usecase/usecase.dart';
+import '../../business/usecase/recipe_get_recipe_by_id_usecase.dart';
 
 class RecipeProvider with ChangeNotifier {
   final RecipeGetRecipesUseCase recipeGetRecipesUseCase;
   final RecipeAddUseCase recipeAddUseCase;
+  final RecipeGetRecipeByIdUseCase recipeGetRecipeByIdUseCase;
 
   RecipeProvider({
     required this.recipeGetRecipesUseCase,
     required this.recipeAddUseCase,
+    required this.recipeGetRecipeByIdUseCase,
   });
 
   bool _isLoading = true;
@@ -95,10 +98,21 @@ class RecipeProvider with ChangeNotifier {
       (failure) => print('Error: $failure'),
       (ingredient) {
         res = true;
-        _recipes.add(ingredient);
-        notifyListeners();
       },
     );
     return res;
+  }
+
+  Future<RecipeModel?> getRecipeById(int recipeId) async {
+    RecipeModel? selectedRecipe;
+    final result = await recipeGetRecipeByIdUseCase.call(recipeId);
+    result.fold(
+      (failure) => print('Error: $failure'),
+      (recipe) {
+        print('recipe');
+        selectedRecipe = recipe;
+      },
+    );
+    return selectedRecipe;
   }
 }

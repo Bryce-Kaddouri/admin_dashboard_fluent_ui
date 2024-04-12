@@ -10,6 +10,7 @@ import 'package:admin_dashboard/src/feature/order/presentation/screen/order_deta
 import 'package:admin_dashboard/src/feature/product/presentation/screen/product_add_screen.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/product_list_screen.dart';
 import 'package:admin_dashboard/src/feature/product/presentation/screen/update_product_screen.dart';
+import 'package:admin_dashboard/src/feature/recipe/presentation/screen/detail_screen.dart';
 import 'package:admin_dashboard/src/feature/recipe/presentation/screen/recipe_add_screen.dart';
 import 'package:admin_dashboard/src/feature/recipe/presentation/screen/recipe_list_screen.dart';
 import 'package:admin_dashboard/src/feature/stat/presentation/screen/stat_screen.dart';
@@ -154,7 +155,7 @@ class RouterHelper {
                 index = 22;
                 title = 'Add Recipe';
               } else if (state.matchedLocation == '/setting') {
-                index = 20;
+                index = 26;
                 title = 'Setting';
               }
 
@@ -346,6 +347,21 @@ class RouterHelper {
               } else {
                 int id = int.parse(idString);
                 return UpdateCustomerScreen(customerId: id);
+              }
+            }),
+        GoRoute(
+            path: '/recipe/:id',
+            builder: (context, state) {
+              String? idString = state.pathParameters['id'];
+              if (idString == null) {
+                return ScaffoldPage(
+                  content: Center(
+                    child: Text('recipe Not found'),
+                  ),
+                );
+              } else {
+                int id = int.parse(idString);
+                return RecipeDetailScreen(id: id);
               }
             }),
         GoRoute(
