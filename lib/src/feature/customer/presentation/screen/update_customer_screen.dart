@@ -2,7 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 // import material dart
 import 'package:flutter/material.dart' as material;
 import 'package:go_router/go_router.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:phone_form_field/phone_form_field.dart';
 import 'package:provider/provider.dart';
 
 import '../../data/model/customer_model.dart';
@@ -15,35 +15,13 @@ class UpdateCustomerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return material.Scaffold(
-      /* padding: EdgeInsets.zero,
-      header: Container(
-        color:
-            FluentTheme.of(context).navigationPaneTheme.overlayBackgroundColor,
-        height: 60,
-        width: MediaQuery.of(context).size.width,
-        child: Row(
-          children: [
-            SizedBox(width: 10),
-            IconButton(
-              icon: Icon(FluentIcons.back, size: 20),
-              onPressed: () {
-                context.go('/customer');
-              },
-            ),
-            Expanded(
-              child: Container(
-                alignment: Alignment.center,
-                child: Text('Update Customer', style: TextStyle(fontSize: 20)),
-              ),
-            ),
-          ],
-        ),
-      ),*/
       appBar: material.AppBar(
         elevation: 4,
         shadowColor: FluentTheme.of(context).shadowColor,
-        surfaceTintColor: FluentTheme.of(context).navigationPaneTheme.backgroundColor,
-        backgroundColor: FluentTheme.of(context).navigationPaneTheme.backgroundColor,
+        surfaceTintColor:
+            FluentTheme.of(context).navigationPaneTheme.backgroundColor,
+        backgroundColor:
+            FluentTheme.of(context).navigationPaneTheme.backgroundColor,
         centerTitle: true,
         title: Text('Update Customer'),
         leading: material.BackButton(
@@ -59,9 +37,12 @@ class UpdateCustomerScreen extends StatelessWidget {
             maxWidth: MediaQuery.of(context).size.width,
             minHeight: MediaQuery.of(context).size.height - 60,
           ),
-          color: FluentTheme.of(context).navigationPaneTheme.overlayBackgroundColor,
+          color: FluentTheme.of(context)
+              .navigationPaneTheme
+              .overlayBackgroundColor,
           child: FutureBuilder<CustomerModel?>(
-            future: context.read<CustomerProvider>().getCustomerById(customerId),
+            future:
+                context.read<CustomerProvider>().getCustomerById(customerId),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 print('data');
@@ -106,16 +87,17 @@ class _UpdateCustomerFormState extends State<UpdateCustomerForm> {
   // controller for first name
   TextEditingController fNameController = TextEditingController();
   TextEditingController lNameController = TextEditingController();
-  TextEditingController phoneNumberController = TextEditingController();
-  TextEditingController countryCodeController = TextEditingController();
+  PhoneController phoneController = PhoneController();
+  final FocusNode focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
     fNameController.text = widget.customerModel.fName;
     lNameController.text = widget.customerModel.lName;
-    phoneNumberController.text = widget.customerModel.phoneNumber;
-    countryCodeController.text = widget.customerModel.countryCode;
+    phoneController.value = PhoneNumber(
+        isoCode: widget.customerModel.isoCode!,
+        nsn: widget.customerModel.phoneNumber);
   }
 
   @override
@@ -168,52 +150,58 @@ class _UpdateCustomerFormState extends State<UpdateCustomerForm> {
             child: material.Card(
               color: Colors.transparent,
               elevation: 0,
-              child: IntlPhoneField(
-                validator: (value) {
-                  if (value == null) {
-                    return 'Please enter phone number';
-                  } else if (value.isValidNumber() == false) {
-                    return 'Please enter valid phone number';
-                  }
-                  return null;
-                },
-                flagsButtonPadding: EdgeInsets.all(10),
-                decoration: material.InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  contentPadding: EdgeInsets.all(10),
-                  constraints: BoxConstraints(maxWidth: 500, maxHeight: 100, minHeight: 100),
-                  labelText: 'Phone Number',
-                  border: material.OutlineInputBorder(),
-                  enabledBorder: material.OutlineInputBorder(),
-                  focusedBorder: material.OutlineInputBorder(),
+              child: Container(
+                width: double.infinity,
+                child: PhoneFieldView(
+                  controller: phoneController,
+                  focusNode: focusNode,
+                  isCountryButtonPersistent: true,
+                  mobileOnly: true,
+                  locale: Locale('ie'),
                 ),
-                initialCountryCode: 'IE',
-                controller: phoneNumberController,
-                onChanged: (phone) {
-                  print(phone.completeNumber);
-                  setState(() {
-                    countryCodeController.text = phone.countryCode;
-                  });
-                },
               ),
             ),
           ),
           const SizedBox(height: 100),
           FilledButton(
-              child: context.watch<CustomerProvider>().isLoading ? const ProgressRing() : Container(alignment: Alignment.center, width: 200, height: 30, child: const Text('Update Category')),
+              child: context.watch<CustomerProvider>().isLoading
+                  ? const ProgressRing()
+                  : Container(
+                      alignment: Alignment.center,
+                      width: 200,
+                      height: 30,
+                      child: const Text('Update Category')),
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   print('add customer');
                   String fName = fNameController.text;
                   String lName = lNameController.text;
-                  String phoneNumber = phoneNumberController.text;
-                  String countryCode = countryCodeController.text;
+                  String phoneNumber = phoneController.value.nsn;
+                  String countryCode = phoneController.value.countryCode;
 
                   CustomerModel oldCustomer = widget.customerModel;
-                  CustomerModel newCustomer = CustomerModel(id: oldCustomer.id, fName: oldCustomer.fName != fName ? fName : oldCustomer.fName, lName: oldCustomer.lName != lName ? lName : oldCustomer.lName, createdAt: oldCustomer.createdAt, updatedAt: DateTime.now(), phoneNumber: oldCustomer.phoneNumber != phoneNumber ? phoneNumber : oldCustomer.phoneNumber, countryCode: oldCustomer.countryCode != countryCode ? countryCode : oldCustomer.countryCode, isEnable: oldCustomer.isEnable);
+                  CustomerModel newCustomer = CustomerModel(
+                      isoCode: phoneController.value.isoCode,
+                      id: oldCustomer.id,
+                      fName: oldCustomer.fName != fName
+                          ? fName
+                          : oldCustomer.fName,
+                      lName: oldCustomer.lName != lName
+                          ? lName
+                          : oldCustomer.lName,
+                      createdAt: oldCustomer.createdAt,
+                      updatedAt: DateTime.now(),
+                      phoneNumber: oldCustomer.phoneNumber != phoneNumber
+                          ? phoneNumber
+                          : oldCustomer.phoneNumber,
+                      countryCode: oldCustomer.countryCode != countryCode
+                          ? countryCode
+                          : oldCustomer.countryCode,
+                      isEnable: oldCustomer.isEnable);
 
-                  bool res = await context.read<CustomerProvider>().updateCustomer(newCustomer, context);
+                  bool res = await context
+                      .read<CustomerProvider>()
+                      .updateCustomer(newCustomer, context);
                 } else {
                   print('form is not valid');
                 }
@@ -221,5 +209,107 @@ class _UpdateCustomerFormState extends State<UpdateCustomerForm> {
         ],
       ),
     );
+  }
+}
+
+class PhoneFieldView extends StatefulWidget {
+  final PhoneController controller;
+  final FocusNode focusNode;
+
+  final bool isCountryButtonPersistent;
+  final bool mobileOnly;
+  final Locale locale;
+  final bool isReadOnly;
+
+  const PhoneFieldView({
+    Key? key,
+    required this.controller,
+    required this.focusNode,
+    required this.isCountryButtonPersistent,
+    required this.mobileOnly,
+    required this.locale,
+    this.isReadOnly = false,
+  }) : super(key: key);
+
+  @override
+  State<PhoneFieldView> createState() => _PhoneFieldViewState();
+
+  static bool validPhoneNumber(PhoneController phoneNumber) {
+    bool isValid = true;
+    if (phoneNumber.value.isValidLength() == false) {
+      isValid = false;
+    } else if (phoneNumber.value.isValid() == false) {
+      isValid = false;
+    }
+
+    return isValid;
+  }
+}
+
+class _PhoneFieldViewState extends State<PhoneFieldView> {
+  bool isFocused = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    widget.focusNode.addListener(() {
+      if (widget.focusNode.hasFocus) {
+        setState(() {
+          isFocused = true;
+        });
+      } else {
+        setState(() {
+          isFocused = false;
+        });
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+        padding: EdgeInsets.all(0),
+        child: AutofillGroup(
+          child: PhoneFormField(
+            countryButtonStyle: CountryButtonStyle(
+              showDialCode: true,
+              showDropdownIcon: true,
+              showIsoCode: false,
+              showFlag: true,
+            ),
+            enabled: !widget.isReadOnly,
+            focusNode: widget.focusNode,
+            controller: widget.controller,
+            isCountryButtonPersistent: widget.isCountryButtonPersistent,
+            autofocus: false,
+            textAlignVertical: TextAlignVertical.center,
+            autofillHints: const [AutofillHints.telephoneNumber],
+            countrySelectorNavigator: CountrySelectorNavigator.page(
+              searchBoxIconColor: FluentTheme.of(context).accentColor,
+              noResultMessage: 'No result found',
+              searchBoxDecoration: material.InputDecoration(
+                hintText: 'Search',
+                filled: true,
+                fillColor: Colors.transparent,
+                border: material.InputBorder.none,
+              ),
+            ),
+            decoration: material.InputDecoration(
+              border: material.InputBorder.none,
+              hintText: 'Phone Number',
+              filled: true,
+              fillColor: Colors.transparent,
+            ),
+            autovalidateMode: AutovalidateMode.disabled,
+            onChanged: (p) {
+              if (p.nsn.length > 9) {
+                PhoneNumber phone =
+                    PhoneNumber(isoCode: p.isoCode, nsn: p.nsn.substring(0, 9));
+                widget.controller.value = phone;
+              }
+            },
+          ),
+        ));
   }
 }

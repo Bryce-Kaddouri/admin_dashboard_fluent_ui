@@ -1,7 +1,8 @@
+import 'package:admin_dashboard/src/feature/customer/presentation/screen/update_customer_screen.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 // import material dart
 import 'package:flutter/material.dart' as material;
-import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:phone_form_field/phone_form_field.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/customer_provider.dart';
@@ -22,8 +23,8 @@ class _CustomerAddScreenState extends State<CustomerAddScreen> {
   // controller for name
   final TextEditingController fNameController = TextEditingController();
   final TextEditingController lNameController = TextEditingController();
-  final TextEditingController phoneNumberController = TextEditingController();
-  final TextEditingController countryCodeController = TextEditingController();
+  PhoneController phoneNumberController = PhoneController();
+  FocusNode focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -78,35 +79,12 @@ class _CustomerAddScreenState extends State<CustomerAddScreen> {
                   child: material.Card(
                     color: Colors.transparent,
                     elevation: 0,
-                    child: IntlPhoneField(
-                      validator: (value) {
-                        if (value == null) {
-                          return 'Please enter phone number';
-                        } else if (value.isValidNumber() == false) {
-                          return 'Please enter valid phone number';
-                        }
-                        return null;
-                      },
-                      flagsButtonPadding: EdgeInsets.all(10),
-                      decoration: material.InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        contentPadding: EdgeInsets.all(10),
-                        constraints: BoxConstraints(
-                            maxWidth: 500, maxHeight: 100, minHeight: 100),
-                        labelText: 'Phone Number',
-                        border: material.OutlineInputBorder(),
-                        enabledBorder: material.OutlineInputBorder(),
-                        focusedBorder: material.OutlineInputBorder(),
-                      ),
-                      initialCountryCode: 'IE',
+                    child: PhoneFieldView(
                       controller: phoneNumberController,
-                      onChanged: (phone) {
-                        print(phone.completeNumber);
-                        setState(() {
-                          countryCodeController.text = phone.countryCode;
-                        });
-                      },
+                      focusNode: focusNode,
+                      isCountryButtonPersistent: true,
+                      mobileOnly: true,
+                      locale: Locale('IE'),
                     ),
                   ),
                 ),
@@ -124,8 +102,10 @@ class _CustomerAddScreenState extends State<CustomerAddScreen> {
                         print('add category');
                         String fName = fNameController.text;
                         String lName = lNameController.text;
-                        String phoneNumber = phoneNumberController.text;
-                        String countryCode = countryCodeController.text;
+                        String phoneNumber = phoneNumberController.value.nsn;
+                        String countryCode =
+                            phoneNumberController.value.countryCode;
+                        IsoCode isoCode = phoneNumberController.value.isoCode;
                         print('fName: $fName');
                         print('lName: $lName');
                         print('phoneNumber: $phoneNumber');
@@ -134,12 +114,12 @@ class _CustomerAddScreenState extends State<CustomerAddScreen> {
                         bool res = await context
                             .read<CustomerProvider>()
                             .addCustomer(fName, lName, phoneNumber, countryCode,
-                                true, context);
+                                true, context, isoCode);
                         if (res) {
                           fNameController.clear();
                           lNameController.clear();
-                          phoneNumberController.clear();
-                          countryCodeController.clear();
+                          phoneNumberController.value =
+                              const PhoneNumber(isoCode: IsoCode.IE, nsn: '');
                         }
                       } else {
                         print('form is not valid');

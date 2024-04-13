@@ -45,7 +45,6 @@ dependencies:
   go_router: ^13.1.0
   fl_chart: ^0.67.0
   fluent_ui: ^4.8.6
-  intl_phone_field: ^3.2.0
   flutter_secure_storage: ^9.0.0
   firebase_core: ^2.27.0
   charts_painter: ^3.1.1
@@ -58,6 +57,7 @@ dependencies:
   cropperx: ^1.1.1
   quantity: ^3.0.2
   units_converter: ^3.0.0
+  phone_form_field: ^9.2.3
 
 dev_dependencies:
   flutter_test:

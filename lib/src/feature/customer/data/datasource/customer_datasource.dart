@@ -82,25 +82,23 @@ class CustomerDataSource {
       print('categoryModel from update datasource');
       print(customerModel.toJson());
       Map<String, dynamic> customerMap = customerModel.toJson();
-      List<Map<String, dynamic>> response = await _client
+      customerMap['updated_at'] = DateTime.now().toIso8601String();
+      Map<String, dynamic> response = await _client
           .from('customers')
           .update(customerMap)
           .eq('id', customerModel.id)
-          .select();
+          .select()
+          .single();
       print('response update');
       print(response);
-      if (response.isNotEmpty) {
-        return Right(true);
-      } else {
-        print('response is empty');
-        return Left(DatabaseFailure(errorMessage: 'Error updating category'));
-      }
+      return Right(true);
     } on PostgrestException catch (error) {
       print('postgrest error');
       print(error);
       return Left(DatabaseFailure(errorMessage: error.message));
     } catch (e) {
-      print('error updating category');
+      print('error updating customer');
+      print(e);
       return Left(DatabaseFailure(errorMessage: 'Error updating category'));
     }
   }

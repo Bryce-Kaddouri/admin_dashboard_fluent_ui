@@ -1,6 +1,5 @@
 import 'package:admin_dashboard/src/feature/customer/presentation/provider/customer_provider.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +20,8 @@ class _CustomerListScreenState extends State<CustomerListScreen>
   int currentPage = 0;
   int nbPages = 0;
 
+  TextEditingController searchController = TextEditingController();
+
   // Override `wantKeepAlive` when using `AutomaticKeepAliveClientMixin`.
   @override
   bool get wantKeepAlive => true;
@@ -33,6 +34,14 @@ class _CustomerListScreenState extends State<CustomerListScreen>
       print('pageController.page: ${pageController.page}');
       setState(() {
         currentPage = pageController.page!.toInt();
+      });
+    });
+    searchController.addListener(() {
+      print('searchController.text: ${searchController.text}');
+      Future.delayed(Duration(milliseconds: 300), () {
+        setState(() {
+          currentPage = pageController.page!.toInt();
+        });
       });
     });
   }
@@ -52,23 +61,46 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                     alignment: Alignment.center,
                     duration: const Duration(milliseconds: 300),
                     child: TextBox(
+                      controller: searchController,
                       prefixMode: OverlayVisibilityMode.always,
                       onChanged: (value) {
                         context.read<CustomerProvider>().setSearchText(value);
                       },
+                      suffixMode: OverlayVisibilityMode.editing,
+                      suffix: Button(
+                        style: ButtonStyle(
+                          elevation: ButtonState.all(0),
+                          padding: ButtonState.all(const EdgeInsets.all(4)),
+                        ),
+                        onPressed: () {
+                          context.read<CustomerProvider>().setSearchText('');
+                          searchController.clear();
+                        },
+                        child: Container(
+                          height: 16,
+                          width: 16,
+                          child: Icon(FluentIcons.clear,
+                              color: FluentTheme.of(context)
+                                  .typography
+                                  .caption!
+                                  .color),
+                        ),
+                      ),
                       prefix: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: const Icon(
-                            FluentIcons.search,
-                            size: 20,
-                            color: Colors.black,
-                          )),
+                          child: Icon(FluentIcons.search,
+                              size: 20,
+                              color: FluentTheme.of(context)
+                                  .typography
+                                  .caption!
+                                  .color)),
                       textAlignVertical: TextAlignVertical.center,
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: FluentTheme.of(context)
+                            .navigationPaneTheme
+                            .backgroundColor,
                         borderRadius:
                             const BorderRadius.all(Radius.circular(5)),
-                        border: Border.all(color: Colors.grey),
                       ),
                     ),
                   ),
@@ -77,10 +109,11 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                 DropDownButton(
                   title: Text(
                     context.watch<CustomerProvider>().nbItemPerPage.toString(),
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style:
+                        FluentTheme.of(context).typography.subtitle!.copyWith(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
                   ),
                   items: [
                     MenuFlyoutItem(
@@ -104,6 +137,11 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                       ),
                       onPressed: () {
                         context.read<CustomerProvider>().setNbItemPerPage(10);
+                        Future.delayed(Duration(milliseconds: 300), () {
+                          setState(() {
+                            currentPage = pageController.page!.toInt();
+                          });
+                        });
                       },
                     ),
                     MenuFlyoutSeparator(),
@@ -128,6 +166,11 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                       ),
                       onPressed: () {
                         context.read<CustomerProvider>().setNbItemPerPage(25);
+                        Future.delayed(Duration(milliseconds: 300), () {
+                          setState(() {
+                            currentPage = pageController.page!.toInt();
+                          });
+                        });
                       },
                     ),
                     MenuFlyoutSeparator(),
@@ -152,6 +195,11 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                       ),
                       onPressed: () {
                         context.read<CustomerProvider>().setNbItemPerPage(50);
+                        Future.delayed(Duration(milliseconds: 300), () {
+                          setState(() {
+                            currentPage = pageController.page!.toInt();
+                          });
+                        });
                       },
                     ),
                     MenuFlyoutSeparator(),
@@ -177,6 +225,11 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                       ),
                       onPressed: () {
                         context.read<CustomerProvider>().setNbItemPerPage(100);
+                        Future.delayed(Duration(milliseconds: 300), () {
+                          setState(() {
+                            currentPage = pageController.page!.toInt();
+                          });
+                        });
                       },
                     ),
                     MenuFlyoutSeparator(),
@@ -202,6 +255,11 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                       ),
                       onPressed: () {
                         context.read<CustomerProvider>().setNbItemPerPage(250);
+                        Future.delayed(Duration(milliseconds: 300), () {
+                          setState(() {
+                            currentPage = pageController.page!.toInt();
+                          });
+                        });
                       },
                     ),
                   ],
@@ -218,8 +276,7 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                     foregroundColor: ButtonState.all(Colors.white),
                   ),
                   onPressed: () {
-                    // Your Logic to Add New `NavigationPaneItem`
-                    print('Search');
+                    context.go('/customer/add');
                   },
                   child: const Icon(FluentIcons.add),
                 ),
@@ -261,52 +318,41 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                     );
                   }
 
-                  int nbPages = customers.length ~/
-                      context.watch<CustomerProvider>().nbItemPerPage;
-                  print('nbPages: $nbPages');
-                  if (customers.length %
-                          context.watch<CustomerProvider>().nbItemPerPage !=
-                      0) {
-                    nbPages++;
+                  List<List<CustomerModel>> customersList = [];
+                  for (int i = 0; i < customers.length; i++) {
+                    if (customersList.isEmpty) {
+                      customersList.add([customers[i]]);
+                    } else if (customersList.last.length <
+                        context.watch<CustomerProvider>().nbItemPerPage) {
+                      customersList[(customersList.length > 0
+                                  ? customersList.length
+                                  : 1) -
+                              1]
+                          .add(customers[i]);
+                    } else {
+                      customersList.add([customers[i]]);
+                    }
                   }
+
                   // add post frame callback to avoid calling setState during build
 
                   return Column(
                     children: [
                       Expanded(
                         child: PageView.builder(
-                          itemCount: nbPages,
+                          itemCount: customersList.length,
                           itemBuilder: (context, indexPage) {
                             return ListView.builder(
                               padding: const EdgeInsets.all(10),
                               shrinkWrap: true,
-                              itemCount: context
-                                  .watch<CustomerProvider>()
-                                  .nbItemPerPage,
+                              itemCount: customersList[indexPage].length,
                               itemBuilder: (context, index) {
-                                int correctIndex = indexPage == 0
-                                    ? index
-                                    : (indexPage *
-                                            context
-                                                .watch<CustomerProvider>()
-                                                .nbItemPerPage) +
-                                        index;
-                                if (correctIndex > customers!.length - 1) {
-                                  return Container();
-                                }
-
                                 CustomerModel customer =
-                                    customers[correctIndex];
-                                /* final category = categories![correctIndex];
-                                print('index: $index');
-                                print('indexPage: $indexPage');
-                                print(
-                                    'correct index: ${indexPage == 0 ? index : (indexPage * context.watch<CategoryProvider>().nbItemPerPage) + index}');
-                                print('-' * 50);*/
+                                    customersList[indexPage][index];
 
                                 return Card(
                                   margin: const EdgeInsets.all(10),
-                                  padding: const EdgeInsets.all(10),
+                                  padding: const EdgeInsets.all(0),
                                   child: ListTile(
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
@@ -321,11 +367,13 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                                               alignment: Alignment.center,
                                               child: Text(
                                                 '${customer.id}',
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 20,
-                                                ),
+                                                style: FluentTheme.of(context)
+                                                    .typography
+                                                    .body!
+                                                    .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
                                               ),
                                             ),
                                           ),
@@ -375,52 +423,128 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                                             foregroundColor:
                                                 ButtonState.all(Colors.white),
                                           ),
-                                          onPressed: () {
+                                          onPressed: () async {
                                             print('delete');
                                             print(
                                                 'category id: ${customer.id}');
-                                            Get.defaultDialog(
-                                              contentPadding:
-                                                  EdgeInsets.all(20),
-                                              content: Column(
-                                                children: [
-                                                  Icon(
-                                                    FluentIcons.delete,
-                                                    color: Colors.red,
-                                                    size: 100,
-                                                  ),
-                                                  Text(
-                                                      'Are you sure to delete this category? The deletion of this category will delete all products associated with it.'),
-                                                ],
-                                              ),
-                                              title: 'Delete category',
-                                              textConfirm: 'Yes',
-                                              textCancel: 'No',
-                                              confirmTextColor: Colors.white,
-                                              onConfirm: () async {
-                                                bool res = await context
-                                                    .read<CustomerProvider>()
-                                                    .deleteCustomer(
-                                                        customer.id);
-                                                Get.back();
-                                                if (res) {
-                                                  Get.snackbar(
-                                                    'Success',
-                                                    'Category deleted successfully',
-                                                    backgroundColor:
-                                                        Colors.green,
-                                                    colorText: Colors.white,
+                                            bool? confirmed = await showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return ContentDialog(
+                                                    title: Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          vertical: 10),
+                                                      child: Text(
+                                                        'Delete Customer',
+                                                        style: FluentTheme.of(
+                                                                context)
+                                                            .typography
+                                                            .title!
+                                                            .copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                      ),
+                                                    ),
+                                                    content: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        Icon(
+                                                          FluentIcons.delete,
+                                                          color: Colors.red,
+                                                          size: 60,
+                                                        ),
+                                                        SizedBox(height: 20),
+                                                        Text(
+                                                          'Are you sure to delete this customer?\n\nThe deletion of this customer will delete all order associated with it.',
+                                                          style: FluentTheme.of(
+                                                                  context)
+                                                              .typography
+                                                              .body!
+                                                              .copyWith(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal,
+                                                              ),
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    actions: [
+                                                      FilledButton(
+                                                        onPressed: () async {
+                                                          Navigator.of(context)
+                                                              .pop(true);
+                                                        },
+                                                        child: Text('Yes'),
+                                                      ),
+                                                      Button(
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop(false);
+                                                        },
+                                                        child: Text('No'),
+                                                      ),
+                                                    ],
                                                   );
-                                                } else {
-                                                  Get.snackbar(
-                                                    'Error',
-                                                    'An error occured while deleting category',
-                                                    backgroundColor: Colors.red,
-                                                    colorText: Colors.white,
-                                                  );
-                                                }
-                                              },
-                                            );
+                                                });
+                                            if (confirmed != null &&
+                                                confirmed) {
+                                              bool res = await context
+                                                  .read<CustomerProvider>()
+                                                  .deleteCustomer(customer.id);
+                                              if (res) {
+                                                await displayInfoBar(
+                                                  context,
+                                                  builder: (context, close) {
+                                                    return InfoBar(
+                                                      title:
+                                                          const Text('Success'),
+                                                      content: Text(
+                                                          "Customer deleted successfully"),
+                                                      severity: InfoBarSeverity
+                                                          .success,
+                                                      isLong: false,
+                                                      action: IconButton(
+                                                        icon: const Icon(
+                                                            FluentIcons.clear),
+                                                        onPressed: close,
+                                                      ),
+                                                    );
+                                                  },
+                                                  alignment: Alignment.topRight,
+                                                );
+                                              } else {
+                                                await displayInfoBar(
+                                                  context,
+                                                  builder: (context, close) {
+                                                    return InfoBar(
+                                                      title:
+                                                          const Text('Error'),
+                                                      content: Container(
+                                                        child: Text(
+                                                            "Something went wrong"),
+                                                      ),
+                                                      severity:
+                                                          InfoBarSeverity.error,
+                                                      isLong: false,
+                                                      action: IconButton(
+                                                        icon: const Icon(
+                                                            FluentIcons.clear),
+                                                        onPressed: close,
+                                                      ),
+                                                    );
+                                                  },
+                                                  alignment: Alignment.topRight,
+                                                );
+                                              }
+                                            }
                                           },
                                           child: const Icon(FluentIcons.delete),
                                         ),
@@ -439,7 +563,11 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             IconButton(
-                              icon: Icon(FluentIcons.back, color: Colors.black),
+                              icon: Icon(FluentIcons.back,
+                                  color: FluentTheme.of(context)
+                                      .typography
+                                      .caption!
+                                      .color),
                               onPressed: () {
                                 pageController.previousPage(
                                     duration: Duration(milliseconds: 300),
@@ -449,26 +577,33 @@ class _CustomerListScreenState extends State<CustomerListScreen>
                             RichText(
                               text: TextSpan(
                                 text: '${currentPage + 1}',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                ),
-                                children: [
-                                  TextSpan(
-                                    text: '/$nbPages',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.normal,
+                                style: FluentTheme.of(context)
+                                    .typography
+                                    .body!
+                                    .copyWith(
+                                      fontWeight: FontWeight.bold,
                                       fontSize: 20,
                                     ),
+                                children: [
+                                  TextSpan(
+                                    text: '/${customersList.length}',
+                                    style: FluentTheme.of(context)
+                                        .typography
+                                        .body!
+                                        .copyWith(
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 16,
+                                        ),
                                   ),
                                 ],
                               ),
                             ),
                             IconButton(
                               icon: Icon(FluentIcons.forward,
-                                  color: Colors.black),
+                                  color: FluentTheme.of(context)
+                                      .typography
+                                      .caption!
+                                      .color),
                               onPressed: () {
                                 pageController.nextPage(
                                     duration: Duration(milliseconds: 300),
