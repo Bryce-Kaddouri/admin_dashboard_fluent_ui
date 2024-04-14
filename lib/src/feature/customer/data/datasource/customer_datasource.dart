@@ -7,19 +7,35 @@ import '../model/customer_model.dart';
 
 class CustomerDataSource {
   final _client = Supabase.instance.client;
+  SupabaseClient _supaAdminClient = SupabaseClient(
+      'https://qlhzemdpzbonyqdecfxn.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFsaHplbWRwemJvbnlxZGVjZnhuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwNDg4NjgwNiwiZXhwIjoyMDIwNDYyODA2fQ.iGkTZL6qeM5f6kXobuo2b6CUdHigONycJuofyjWtEpU');
 
   Future<Either<DatabaseFailure, bool>> addCustomer(
       CustomerAddParam params) async {
     try {
-      List<Map<String, dynamic>> response =
-          await _client.from('customers').insert(params.toJson()).select();
+      Map<String, dynamic> response = await _client
+          .from('customers')
+          .insert(params.toJson())
+          .select()
+          .single();
+
+      UserResponse res =
+          await _supaAdminClient.auth.admin.createUser(AdminUserAttributes(
+        phone: '+${params.countryCode}${params.phoneNumber}',
+        userMetadata: {
+          'fName': params.fName,
+          'lName': params.lName,
+          'id': response['id'],
+        },
+        appMetadata: {'role': 'CUSTOMER'},
+        emailConfirm: true,
+      ));
+      print(res.user);
+
       print(response);
-      if (response.isNotEmpty) {
-        print('response is not empty');
-        return const Right(true);
-      } else {
-        return Left(DatabaseFailure(errorMessage: 'Error adding customer'));
-      }
+
+      return const Right(true);
     } on PostgrestException catch (error) {
       print('postgrest error');
       print(error);
